@@ -48,6 +48,7 @@ public class ShopView : BaseView
         this.exitButton.onClick.AddListener(() => OnClickExit?.Invoke());
         await InitializeItemHolders();
         await InitializeTabButtons();
+        ResetPanelPosition();
     }
 
     private async UniTask InitializeItemHolders()
