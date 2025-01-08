@@ -21,6 +21,16 @@ public class DraggableObject : MonoBehaviour
         this.isPlaced = false;
     }
 
+    private void OnEnable()
+    {
+        GameState.isEditing = true;
+    }
+
+    private void OnDisable()
+    {
+        GameState.isEditing = false;
+    }
+
     public void ClearAndSaveOldPosition()
     {
         UpdateBoundsPosition();
