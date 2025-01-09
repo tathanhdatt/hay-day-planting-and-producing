@@ -19,4 +19,9 @@ MonoBehaviour:
   unlockLevel: 1
   currencyType: 0
   price: 200
-  prefab: {fileID: 1136315669024522095, guid: 9d81c0c4f606d6a4a8a3052460c08eb0, type: 3}
+  prefab: {fileID: 1819332827748883941, guid: 9d81c0c4f606d6a4a8a3052460c08eb0, type: 3}
+  days: 0
+  hours: 0
+  minutes: 0
+  seconds: 30
+  isEnoughCurrency: 1

@@ -1,16 +1,26 @@
 ﻿using System;
+using Dt.Attribute;
 using UnityEngine;
 
 public class DraggableObject : MonoBehaviour
 {
+    [SerializeField, ReadOnly]
     private Camera cam;
+
+    [SerializeField, ReadOnly]
     private GridLayout gridLayout;
+
+    [SerializeField, ReadOnly]
     private BuildingSystem buildingSystem;
-    private BoundsInt bounds;
+
+    [SerializeField, ReadOnly]
     private bool isPlaced;
+
+    [SerializeField, ReadOnly]
     private Vector3 oldPosition;
 
-    public event Action OnPlacedNewItem;
+    private BoundsInt bounds;
+    public event Action OnFirstTimePlaced;
 
     public void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout, BoundsInt bounds)
     {
@@ -19,6 +29,7 @@ public class DraggableObject : MonoBehaviour
         this.buildingSystem = buildingSystem;
         this.bounds = bounds;
         this.isPlaced = false;
+        enabled = true;
     }
 
     private void OnEnable()
@@ -63,15 +74,15 @@ public class DraggableObject : MonoBehaviour
     {
         if (this.isPlaced)
         {
-            ReplaceOnNewPositionIfCan();
+            TryReplace();
         }
         else
         {
-            PlaceNewItem();
+            PlaceFirstTime();
         }
     }
 
-    private void ReplaceOnNewPositionIfCan()
+    private void TryReplace()
     {
         if (this.buildingSystem.CanPlace(this.bounds))
         {
@@ -85,11 +96,12 @@ public class DraggableObject : MonoBehaviour
         }
     }
 
-    private void PlaceNewItem()
+    private void PlaceFirstTime()
     {
         if (this.buildingSystem.CanPlace(this.bounds))
         {
-            OnPlacedNewItem?.Invoke();
+            OnFirstTimePlaced?.Invoke();
+            this.isPlaced = true;
             Place();
         }
         else
@@ -100,7 +112,6 @@ public class DraggableObject : MonoBehaviour
 
     private void Place()
     {
-        this.isPlaced = true;
         this.buildingSystem.PlaceTilesInArea(this.bounds);
         enabled = false;
     }

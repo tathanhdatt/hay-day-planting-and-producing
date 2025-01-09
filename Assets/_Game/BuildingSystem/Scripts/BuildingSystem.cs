@@ -1,5 +1,5 @@
-﻿using Dt.Attribute;
-using Unity.VisualScripting;
+﻿using System;
+using Dt.Attribute;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,11 +13,12 @@ public class BuildingSystem : MonoBehaviour
 
     [SerializeField, Required]
     private TileBase occupiedTile;
-
+    
+    [Title]
     [SerializeField, Required]
-    private TileBase hoveringTile;
+    private TimerTooltip tooltip;
 
-    private DraggableObject currentDraggableObject;
+    private Facility facility;
 
     private ICurrency currency;
     private ShopItemInfo currentItemInfo;
@@ -31,17 +32,32 @@ public class BuildingSystem : MonoBehaviour
     private void SpawnItemHandler(ShopItemInfo info)
     {
         this.currentItemInfo = info;
-        PlaceableObject newItem = Instantiate(info.prefab, this.mainTilemap.transform);
-        this.currentDraggableObject = newItem.AddComponent<DraggableObject>();
-        newItem.Initialize(this.currentDraggableObject);
-        this.currentDraggableObject.Initialize(this, this.gridLayout, newItem.Bounds);
-        this.currentDraggableObject.OnPlacedNewItem += OnPlacedNewItem;
+        InitializeFacility();
     }
 
-    private void OnPlacedNewItem()
+    private void InitializeFacility()
     {
-        this.currentDraggableObject.OnPlacedNewItem -= OnPlacedNewItem;
+        this.facility = Instantiate(
+            this.currentItemInfo.prefab, this.mainTilemap.transform);
+        this.facility.Initialize(this, this.gridLayout, this.tooltip);
+        this.facility.OnFirstTimePlaced += OnFirstTimePlacedHandler;
+    }
+
+    private void Build()
+    {
+        TimeSpan buildingTimeSpan = new TimeSpan(
+            this.currentItemInfo.days,
+            this.currentItemInfo.hours,
+            this.currentItemInfo.minutes,
+            this.currentItemInfo.seconds);
+        this.facility.StartBuilding(buildingTimeSpan);
+    }
+
+    private void OnFirstTimePlacedHandler()
+    {
+        this.facility.OnFirstTimePlaced -= OnFirstTimePlacedHandler;
         SubtractAmount();
+        Build();
     }
 
     private void SubtractAmount()
@@ -74,11 +90,6 @@ public class BuildingSystem : MonoBehaviour
     public void ClearTilesInArea(BoundsInt area)
     {
         SetTilesInArea(area, null);
-    }
-
-    public void HoverTilesInArea(BoundsInt area)
-    {
-        SetTilesInArea(area, this.hoveringTile);
     }
 
     public void PlaceTilesInArea(BoundsInt area)
