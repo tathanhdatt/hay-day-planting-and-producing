@@ -1,6 +1,7 @@
 ﻿using System;
 using Dt.Attribute;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InteractionDetector : MonoBehaviour
 {
@@ -41,6 +42,8 @@ public class InteractionDetector : MonoBehaviour
     {
         bool hasTouch = Input.touchCount > 0;
         if (!hasTouch) return;
+        bool isOverUI = EventSystem.current.IsPointerOverGameObject();
+        if (isOverUI) return;
         this.touch = Input.GetTouch(0);
         switch (this.touch.phase)
         {
@@ -58,9 +61,15 @@ public class InteractionDetector : MonoBehaviour
 
     private void OnTouchBegan()
     {
-        if (!IsCurrentTouchInBounds()) return;
-        this.holdingTimeSpan = 0;
-        this.isHolding = true;
+        if (IsCurrentTouchInBounds())
+        {
+            this.holdingTimeSpan = 0;
+            this.isHolding = true;
+        }
+        else
+        {
+            OnTouchedOut?.Invoke();
+        }
     }
 
     private void OnTouchMoved()
@@ -73,7 +82,6 @@ public class InteractionDetector : MonoBehaviour
     {
         if (!IsCurrentTouchInBounds())
         {
-            OnTouchedOut?.Invoke();
         }
 
         this.isHolding = false;

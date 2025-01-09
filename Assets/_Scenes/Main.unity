@@ -255,7 +255,7 @@ GameObject:
   - component: {fileID: 15460427}
   - component: {fileID: 15460429}
   - component: {fileID: 15460428}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -639,7 +639,7 @@ GameObject:
   - component: {fileID: 187335683}
   - component: {fileID: 187335685}
   - component: {fileID: 187335684}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -929,7 +929,7 @@ GameObject:
   - component: {fileID: 265418522}
   - component: {fileID: 265418524}
   - component: {fileID: 265418523}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Time Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2337,7 +2337,7 @@ GameObject:
   - component: {fileID: 786039876}
   - component: {fileID: 786039875}
   - component: {fileID: 786039874}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Skip Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2581,7 +2581,7 @@ GameObject:
   - component: {fileID: 802736242}
   - component: {fileID: 802736243}
   - component: {fileID: 802736244}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Tooltips
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3063,7 +3063,7 @@ GameObject:
   - component: {fileID: 997408830}
   - component: {fileID: 997408832}
   - component: {fileID: 997408831}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Time Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38880,7 +38880,7 @@ GameObject:
   - component: {fileID: 1229962233}
   - component: {fileID: 1229962235}
   - component: {fileID: 1229962234}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39015,7 +39015,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1389395452}
   - component: {fileID: 1389395453}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Timer Tooltip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39099,7 +39099,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -1079.9999, y: 0}
+  m_AnchoredPosition: {x: -1080, y: 0}
   m_SizeDelta: {x: 800, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1434412707
@@ -39480,7 +39480,7 @@ GameObject:
   - component: {fileID: 1638519453}
   - component: {fileID: 1638519455}
   - component: {fileID: 1638519454}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40571,7 +40571,7 @@ GameObject:
   - component: {fileID: 2034251274}
   - component: {fileID: 2034251276}
   - component: {fileID: 2034251275}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
