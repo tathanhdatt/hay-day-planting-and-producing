@@ -14,6 +14,9 @@ namespace Core.Game
 
         [SerializeField, Required]
         private BuildingSystem buildingSystem;
+        
+        [SerializeField, Required]
+        private TimerTooltip timerTooltip;
 
         private IAudioService audioService;
         private ILevelRequirement levelRequirement;
@@ -33,6 +36,7 @@ namespace Core.Game
             InitLevelRequirement();
             InitLevelStorage();
             InitBuildingSystem();
+            InitTimerTooltip();
         }
 
 
@@ -68,6 +72,11 @@ namespace Core.Game
                 InitCurrency();
             }
             this.buildingSystem.Initialize(Currency);
+        }
+
+        private void InitTimerTooltip()
+        {
+            this.timerTooltip.Initialize(Currency);
         }
 
         private async void Start()

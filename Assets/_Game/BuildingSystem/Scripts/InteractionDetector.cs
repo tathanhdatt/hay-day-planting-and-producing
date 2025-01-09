@@ -1,25 +1,14 @@
-﻿using Dt.Attribute;
+﻿using System;
+using Dt.Attribute;
 using UnityEngine;
 
-public class PlaceableObject : MonoBehaviour
+public class InteractionDetector : MonoBehaviour
 {
     [SerializeField, Required]
-    private SpriteRenderer graphic;
-
-    [SerializeField]
-    private BoundsInt bounds;
-
-    [SerializeField]
-    private BoxCollider2D holdingCollider;
-
-    [SerializeField]
-    private Vector3 offset;
+    private Collider2D holdingCollider;
 
     [SerializeField]
     private float holdingDuration;
-
-    [SerializeField, ReadOnly]
-    private DraggableObject draggableObject;
 
     [SerializeField, ReadOnly]
     private float holdingTimeSpan;
@@ -30,61 +19,72 @@ public class PlaceableObject : MonoBehaviour
     [SerializeField, ReadOnly]
     private Camera cam;
 
-    public BoundsInt Bounds => this.bounds;
+    private Touch touch;
 
-    public void Initialize(DraggableObject draggableObject)
+    public event Action OnAllowedEditing;
+    public event Action OnTouchedOut;
+    public event Action OnTouchedMoved;
+
+
+    public void Initialize()
     {
-        this.draggableObject = draggableObject;
         this.cam = Camera.main;
     }
 
     private void Update()
     {
-        DetectHolding();
+        DetectTouch();
         CooldownHolding();
     }
 
-    private void DetectHolding()
+    private void DetectTouch()
     {
         bool hasTouch = Input.touchCount > 0;
         if (!hasTouch) return;
-        Touch touch = Input.GetTouch(0);
-        switch (touch.phase)
+        this.touch = Input.GetTouch(0);
+        switch (this.touch.phase)
         {
             case TouchPhase.Began:
-                OnTouchBegan(touch);
+                OnTouchBegan();
                 break;
             case TouchPhase.Ended:
-                OnTouchEnded(touch);
+                OnTouchEnded();
                 break;
             case TouchPhase.Moved:
-                OnTouchMoved(touch);
+                OnTouchMoved();
                 break;
         }
     }
 
-    private void OnTouchBegan(Touch touch)
+    private void OnTouchBegan()
     {
-        if (!IsInBounds(touch)) return;
+        if (!IsCurrentTouchInBounds()) return;
         this.holdingTimeSpan = 0;
         this.isHolding = true;
     }
 
-    private void OnTouchMoved(Touch touch)
+    private void OnTouchMoved()
     {
+        OnTouchedMoved?.Invoke();
         this.isHolding = false;
     }
 
-    private void OnTouchEnded(Touch touch)
+    private void OnTouchEnded()
     {
+        if (!IsCurrentTouchInBounds())
+        {
+            OnTouchedOut?.Invoke();
+        }
+
         this.isHolding = false;
     }
 
-    private bool IsInBounds(Touch touch)
+    private bool IsCurrentTouchInBounds()
     {
-        Vector3 worldPos = this.cam.ScreenToWorldPoint(touch.position);
+        Vector3 worldPos = this.cam.ScreenToWorldPoint(this.touch.position);
         worldPos.z = 0;
-        return this.holdingCollider.bounds.Contains(worldPos);
+        RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector3.forward, 1);
+        return hit.collider == this.holdingCollider;
     }
 
     private void CooldownHolding()
@@ -109,8 +109,7 @@ public class PlaceableObject : MonoBehaviour
 
     private void AllowEditing()
     {
-        this.draggableObject.enabled = true;
-        this.draggableObject.ClearAndSaveOldPosition();
         this.isHolding = false;
+        OnAllowedEditing?.Invoke();
     }
 }
