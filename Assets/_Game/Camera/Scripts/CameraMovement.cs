@@ -1,6 +1,6 @@
 ﻿using Dt.Attribute;
+using Lean.Touch;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -22,7 +22,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField]
     private float yMax;
 
-    [Title("")]
+    [Title]
     [SerializeField, Required]
     private Camera cam;
 
@@ -37,105 +37,84 @@ public class CameraMovement : MonoBehaviour
 
     private Touch touch;
 
-    private void Update()
+    private void Awake()
+    {
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        LeanTouch.OnFingerDown += OnFingerDownHandler;
+        LeanTouch.OnFingerUpdate += OnFingerUpdateHandler;
+        LeanTouch.OnFingerUp += OnFingerUpHandler;
+    }
+
+
+    private void OnFingerDownHandler(LeanFinger finger)
+    {
+        if (finger.IsOverGui) return;
+        this.canMove = true;
+    }
+
+    private void OnFingerUpdateHandler(LeanFinger finger)
     {
         if (GameState.isEditing)
         {
-            this.canMove = false;
-            MoveCameraWhileEditing();
+            MoveCameraWhileEditing(finger);
         }
         else
         {
-            Move();
+            Move(finger);
         }
     }
 
-    private void MoveCameraWhileEditing()
+    private void OnFingerUpHandler(LeanFinger finger)
     {
-        if (!HasTouch()) return;
-        this.touch = Input.GetTouch(0);
-        if (!IsClosedDeviceBoundary()) return;
-        Vector3 touchWorldPos = this.cam.ScreenToWorldPoint(this.touch.position);
+        this.canMove = false;
+    }
+
+    private void MoveCameraWhileEditing(LeanFinger finger)
+    {
+        if (!IsClosedDeviceBoundary(finger)) return;
+        Vector3 worldPos = finger.GetWorldPosition(CameraConstant.ZPosition);
         Vector3 pos = Vector3.Lerp(
             this.cam.transform.position,
-            touchWorldPos,
+            worldPos,
             Time.deltaTime * this.speedInEditing);
         this.cam.transform.position = ClampCameraPosition(pos);
     }
 
-    private bool IsClosedDeviceBoundary()
+    private void Move(LeanFinger finger)
     {
-        Vector3 viewportPoint = this.cam.ScreenToViewportPoint(this.touch.position);
+        bool isZooming = LeanTouch.Fingers.Count == 2;
+        if (isZooming) return;
+        if (!this.canMove) return;
+        Vector3 delta = finger.GetWorldDelta(CameraConstant.ZPosition);
+        Vector3 newPos = this.cam.transform.position - delta;
+        this.cam.transform.position = ClampCameraPosition(newPos);
+    }
+
+    private bool IsClosedDeviceBoundary(LeanFinger finger)
+    {
+        Vector3 viewportPoint = this.cam.ScreenToViewportPoint(finger.ScreenPosition);
         bool isInHorizontalBoundary = viewportPoint.x is < leftBoundary or > rightBoundary;
         bool isInVerticalBoundary = viewportPoint.y is < bottomBoundary or > topBoundary;
         return isInHorizontalBoundary || isInVerticalBoundary;
     }
 
-    private void Move()
-    {
-        bool isZooming = Input.touchCount == CameraZoom.NumberOfZoomFingers;
-        if (!HasTouch() || isZooming) return;
-        this.touch = Input.GetTouch(0);
-        HandleByTouchPhase();
-    }
-
-    private bool HasTouch()
-    {
-        return Input.touchCount > 0;
-    }
-
-    private void HandleByTouchPhase()
-    {
-        switch (this.touch.phase)
-        {
-            case TouchPhase.Began:
-                OnTouchBegan();
-                break;
-            case TouchPhase.Moved:
-                OnTouchMoved();
-                break;
-            case TouchPhase.Ended:
-                OnTouchEnded();
-                break;
-        }
-    }
-
-    private void OnTouchBegan()
-    {
-        bool isOverUI = EventSystem.current.IsPointerOverGameObject();
-        if (isOverUI) return;
-        this.canMove = true;
-        UpdateLastTouchPos();
-    }
-
-    private void UpdateLastTouchPos()
-    {
-        this.lastTouchPos = this.cam.ScreenToWorldPoint(this.touch.position);
-    }
-
-    private void OnTouchMoved()
-    {
-        if (!this.canMove) return;
-        UpdateCameraPosition();
-    }
-
-    private void UpdateCameraPosition()
-    {
-        Vector3 direction = this.lastTouchPos - this.cam.ScreenToWorldPoint(this.touch.position);
-        Vector3 position = this.cam.transform.position + direction;
-        this.cam.transform.position = ClampCameraPosition(position);
-    }
 
     private Vector3 ClampCameraPosition(Vector3 position)
     {
         position.x = Mathf.Clamp(position.x, this.xMin, this.xMax);
         position.y = Mathf.Clamp(position.y, this.yMin, this.yMax);
-        position.z = -10;
+        position.z = CameraConstant.ZPosition;
         return position;
     }
 
-    private void OnTouchEnded()
+    private void OnDestroy()
     {
-        this.canMove = false;
+        LeanTouch.OnFingerDown -= OnFingerDownHandler;
+        LeanTouch.OnFingerUpdate -= OnFingerUpdateHandler;
+        LeanTouch.OnFingerUp -= OnFingerUpHandler;
     }
 }

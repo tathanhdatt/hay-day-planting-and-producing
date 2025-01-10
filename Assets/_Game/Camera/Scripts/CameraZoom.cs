@@ -1,4 +1,6 @@
-﻿using Dt.Attribute;
+﻿using System.Collections.Generic;
+using Dt.Attribute;
+using Lean.Touch;
 using UnityEngine;
 
 public class CameraZoom : MonoBehaviour
@@ -31,33 +33,52 @@ public class CameraZoom : MonoBehaviour
     [SerializeField, Required]
     private Transform pivot;
 
-    private void Update()
+    private void Awake()
     {
-        Zoom();
+        Initialize();
     }
 
-    private void Zoom()
+    private void Initialize()
+    {
+        LeanTouch.OnGesture += OnGestureHandler;
+    }
+
+    private void OnGestureHandler(List<LeanFinger> fingers)
     {
         if (GameState.isEditing) return;
-        bool hasTwoFinger = Input.touchCount == NumberOfZoomFingers;
-        if (!hasTwoFinger) return;
-        AdjustCameraOrthographicSize();
-        // AlignCamera();
+        if (fingers.Count != NumberOfZoomFingers) return;
+        if (!IsAnyFingerMoved(fingers)) return;
+        AdjustOrthographicSize(fingers[0], fingers[1]);
     }
 
-    private void AdjustCameraOrthographicSize()
+    private bool IsAnyFingerMoved(List<LeanFinger> fingers)
     {
-        Touch firstTouch = Input.GetTouch(0);
-        Touch secondTouch = Input.GetTouch(1);
-        bool isFirstTouchMoved = firstTouch.phase == TouchPhase.Moved;
-        bool isSecondTouchMoved = secondTouch.phase == TouchPhase.Moved;
-        if (!isFirstTouchMoved && !isSecondTouchMoved) return;
-        this.cam.orthographicSize = CalcOrthographicSize(firstTouch, secondTouch);
+        foreach (LeanFinger finger in fingers)
+        {
+            if (IsFingerMoved(finger))
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
-    private float CalcOrthographicSize(Touch firstTouch, Touch secondTouch)
+    private bool IsFingerMoved(LeanFinger finger)
     {
-        float sqrtMagnitude = (firstTouch.position - secondTouch.position).sqrMagnitude;
+        return finger.ScreenPosition != finger.LastScreenPosition;
+    }
+
+    private void AdjustOrthographicSize(LeanFinger first, LeanFinger second)
+    {
+        Vector2 firstFingerPos = first.ScreenPosition;
+        Vector2 secondFingerPos = second.ScreenPosition;
+        this.cam.orthographicSize = CalcOrthographicSize(firstFingerPos, secondFingerPos);
+    }
+
+    private float CalcOrthographicSize(Vector2 firstFingerPos, Vector2 secondFingerPos)
+    {
+        float sqrtMagnitude = (firstFingerPos - secondFingerPos).sqrMagnitude;
         float sign = Mathf.Sign(this.lastSqrtMagnitude - sqrtMagnitude);
         float size = this.cam.orthographicSize + sign * this.speed * Time.deltaTime;
         size = Mathf.Clamp(size, this.minZoom, this.maxZoom);
@@ -86,5 +107,10 @@ public class CameraZoom : MonoBehaviour
         this.pointBetweenTwoTouch = Vector3.Lerp(firstWorldPos, secondWorldPos, 0.5f);
         this.offset = this.pointBetweenTwoTouch - this.cam.transform.position;
         this.pivot.position = this.pointBetweenTwoTouch;
+    }
+
+    private void OnDestroy()
+    {
+        LeanTouch.OnGesture -= OnGestureHandler;
     }
 }
