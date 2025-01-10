@@ -1536,14 +1536,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 519420031}
-  speed: 10
+  speed: 12
   minZoom: 2
   maxZoom: 10
-  alignSpeed: 5
-  offset: {x: 0, y: 0, z: 0}
-  pointBetweenTwoTouch: {x: 0, y: 0, z: 0}
   lastSqrtMagnitude: 0
-  pivot: {fileID: 1027035567}
+  beginZoomWorldPos: {x: 0, y: 0, z: 0}
 --- !u!1001 &532377848
 PrefabInstance:
   m_ObjectHideFlags: 0
