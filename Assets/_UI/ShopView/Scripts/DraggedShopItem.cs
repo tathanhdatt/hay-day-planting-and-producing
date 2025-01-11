@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class DraggedShopItem : MonoBehaviour,
-    IBeginDragHandler, IDragHandler, IEndDragHandler,
+    IDragHandler, IEndDragHandler,
     IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField, Required]
@@ -34,10 +34,6 @@ public class DraggedShopItem : MonoBehaviour,
         this.draggingIcon = draggingIcon;
         this.startPosition = this.draggingIcon.anchoredPosition;
         this.info = info;
-    }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
     }
 
     public void OnDrag(PointerEventData eventData)

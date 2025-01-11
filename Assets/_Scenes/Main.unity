@@ -1521,6 +1521,7 @@ MonoBehaviour:
   yMax: 15
   cam: {fileID: 519420031}
   speedInEditing: 2
+  moveToCenterDuration: 0.4
   lastTouchPos: {x: 0, y: 0, z: 0}
   canMove: 0
 --- !u!114 &519420034

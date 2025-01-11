@@ -1,7 +1,7 @@
 ﻿using System;
 using Dt.Attribute;
+using Lean.Touch;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class InteractionDetector : MonoBehaviour
 {
@@ -17,11 +17,6 @@ public class InteractionDetector : MonoBehaviour
     [SerializeField, ReadOnly]
     private bool isHolding;
 
-    [SerializeField, ReadOnly]
-    private Camera cam;
-
-    private Touch touch;
-
     public event Action OnAllowedEditing;
     public event Action OnTouchedOut;
     public event Action OnTouchedMoved;
@@ -29,39 +24,17 @@ public class InteractionDetector : MonoBehaviour
 
     public void Initialize()
     {
-        this.cam = Camera.main;
+        LeanTouch.OnFingerDown += OnFingerDownHandler;
+        LeanTouch.OnFingerUpdate += OnFingerUpdateHandler;
+        LeanTouch.OnFingerUp += OnFingerUpHandler;
+        LeanTouch.OnFingerTap += OnFingerTapHandler;
     }
 
-    private void Update()
-    {
-        DetectTouch();
-        CooldownHolding();
-    }
 
-    private void DetectTouch()
+    private void OnFingerDownHandler(LeanFinger finger)
     {
-        bool hasTouch = Input.touchCount > 0;
-        if (!hasTouch) return;
-        bool isOverUI = EventSystem.current.IsPointerOverGameObject();
-        if (isOverUI) return;
-        this.touch = Input.GetTouch(0);
-        switch (this.touch.phase)
-        {
-            case TouchPhase.Began:
-                OnTouchBegan();
-                break;
-            case TouchPhase.Ended:
-                OnTouchEnded();
-                break;
-            case TouchPhase.Moved:
-                OnTouchMoved();
-                break;
-        }
-    }
-
-    private void OnTouchBegan()
-    {
-        if (IsCurrentTouchInBounds())
+        if (finger.IsOverGui) return;
+        if (IsCurrentFingerInBounds(finger))
         {
             this.holdingTimeSpan = 0;
             this.isHolding = true;
@@ -72,24 +45,42 @@ public class InteractionDetector : MonoBehaviour
         }
     }
 
-    private void OnTouchMoved()
+    private void OnFingerUpdateHandler(LeanFinger finger)
+    {
+        bool isFingerMoved = finger.ScreenDelta != Vector2.zero;
+        if (isFingerMoved)
+        {
+            OnFingerMoved();
+        }
+        else
+        {
+            CooldownHolding();
+        }
+    }
+
+    private void OnFingerUpHandler(LeanFinger finger)
+    {
+        this.holdingTimeSpan = 0;
+        this.isHolding = false;
+    }
+
+    private void OnFingerTapHandler(LeanFinger finger)
+    {
+        if (IsCurrentFingerInBounds(finger))
+        {
+            Messenger.Broadcast(Message.MoveCameraTo, transform.position);
+        }
+    }
+
+    private void OnFingerMoved()
     {
         OnTouchedMoved?.Invoke();
         this.isHolding = false;
     }
 
-    private void OnTouchEnded()
+    private bool IsCurrentFingerInBounds(LeanFinger finger)
     {
-        if (!IsCurrentTouchInBounds())
-        {
-        }
-
-        this.isHolding = false;
-    }
-
-    private bool IsCurrentTouchInBounds()
-    {
-        Vector3 worldPos = this.cam.ScreenToWorldPoint(this.touch.position);
+        Vector3 worldPos = finger.GetWorldPosition(CameraConstant.ZPosition);
         worldPos.z = 0;
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector3.forward, 1);
         return hit.collider == this.holdingCollider;
@@ -119,5 +110,13 @@ public class InteractionDetector : MonoBehaviour
     {
         this.isHolding = false;
         OnAllowedEditing?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        LeanTouch.OnFingerDown -= OnFingerDownHandler;
+        LeanTouch.OnFingerUpdate -= OnFingerUpdateHandler;
+        LeanTouch.OnFingerUp -= OnFingerUpHandler;
+        LeanTouch.OnFingerTap -= OnFingerTapHandler;
     }
 }
