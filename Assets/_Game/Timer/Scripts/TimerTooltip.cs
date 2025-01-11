@@ -54,7 +54,6 @@ public class TimerTooltip : MonoBehaviour
         gameObject.SetActive(true);
         this.timer = timer;
         this.timerName.SetText(this.timer.Name);
-        transform.position = this.timer.transform.position;
     }
 
     private void Update()
@@ -64,6 +63,7 @@ public class TimerTooltip : MonoBehaviour
             Hide();
             return;
         }
+        transform.position = this.timer.transform.position;
         this.fill.fillAmount = this.timer.GetTimeLeftPercentage();
         this.timeLeftText.SetText(this.timer.GetFormattedTimeLeft());
         this.skipPriceText.SetText(GetGemToSkip().ToString());

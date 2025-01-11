@@ -1,12 +1,10 @@
 ﻿using System;
 using Dt.Attribute;
+using Lean.Touch;
 using UnityEngine;
 
 public class DraggableObject : MonoBehaviour
 {
-    [SerializeField, ReadOnly]
-    private Camera cam;
-
     [SerializeField, ReadOnly]
     private GridLayout gridLayout;
 
@@ -24,7 +22,6 @@ public class DraggableObject : MonoBehaviour
 
     public void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout, BoundsInt bounds)
     {
-        this.cam = Camera.main;
         this.gridLayout = gridLayout;
         this.buildingSystem = buildingSystem;
         this.bounds = bounds;
@@ -32,14 +29,33 @@ public class DraggableObject : MonoBehaviour
         enabled = true;
     }
 
+
     private void OnEnable()
     {
         GameState.isEditing = true;
+        LeanTouch.OnFingerUpdate += OnFingerUpdateHandler;
+        LeanTouch.OnFingerUp += OnFingerUpHandler;
     }
 
     private void OnDisable()
     {
         GameState.isEditing = false;
+        LeanTouch.OnFingerUpdate -= OnFingerUpdateHandler;
+        LeanTouch.OnFingerUp -= OnFingerUpHandler;
+    }
+
+    private void OnFingerUpdateHandler(LeanFinger finger)
+    {
+        Vector3 worldPos = finger.GetWorldPosition(CameraConstant.ZPosition);
+        worldPos.z = 0;
+        Vector3Int gridPos = this.gridLayout.WorldToCell(worldPos);
+        transform.position = this.gridLayout.CellToLocalInterpolated(gridPos);
+    }
+
+    private void OnFingerUpHandler(LeanFinger finger)
+    {
+        UpdateBoundsPosition();
+        TryPlace();
     }
 
     public void ClearAndSaveOldPosition()
@@ -47,27 +63,6 @@ public class DraggableObject : MonoBehaviour
         UpdateBoundsPosition();
         this.oldPosition = transform.position;
         this.buildingSystem.ClearTilesInArea(this.bounds);
-    }
-
-    private void Update()
-    {
-        MoveObjectByMouse();
-    }
-
-    private void MoveObjectByMouse()
-    {
-        Vector3 mousePos = Input.mousePosition;
-        Vector3 worldPos = this.cam.ScreenToWorldPoint(mousePos);
-        worldPos.z = 0;
-        Vector3Int gridPos = this.gridLayout.WorldToCell(worldPos);
-        transform.position = this.gridLayout.CellToLocalInterpolated(gridPos);
-    }
-
-    private void LateUpdate()
-    {
-        if (!Input.GetMouseButtonUp(0)) return;
-        UpdateBoundsPosition();
-        TryPlace();
     }
 
     private void TryPlace()
@@ -120,5 +115,9 @@ public class DraggableObject : MonoBehaviour
     {
         Vector3Int pos = this.gridLayout.LocalToCell(transform.position);
         this.bounds.position = pos;
+    }
+
+    private void OnDestroy()
+    {
     }
 }

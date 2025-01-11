@@ -1,4 +1,5 @@
-﻿using Dt.Attribute;
+﻿using DG.Tweening;
+using Dt.Attribute;
 using Lean.Touch;
 using UnityEngine;
 
@@ -29,6 +30,9 @@ public class CameraMovement : MonoBehaviour
     [SerializeField]
     private float speedInEditing;
 
+    [SerializeField]
+    private float moveToCenterDuration;
+
     [SerializeField, ReadOnly]
     private Vector3 lastTouchPos;
 
@@ -47,8 +51,8 @@ public class CameraMovement : MonoBehaviour
         LeanTouch.OnFingerDown += OnFingerDownHandler;
         LeanTouch.OnFingerUpdate += OnFingerUpdateHandler;
         LeanTouch.OnFingerUp += OnFingerUpHandler;
+        Messenger.AddListener<Vector3>(Message.MoveCameraTo, MoveCameraTo);
     }
-
 
     private void OnFingerDownHandler(LeanFinger finger)
     {
@@ -71,6 +75,12 @@ public class CameraMovement : MonoBehaviour
     private void OnFingerUpHandler(LeanFinger finger)
     {
         this.canMove = false;
+    }
+
+    private void MoveCameraTo(Vector3 position)
+    {
+        position = ClampCameraPosition(position);
+        this.cam.transform.DOMove(position, this.moveToCenterDuration).SetEase(Ease.OutQuart);
     }
 
     private void MoveCameraWhileEditing(LeanFinger finger)
@@ -116,5 +126,6 @@ public class CameraMovement : MonoBehaviour
         LeanTouch.OnFingerDown -= OnFingerDownHandler;
         LeanTouch.OnFingerUpdate -= OnFingerUpdateHandler;
         LeanTouch.OnFingerUp -= OnFingerUpHandler;
+        Messenger.RemoveListener<Vector3>(Message.MoveCameraTo, MoveCameraTo);
     }
 }
