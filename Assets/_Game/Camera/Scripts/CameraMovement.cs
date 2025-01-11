@@ -23,7 +23,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField]
     private float yMax;
 
-    [Title]
+    [Line]
     [SerializeField, Required]
     private Camera cam;
 

@@ -14,7 +14,7 @@ public class BuildingSystem : MonoBehaviour
     [SerializeField, Required]
     private TileBase occupiedTile;
     
-    [Title]
+    [Line]
     [SerializeField, Required]
     private TimerTooltip tooltip;
 
