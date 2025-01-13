@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Barn_Stage_3_0: -5006506103873638069
+      Barn_Stage_3_1: 3419110109140676469
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

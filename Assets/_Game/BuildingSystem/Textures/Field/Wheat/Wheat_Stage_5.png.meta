@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Wheat_Stage_5_0: 414262566162144735
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
