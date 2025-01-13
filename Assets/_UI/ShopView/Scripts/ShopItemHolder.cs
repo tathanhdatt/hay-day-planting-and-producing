@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Dt.Attribute;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ public class ShopItemHolder : MonoBehaviour
 
     public ShopItemType ItemType => this.itemType;
     public ShopItemInfo[] ItemInfos => this.shopItems;
+    
+    private readonly List<ShopItem> items = new List<ShopItem>();
 
     public async UniTask Initialize(Transform draggingBound)
     {
@@ -30,7 +33,25 @@ public class ShopItemHolder : MonoBehaviour
         foreach (ShopItemInfo info in this.shopItems)
         {
             ShopItem newItem = Instantiate(this.shopItemPrefab, this.holder);
+            this.items.Add(newItem);
             await newItem.Initialize(info, draggingBound);
         }
+    }
+
+    public void Refresh()
+    {
+        foreach (ShopItem item in this.items)
+        {
+            item.Refresh();
+        }
+    }
+
+    public void OnUpdateLevel()
+    {
+        foreach (ShopItemInfo info in ItemInfos)
+        {
+            info.UpdateQuantity();
+        }
+        Refresh();
     }
 }

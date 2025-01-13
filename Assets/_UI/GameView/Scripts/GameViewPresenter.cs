@@ -80,7 +80,7 @@ public class GameViewPresenter : BaseViewPresenter
 
     private void OnClickAddXpHandler()
     {
-        this.levelXpStorage.AddXp(10);
+        this.levelXpStorage.AddXp(9);
     }
 
     private void OnLevelUpdatedHandler(int level)

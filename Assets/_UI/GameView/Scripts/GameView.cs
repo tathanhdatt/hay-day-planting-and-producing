@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Dt.Attribute;
 using TMPro;
 using UnityEngine;
@@ -10,13 +11,21 @@ public class GameView : BaseView
 {
     [Title("Level")]
     [SerializeField, Required]
-    private FillBar levelXpBar;
+    private Image levelXpBar;
 
     [SerializeField, Required]
     private TMP_Text levelText;
 
     [SerializeField, Required]
     private TMP_Text levelXpText;
+
+    [SerializeField]
+    private float xpBarUpdateDuration;
+
+    [SerializeField, ReadOnly]
+    private float maxXpBarWidth;
+    
+    private Tweener xpBarTweener;
 
     [Title("Currency")]
     [SerializeField, Required]
@@ -60,53 +69,51 @@ public class GameView : BaseView
         this.addCoinButton.onClick.AddListener(() => OnClickAddCoin?.Invoke());
         this.addGemButton.onClick.AddListener(() => OnClickAddGem?.Invoke());
         this.addXpButton.onClick.AddListener(() => OnClickAddXp?.Invoke());
+        this.maxXpBarWidth = ((RectTransform)this.levelXpBar.transform.parent.transform).rect.width;
     }
 
     public void SetCoinText(int coin)
     {
-        this.coinText.SetText(GetStringNumber(coin));
+        this.coinText.SetText(coin.ToString());
     }
 
     public void SetGemText(int gem)
     {
-        this.gemText.SetText(GetStringNumber(gem));
+        this.gemText.SetText(gem.ToString());
     }
 
-    public void FillLevelXpBar(float percentage)
+    public async void FillLevelXpBar(float percentage)
     {
-        this.levelXpBar.FillTo(percentage);
+        this.xpBarTweener?.Complete();
+        Vector2 sizeDelta = GetLevelXpBarSize();
+        sizeDelta.x = percentage * this.maxXpBarWidth;
+        this.xpBarTweener = this.levelXpBar.rectTransform
+            .DOSizeDelta(sizeDelta, this.xpBarUpdateDuration);
+        this.xpBarTweener.SetEase(Ease.OutQuart);
+        await this.xpBarTweener.AsyncWaitForCompletion();
     }
 
     public void SetFillBar(float percentage)
     {
-        this.levelXpBar.SetFillAmount(percentage);
+        this.xpBarTweener?.Complete();
+        Vector2 sizeDelta = GetLevelXpBarSize();
+        sizeDelta.x = percentage * this.maxXpBarWidth;
+        this.levelXpBar.rectTransform.sizeDelta = sizeDelta;
+    }
+
+    private Vector2 GetLevelXpBarSize()
+    {
+        return this.levelXpBar.rectTransform.sizeDelta;
     }
 
     public void SetLevel(int level)
     {
-        this.levelText.SetText(GetStringNumber(level));
+        this.levelText.SetText(level.ToString());
     }
 
     public void SetLevelXpText(int currentXp, int requiredXp)
     {
         string xpProgression = $"{currentXp}/{requiredXp}";
         this.levelXpText.SetText(xpProgression);
-    }
-
-    private string GetStringNumber(int number)
-    {
-        if (number == 0)
-        {
-            return "<sprite=\"0\" index=0>";
-        }
-
-        StringBuilder stringNumber = new StringBuilder();
-        while (number > 0)
-        {
-            stringNumber.Insert(0, $"<sprite=\"{number % 10}\" index=0>");
-            number /= 10;
-        }
-
-        return stringNumber.ToString();
     }
 }

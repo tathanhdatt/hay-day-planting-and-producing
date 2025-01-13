@@ -3,12 +3,14 @@
 public class ShopViewPresenter : BaseViewPresenter
 {
     private readonly ICurrency currency;
+    private readonly ILevelXpStorage levelXpStorage;
     private ShopView shopView;
 
-    public ShopViewPresenter(GamePresenter gamePresenter, Transform transform, ICurrency currency)
-        : base(gamePresenter, transform)
+    public ShopViewPresenter(GamePresenter gamePresenter, Transform transform, 
+        ICurrency currency, ILevelXpStorage levelXpStorage) : base(gamePresenter, transform)
     {
         this.currency = currency;
+        this.levelXpStorage = levelXpStorage;
     }
 
     protected override void AddViews()
@@ -16,6 +18,12 @@ public class ShopViewPresenter : BaseViewPresenter
         this.shopView = AddView<ShopView>();
         Messenger.AddListener(Message.OutOfShopBound, OutOfShopBoundHandler);
         this.currency.OnAmountChanged += OnAmountChangedHandle;
+        this.levelXpStorage.OnLevelUpdated += OnLevelUpdatedHandler;
+    }
+
+    private void OnLevelUpdatedHandler(int level)
+    {
+        this.shopView.OnUpdateLevel();
     }
 
     private void OnAmountChangedHandle(CurrencyType type)
@@ -31,7 +39,7 @@ public class ShopViewPresenter : BaseViewPresenter
             foreach (ShopItemInfo itemInfo in itemHolder.ItemInfos)
             {
                 if (itemInfo.currencyType != type) continue;
-                itemInfo.isEnoughCurrency = this.currency.InEnough(type, itemInfo.price);
+                itemInfo.isEnoughCurrency = this.currency.IsEnough(type, itemInfo.price);
             }
         }
     }
@@ -45,6 +53,7 @@ public class ShopViewPresenter : BaseViewPresenter
     {
         base.OnShow();
         this.shopView.OnClickExit += OnClickExitHandler;
+        this.shopView.RefreshHolders();
     }
 
     protected override void OnHide()

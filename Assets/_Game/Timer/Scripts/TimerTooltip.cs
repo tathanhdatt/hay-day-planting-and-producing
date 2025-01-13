@@ -36,7 +36,7 @@ public class TimerTooltip : MonoBehaviour
     private void OnClickSkipHandler()
     {
         int gem = GetGemToSkip();
-        if (this.currency.InEnough(CurrencyType.Gem, gem))
+        if (this.currency.IsEnough(CurrencyType.Gem, gem))
         {
             this.timer?.SkipTimer();
             this.currency.SubtractAmount(CurrencyType.Gem, gem);

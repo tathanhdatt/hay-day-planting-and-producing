@@ -12,13 +12,34 @@ public class ShopItemInfo : ScriptableObject
     public int unlockLevel;
     public CurrencyType currencyType;
     public int price;
+
+    [Title("Quantity")]
+    public int additionalQuantityEachLevel;
+    public int quantity;
+    public int maxQuantity;
+
     [Title("Prefab")]
     public Facility prefab;
+
     [Title("Building Time")]
     public int days;
     public int hours;
     public int minutes;
     public int seconds;
+
     [ReadOnly]
     public bool isEnoughCurrency;
+
+
+    [Button]
+    public void UpdateQuantity()
+    {
+        this.maxQuantity += this.additionalQuantityEachLevel;
+    }
+
+    [Button]
+    public void IncreaseQuantity()
+    {
+        this.quantity += 1;
+    }
 }

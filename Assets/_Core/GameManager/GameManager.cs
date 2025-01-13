@@ -14,7 +14,7 @@ namespace Core.Game
 
         [SerializeField, Required]
         private BuildingSystem buildingSystem;
-        
+
         [SerializeField, Required]
         private TimerTooltip timerTooltip;
 
@@ -71,6 +71,7 @@ namespace Core.Game
             {
                 InitCurrency();
             }
+
             this.buildingSystem.Initialize(Currency);
         }
 
@@ -88,9 +89,26 @@ namespace Core.Game
 
         private async UniTask OnEnter()
         {
+            Messenger.AddListener<OpenableView>(Message.OpenView, OpenViewHandler);
             await this.presenter.GetViewPresenter<GameViewPresenter>().Show();
             Currency.SetAmount(CurrencyType.Coin, 1000);
             Currency.SetAmount(CurrencyType.Gem, 1000);
+        }
+
+        private async void OpenViewHandler(OpenableView openableView)
+        {
+            switch (openableView)
+            {
+                case OpenableView.Achievement:
+                    await this.presenter.GetViewPresenter<AchievementViewPresenter>().Show();
+                    break;
+                case OpenableView.Barn:
+                    await this.presenter.GetViewPresenter<BarnViewPresenter>().Show();
+                    break;
+                case OpenableView.Silo:
+                    await this.presenter.GetViewPresenter<SiloViewPresenter>().Show();
+                    break;
+            }
         }
 
         public void Dispose()

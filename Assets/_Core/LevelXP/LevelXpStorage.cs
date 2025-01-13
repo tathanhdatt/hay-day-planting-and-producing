@@ -36,18 +36,19 @@ public class LevelXpStorage : ILevelXpStorage
     {
         this.currentXp += levelXp;
         bool isEnoughXp = this.currentXp >= this.requiredXp;
-        OnXpUpdated?.Invoke(this.currentXp);
         if (isEnoughXp)
         {
             UpdateLevel();
         }
+
+        OnXpUpdated?.Invoke(this.currentXp);
     }
 
     private void UpdateLevel()
     {
         int nextLevel = Math.Clamp(this.currentLevel + 1, 1, this.levelRequirement.NumberLevel);
+        this.currentXp -= this.requiredXp;
         SetCurrentLevel(nextLevel);
-        this.currentXp = 0;
         OnLevelUpdated?.Invoke(this.currentLevel);
         Messenger.Broadcast(Message.UpdatedLevel, this.currentLevel);
     }

@@ -56,6 +56,7 @@ public class BuildingSystem : MonoBehaviour
     private void OnFirstTimePlacedHandler()
     {
         this.facility.OnFirstTimePlaced -= OnFirstTimePlacedHandler;
+        this.currentItemInfo.IncreaseQuantity();
         SubtractAmount();
         Build();
     }

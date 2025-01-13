@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class DraggableObject : MonoBehaviour
 {
+    [SerializeField, Required]
+    private SpriteRenderer graphic;
+
     [SerializeField, ReadOnly]
     private GridLayout gridLayout;
 
@@ -33,6 +36,7 @@ public class DraggableObject : MonoBehaviour
     private void OnEnable()
     {
         GameState.isEditing = true;
+        SetInteractingLayer();
         LeanTouch.OnFingerUpdate += OnFingerUpdateHandler;
         LeanTouch.OnFingerUp += OnFingerUpHandler;
     }
@@ -40,8 +44,19 @@ public class DraggableObject : MonoBehaviour
     private void OnDisable()
     {
         GameState.isEditing = false;
+        ResetSortingLayer();
         LeanTouch.OnFingerUpdate -= OnFingerUpdateHandler;
         LeanTouch.OnFingerUp -= OnFingerUpHandler;
+    }
+
+    private void SetInteractingLayer()
+    {
+        this.graphic.sortingLayerName = SortingLayerName.Interactable;
+    }
+
+    private void ResetSortingLayer()
+    {
+        this.graphic.sortingLayerName = SortingLayerName.Facility;
     }
 
     private void OnFingerUpdateHandler(LeanFinger finger)

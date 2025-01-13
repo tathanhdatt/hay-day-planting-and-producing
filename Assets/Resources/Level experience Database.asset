@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1b1e93a10a447e48106ace5788eec0d, type: 3}
-  m_Name: Level experience Database
+  m_Name: Level Experience Database
   m_EditorClassIdentifier: 
   database:
   - level: 1

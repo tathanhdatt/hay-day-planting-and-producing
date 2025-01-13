@@ -18,8 +18,9 @@ public class InteractionDetector : MonoBehaviour
     private bool isHolding;
 
     public event Action OnAllowedEditing;
-    public event Action OnTouchedOut;
-    public event Action OnTouchedMoved;
+    public event Action OnFingerDownOut;
+    public event Action OnFingerMove;
+    public event Action OnFingerDown;
 
 
     public void Initialize()
@@ -38,10 +39,11 @@ public class InteractionDetector : MonoBehaviour
         {
             this.holdingTimeSpan = 0;
             this.isHolding = true;
+            OnFingerDown?.Invoke();
         }
         else
         {
-            OnTouchedOut?.Invoke();
+            OnFingerDownOut?.Invoke();
         }
     }
 
@@ -74,7 +76,7 @@ public class InteractionDetector : MonoBehaviour
 
     private void OnFingerMoved()
     {
-        OnTouchedMoved?.Invoke();
+        OnFingerMove?.Invoke();
         this.isHolding = false;
     }
 

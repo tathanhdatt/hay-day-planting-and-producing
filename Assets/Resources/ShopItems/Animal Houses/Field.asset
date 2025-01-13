@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d246714ffb64c31818447f78d33c7bf, type: 3}
+  m_Name: Field
+  m_EditorClassIdentifier: 
+  icon: {fileID: 2202885217157402906, guid: 53b9ff8ecf2d518409750104b490651f, type: 3}
+  title: Field
+  description: 
+  isUnlocked: 1
+  unlockLevel: 1
+  currencyType: 0
+  price: 1
+  additionalQuantityEachLevel: 3
+  quantity: 0
+  maxQuantity: 9
+  prefab: {fileID: 1778937167857324460, guid: 9d81c0c4f606d6a4a8a3052460c08eb0, type: 3}
+  days: 0
+  hours: 0
+  minutes: 0
+  seconds: 1
+  isEnoughCurrency: 1
