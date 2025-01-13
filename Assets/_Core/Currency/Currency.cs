@@ -58,7 +58,7 @@ public class Currency : ICurrency
         OnAmountChanged?.Invoke(currencyType);
     }
 
-    public bool InEnough(CurrencyType currencyType, int amount)
+    public bool IsEnough(CurrencyType currencyType, int amount)
     {
         if (!this.currencies.TryGetValue(currencyType, out int currentAmount))
         {

@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Facility
+    uniqueID: 2698406463
+    locked: 0
   - name: Tooltip
     uniqueID: 413717759
     locked: 0

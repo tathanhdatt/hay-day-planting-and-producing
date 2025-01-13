@@ -8,5 +8,5 @@ public interface ICurrency
     void AddCurrency(CurrencyType currencyType, int amount = 0);
     void AddAmount(CurrencyType currencyType, int amount);
     void SubtractAmount(CurrencyType currencyType, int amount);
-    bool InEnough(CurrencyType currencyType, int amount);
+    bool IsEnough(CurrencyType currencyType, int amount);
 }

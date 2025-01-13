@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Text;
+using Cysharp.Threading.Tasks;
 using Dt.Attribute;
 using TMPro;
 using UnityEngine;
@@ -6,13 +7,6 @@ using UnityEngine.UI;
 
 public class ShopItem : MonoBehaviour
 {
-    [Title("Background")]
-    [SerializeField, Required]
-    private Image unlockedBackground;
-
-    [SerializeField, Required]
-    private Image lockedBackground;
-
     [Title("Info")]
     [SerializeField, Required]
     private Image icon;
@@ -26,6 +20,9 @@ public class ShopItem : MonoBehaviour
     [SerializeField, Required]
     private TMP_Text unlockedLevelText;
 
+    [SerializeField, Required]
+    private TMP_Text quantityText;
+
     [SerializeField, ReadOnly]
     private CurrencyType currencyType;
 
@@ -34,15 +31,9 @@ public class ShopItem : MonoBehaviour
 
     [Title("Currency")]
     [SerializeField, Required]
-    private GameObject currencyGameObject;
-
-    [SerializeField, Required]
-    private Image currencyIcon;
-
-    [SerializeField, Required]
     private TMP_Text price;
 
-    [Title("")]
+    [Line]
     [SerializeField, Required]
     private CurrencyGraphic[] currencyGraphics;
 
@@ -56,23 +47,70 @@ public class ShopItem : MonoBehaviour
     {
         this.draggedShopItem.Initialize(draggingBound, this.icon.transform as RectTransform, info);
         this.info = info;
-        DisplayInfo();
-        UpdateStatus();
+        Refresh();
         Messenger.AddListener<int>(Message.UpdatedLevel, UpdatedLevelHandler);
         await UniTask.CompletedTask;
     }
 
+    public void Refresh()
+    {
+        UpdateInfo();
+        UpdateStatus();
+    }
 
-    private void DisplayInfo()
+    private void UpdateInfo()
+    {
+        SetIcon();
+        SetTitle();
+        SetDescription();
+        SetPrice();
+        SetUnlockedLevel();
+        SetQuantity();
+    }
+
+
+    private void SetIcon()
     {
         this.icon.sprite = this.info.icon;
+    }
+
+    private void SetTitle()
+    {
         this.title.SetText(this.info.title);
+    }
+
+    private void SetDescription()
+    {
         this.description.SetText(this.info.description);
+    }
+
+    private void SetPrice()
+    {
         this.currencyType = this.info.currencyType;
-        this.price.SetText(this.info.price.ToString());
+        this.price.SetText(GetPriceText(this.info.price));
+    }
+
+    private void SetUnlockedLevel()
+    {
         this.unlockedLevel = this.info.unlockLevel;
         this.unlockedLevelText.SetText($"Unlock at level {this.info.unlockLevel}");
-        SetCurrencyIcon();
+    }
+
+    private string GetPriceText(int price)
+    {
+        StringBuilder priceText = new StringBuilder(36);
+        priceText.Append(price);
+        priceText.Append(" ");
+        if (this.currencyType == CurrencyType.Gem)
+        {
+            priceText.Append("<sprite=\"diamond\" index=0>");
+        }
+        else
+        {
+            priceText.Append("<sprite=\"coin\" index=0>");
+        }
+
+        return priceText.ToString();
     }
 
     private void UpdateStatus()
@@ -87,17 +125,6 @@ public class ShopItem : MonoBehaviour
         }
     }
 
-    private void SetCurrencyIcon()
-    {
-        foreach (CurrencyGraphic graphic in this.currencyGraphics)
-        {
-            if (graphic.type == this.currencyType)
-            {
-                this.currencyIcon.sprite = graphic.icon;
-            }
-        }
-    }
-
     private void UpdatedLevelHandler(int level)
     {
         if (level != this.unlockedLevel) return;
@@ -107,21 +134,31 @@ public class ShopItem : MonoBehaviour
 
     private void SetUnlocked()
     {
-        this.unlockedBackground.gameObject.SetActive(true);
-        this.currencyGameObject.SetActive(true);
-        this.draggedShopItem.gameObject.SetActive(true);
+        this.price.gameObject.SetActive(true);
+        bool isAvailable = this.info.quantity < this.info.maxQuantity;
+        this.draggedShopItem.enabled = isAvailable;
+        this.draggedShopItem.gameObject.SetActive(isAvailable);
 
-        this.lockedBackground.gameObject.SetActive(false);
         this.unlockedLevelText.gameObject.SetActive(false);
     }
 
     private void SetLocked()
     {
-        this.unlockedBackground.gameObject.SetActive(false);
-        this.currencyGameObject.SetActive(false);
+        this.price.gameObject.SetActive(false);
         this.draggedShopItem.gameObject.SetActive(false);
 
-        this.lockedBackground.gameObject.SetActive(true);
         this.unlockedLevelText.gameObject.SetActive(true);
+    }
+
+    private void SetQuantity()
+    {
+        if (this.info.maxQuantity == 1)
+        {
+            this.quantityText.SetText(string.Empty);
+        }
+
+        {
+            this.quantityText.SetText($"{this.info.quantity}/{this.info.maxQuantity}");
+        }
     }
 }

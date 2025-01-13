@@ -23,8 +23,20 @@ public class GamePresenter : MonoBehaviour
         AddPresenter(gameViewPresenter);
 
         ShopViewPresenter shopViewPresenter = new ShopViewPresenter(
-            this, transform, this.manager.Currency);
+            this, transform, this.manager.Currency, this.manager.LevelXpStorage);
         AddPresenter(shopViewPresenter);
+
+        AchievementViewPresenter achievementViewPresenter = new AchievementViewPresenter(
+            this, transform);
+        AddPresenter(achievementViewPresenter);
+
+        BarnViewPresenter barnViewPresenter = new BarnViewPresenter(
+            this, transform);
+        AddPresenter(barnViewPresenter);
+
+        SiloViewPresenter siloViewPresenter = new SiloViewPresenter(
+            this, transform);
+        AddPresenter(siloViewPresenter);
     }
 
     public async UniTask InitialViewPresenters()

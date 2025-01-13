@@ -4,4 +4,5 @@
     public const string UpdatedLevel = "UpdatedLevel";
     public const string SpawnItem = "SpawnItem";
     public const string MoveCameraTo = "MoveCameraTo";
+    public const string OpenView = "OpenView";
 }

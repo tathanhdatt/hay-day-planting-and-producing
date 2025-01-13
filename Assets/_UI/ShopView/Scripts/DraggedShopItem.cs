@@ -55,7 +55,7 @@ public class DraggedShopItem : MonoBehaviour,
     private void SetInteractableLayerForItemIcon()
     {
         this.iconCanvas.overrideSorting = true;
-        this.iconCanvas.sortingLayerName = "Interactable";
+        this.iconCanvas.sortingLayerName = SortingLayerName.Interactable;
     }
 
     private void HandleOnOutOfShop()

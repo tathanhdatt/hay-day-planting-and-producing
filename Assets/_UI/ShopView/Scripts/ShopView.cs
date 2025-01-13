@@ -60,6 +60,22 @@ public class ShopView : BaseView
         }
     }
 
+    public void RefreshHolders()
+    {
+        foreach (ShopItemHolder holder in this.itemHolders)
+        {
+            holder.Refresh();
+        }
+    }
+
+    public void OnUpdateLevel()
+    {
+        foreach (ShopItemHolder holder in this.itemHolders)
+        {
+            holder.OnUpdateLevel();
+        }
+    }
+
     private async UniTask InitializeTabButtons()
     {
         foreach (TabToggle button in this.tabButtons)

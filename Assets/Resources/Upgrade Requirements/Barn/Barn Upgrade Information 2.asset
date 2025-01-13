@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80fe895901e24043b2c7332b83244c03, type: 3}
+  m_Name: Barn Upgrade Information 2
+  m_EditorClassIdentifier: 
+  fromCapacity: 1000
+  toCapacity: 24999
+  additionalCapacityEachLevel: 50
+  additionalProductEachLevel: 1
+  requirements:
+  - {fileID: 11400000, guid: 1ea12ff183dac93439ca5e2122b0786f, type: 2}
+  - {fileID: 11400000, guid: f221dee478427e749955d4402f92fe55, type: 2}
+  - {fileID: 11400000, guid: 7ecb17e31bece51478794a33849ce31e, type: 2}
