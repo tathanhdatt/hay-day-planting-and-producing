@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15afb8d5a56a42128d311edb5142281e, type: 3}
   m_Name: Nail
   m_EditorClassIdentifier: 
-  quantity: 1
+  requiredQuantity: 1
   goods: {fileID: 11400000, guid: 433bbe284393f7747b0b1b8af5da15c1, type: 2}

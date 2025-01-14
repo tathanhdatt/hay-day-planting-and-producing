@@ -570,6 +570,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cd6d9e0fcea12044280c10d8647bd7fa, type: 2}
   - {fileID: 11400000, guid: 68fb84f2367079741a4a4d7ef73405c4, type: 2}
   draggedShopItem: {fileID: 6665136875824742875}
+  grayScaleMaterial: {fileID: 2100000, guid: c3698aa13f847ae42a9bb794c249d8f3, type: 2}
   info: {fileID: 0}
 --- !u!1 &4108042622972132067
 GameObject:

@@ -11,12 +11,25 @@ public class UpgradeInformation : ScriptableObject
     public int additionalSupplyEachLevel;
     public List<SupplyRequirement> requirements;
 
-    [Button]
-    public void UpdateRequirements()
+    public bool IsInRangeCapacity(int capacity)
+    {
+        if (this.fromCapacity <= capacity && capacity <= this.toCapacity)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool CanUpgrade()
     {
         foreach (SupplyRequirement requirement in this.requirements)
         {
-            requirement.quantity += this.additionalSupplyEachLevel;
+            if (requirement.requiredQuantity > requirement.goods.quantity)
+            {
+                return false;
+            }
         }
+
+        return true;
     }
 }

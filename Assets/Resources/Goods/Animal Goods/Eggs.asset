@@ -15,3 +15,5 @@ MonoBehaviour:
   goodsName: Eggs
   graphic: {fileID: 4646649027328027380, guid: 39ed891b1e905784d92a01286a209a64, type: 3}
   quantity: 0
+  level: 1
+  isUnlocked: 0

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7f6e28d722d4b368ec9142ef2415b08, type: 3}
   m_Name: Plank
   m_EditorClassIdentifier: 
-  productName: Plank
+  goodsName: Plank
   graphic: {fileID: -2080620203782119094, guid: 7e81ef70f44059540911da208f883113, type: 3}
   quantity: 0
+  level: 1
+  isUnlocked: 1

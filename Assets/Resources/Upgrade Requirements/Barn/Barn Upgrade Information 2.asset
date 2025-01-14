@@ -15,7 +15,7 @@ MonoBehaviour:
   fromCapacity: 1000
   toCapacity: 24999
   additionalCapacityEachLevel: 50
-  additionalProductEachLevel: 1
+  additionalSupplyEachLevel: 1
   requirements:
   - {fileID: 11400000, guid: 1ea12ff183dac93439ca5e2122b0786f, type: 2}
   - {fileID: 11400000, guid: f221dee478427e749955d4402f92fe55, type: 2}

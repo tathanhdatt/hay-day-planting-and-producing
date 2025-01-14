@@ -33,12 +33,15 @@ public class ShopItem : MonoBehaviour
     [SerializeField, Required]
     private TMP_Text price;
 
-    [Line]
     [SerializeField, Required]
     private CurrencyGraphic[] currencyGraphics;
 
+    [Line]
     [SerializeField, Required]
     private DraggedShopItem draggedShopItem;
+
+    [SerializeField, Required]
+    private Material grayScaleMaterial;
 
     [SerializeField, ReadOnly]
     private ShopItemInfo info;
@@ -136,7 +139,16 @@ public class ShopItem : MonoBehaviour
     {
         this.price.gameObject.SetActive(true);
         bool isAvailable = this.info.quantity < this.info.maxQuantity;
-        this.draggedShopItem.enabled = isAvailable;
+        if (isAvailable)
+        {
+            this.draggedShopItem.enabled = true;
+            this.icon.material = null;
+        }
+        else
+        {
+            this.icon.material = this.grayScaleMaterial;
+        }
+
         this.draggedShopItem.gameObject.SetActive(isAvailable);
 
         this.unlockedLevelText.gameObject.SetActive(false);
@@ -146,6 +158,7 @@ public class ShopItem : MonoBehaviour
     {
         this.price.gameObject.SetActive(false);
         this.draggedShopItem.gameObject.SetActive(false);
+        this.icon.material = this.grayScaleMaterial;
 
         this.unlockedLevelText.gameObject.SetActive(true);
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class BaseViewPresenter
 {
-    private readonly List<BaseView> views = new List<BaseView>();
+    private readonly List<BaseView> views = new List<BaseView>(4);
     protected GamePresenter GamePresenter { get; private set; }
     public Transform Transform { get; private set; }
     public bool IsShowing { get; private set; }
@@ -26,9 +26,10 @@ public abstract class BaseViewPresenter
 
     protected abstract void AddViews();
 
-    protected T AddView<T>() where T : BaseView
+    protected T AddView<T>(bool canShowWithPresenter = true) where T : BaseView
     {
-        T view = Object.FindAnyObjectByType<T>();
+        T view = Transform.GetComponentInChildren<T>();
+        view.CanShowWithPresenter = canShowWithPresenter;
         this.views.Add(view);
         return view;
     }
@@ -38,7 +39,10 @@ public abstract class BaseViewPresenter
         IsShowing = true;
         foreach (BaseView view in this.views)
         {
-            await view.Show();
+            if (view.CanShowWithPresenter)
+            {
+                await view.Show();
+            }
         }
 
         OnShow();
