@@ -21,6 +21,7 @@ public class InteractionDetector : MonoBehaviour
     public event Action OnFingerDownOut;
     public event Action OnFingerMove;
     public event Action OnFingerDown;
+    public event Action OnFingerUp;
 
 
     public void Initialize()
@@ -28,7 +29,6 @@ public class InteractionDetector : MonoBehaviour
         LeanTouch.OnFingerDown += OnFingerDownHandler;
         LeanTouch.OnFingerUpdate += OnFingerUpdateHandler;
         LeanTouch.OnFingerUp += OnFingerUpHandler;
-        LeanTouch.OnFingerTap += OnFingerTapHandler;
     }
 
 
@@ -64,13 +64,10 @@ public class InteractionDetector : MonoBehaviour
     {
         this.holdingTimeSpan = 0;
         this.isHolding = false;
-    }
-
-    private void OnFingerTapHandler(LeanFinger finger)
-    {
+        if (finger.IsOverGui) return;
         if (IsCurrentFingerInBounds(finger))
         {
-            Messenger.Broadcast(Message.MoveCameraTo, transform.position);
+            OnFingerUp?.Invoke();
         }
     }
 
@@ -119,6 +116,5 @@ public class InteractionDetector : MonoBehaviour
         LeanTouch.OnFingerDown -= OnFingerDownHandler;
         LeanTouch.OnFingerUpdate -= OnFingerUpdateHandler;
         LeanTouch.OnFingerUp -= OnFingerUpHandler;
-        LeanTouch.OnFingerTap -= OnFingerTapHandler;
     }
 }

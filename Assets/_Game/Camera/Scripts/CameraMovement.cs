@@ -126,6 +126,5 @@ public class CameraMovement : MonoBehaviour
         LeanTouch.OnFingerDown -= OnFingerDownHandler;
         LeanTouch.OnFingerUpdate -= OnFingerUpdateHandler;
         LeanTouch.OnFingerUp -= OnFingerUpHandler;
-        Messenger.RemoveListener<Vector3>(Message.MoveCameraTo, MoveCameraTo);
     }
 }

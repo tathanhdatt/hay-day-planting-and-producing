@@ -18,10 +18,18 @@ namespace Core.Game
         [SerializeField, Required]
         private TimerTooltip timerTooltip;
 
+        [SerializeField, Required]
+        private GoodsDatabase barnDatabase;
+
+        [SerializeField, Required]
+        private GoodsDatabase siloDatabase;
+
         private IAudioService audioService;
         private ILevelRequirement levelRequirement;
         public ILevelXpStorage LevelXpStorage { get; private set; }
         public ICurrency Currency { get; private set; }
+        public GoodsDatabase BarnDatabase => this.barnDatabase;
+        public GoodsDatabase SiloDatabase => this.siloDatabase;
 
         private void Awake()
         {
@@ -55,7 +63,7 @@ namespace Core.Game
 
         private void InitLevelRequirement()
         {
-            LevelXpDatabase database = Resources.Load<LevelXpDatabase>("Level experience Database");
+            LevelXpDatabase database = Resources.Load<LevelXpDatabase>("Level Experience Database");
             this.levelRequirement = new LevelRequirement(database);
         }
 
@@ -103,10 +111,10 @@ namespace Core.Game
                     await this.presenter.GetViewPresenter<AchievementViewPresenter>().Show();
                     break;
                 case OpenableView.Barn:
-                    await this.presenter.GetViewPresenter<BarnViewPresenter>().Show();
+                    await this.presenter.GetViewPresenter<BarnStorageViewPresenter>().Show();
                     break;
                 case OpenableView.Silo:
-                    await this.presenter.GetViewPresenter<SiloViewPresenter>().Show();
+                    await this.presenter.GetViewPresenter<SiloStorageViewPresenter>().Show();
                     break;
             }
         }

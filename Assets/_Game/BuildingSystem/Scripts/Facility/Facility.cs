@@ -13,9 +13,14 @@ public abstract class Facility : MonoBehaviour
     [SerializeField]
     private Timer buildingTimer;
 
+    [SerializeField, Required]
+    private SpriteRenderer graphic;
 
     [SerializeField]
     private BoundsInt bounds;
+
+    [SerializeField, ReadOnly]
+    private bool canFocus;
 
     private TimerTooltip tooltip;
 
@@ -32,7 +37,7 @@ public abstract class Facility : MonoBehaviour
 
     private void InitializeBuildingTimer()
     {
-        this.buildingTimer.Initialize();
+        this.buildingTimer?.Initialize();
     }
 
     private void InitializeInteractionDetector()
@@ -42,10 +47,12 @@ public abstract class Facility : MonoBehaviour
         this.interactionDetector.OnFingerDownOut += OnFingerDownOutHandler;
         this.interactionDetector.OnFingerMove += OnFingerMoveHandler;
         this.interactionDetector.OnFingerDown += OnFingerDownHandler;
+        this.interactionDetector.OnFingerUp += OnFingerUpHandler;
     }
 
     private void InitializeDraggableObject(BuildingSystem buildingSystem, GridLayout gridLayout)
     {
+        if (this.draggableObject == null) return;
         this.draggableObject.Initialize(buildingSystem, gridLayout, this.bounds);
         this.draggableObject.OnFirstTimePlaced += OnFirstTimePlacedHandler;
     }
@@ -81,19 +88,55 @@ public abstract class Facility : MonoBehaviour
         }
     }
 
-    private void OnFingerMoveHandler()
+    protected virtual void OnFingerDownHandler()
     {
+        this.canFocus = true;
+    }
+
+    protected virtual void OnFingerMoveHandler()
+    {
+        this.canFocus = false;
         this.tooltip.Hide();
     }
 
-    protected abstract void OnFingerDownHandler();
+
+    protected virtual void OnFingerUpHandler()
+    {
+        if (this.canFocus)
+        {
+            Focus();
+        }
+    }
+
+    private void Focus()
+    {
+        Vector3 center = transform.position;
+        center.y += this.graphic.bounds.size.y / 2;
+        Messenger.Broadcast(Message.MoveCameraTo, center);
+    }
+
+    public void SetDraggable(bool draggable)
+    {
+        if (this.draggableObject == null) return;
+        this.draggableObject.enabled = draggable;
+    }
+
+    public void SetPlaced(bool placed)
+    {
+        this.draggableObject?.SetPlaced(placed);
+    }
 
     private void OnDestroy()
     {
-        this.draggableObject.OnFirstTimePlaced -= OnFirstTimePlacedHandler;
+        if (this.draggableObject != null)
+        {
+            this.draggableObject.OnFirstTimePlaced -= OnFirstTimePlacedHandler;
+        }
+
         this.interactionDetector.OnAllowedEditing -= OnAllowedEditingHandler;
         this.interactionDetector.OnFingerDownOut -= OnFingerDownOutHandler;
         this.interactionDetector.OnFingerMove -= OnFingerMoveHandler;
         this.interactionDetector.OnFingerDown -= OnFingerDownHandler;
+        this.interactionDetector.OnFingerUp -= OnFingerUpHandler;
     }
 }

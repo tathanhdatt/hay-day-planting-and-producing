@@ -29,7 +29,6 @@ public class DraggableObject : MonoBehaviour
         this.buildingSystem = buildingSystem;
         this.bounds = bounds;
         this.isPlaced = false;
-        enabled = true;
     }
 
 
@@ -132,7 +131,8 @@ public class DraggableObject : MonoBehaviour
         this.bounds.position = pos;
     }
 
-    private void OnDestroy()
+    public void SetPlaced(bool placed)
     {
+        this.isPlaced = placed;
     }
 }

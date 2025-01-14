@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Dt.Attribute;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -18,6 +19,10 @@ public class BuildingSystem : MonoBehaviour
     [SerializeField, Required]
     private TimerTooltip tooltip;
 
+    [Line]
+    [SerializeField]
+    private List<Facility> availableFacilities;
+
     private Facility facility;
 
     private ICurrency currency;
@@ -27,6 +32,17 @@ public class BuildingSystem : MonoBehaviour
     {
         Messenger.AddListener<ShopItemInfo>(Message.SpawnItem, SpawnItemHandler);
         this.currency = currency;
+        InitializeAvailableFacilities();
+    }
+
+    private void InitializeAvailableFacilities()
+    {
+        foreach (Facility availableFacility in this.availableFacilities)
+        {
+            availableFacility.Initialize(this, this.gridLayout, this.tooltip);
+            availableFacility.SetDraggable(false);
+            availableFacility.SetPlaced(true);
+        }
     }
 
     private void SpawnItemHandler(ShopItemInfo info)
@@ -40,6 +56,7 @@ public class BuildingSystem : MonoBehaviour
         this.facility = Instantiate(
             this.currentItemInfo.prefab, this.mainTilemap.transform);
         this.facility.Initialize(this, this.gridLayout, this.tooltip);
+        this.facility.SetDraggable(true);
         this.facility.OnFirstTimePlaced += OnFirstTimePlacedHandler;
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class BaseView : MonoBehaviour
 {
     private Canvas canvas;
+    public bool CanShowWithPresenter { get; set; } = false;
 
     public virtual async UniTask Initialize()
     {

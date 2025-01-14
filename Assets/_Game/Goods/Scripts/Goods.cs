@@ -7,4 +7,5 @@ public class Goods : ScriptableObject
     public Sprite graphic;
     public int quantity;
     public int level;
+    public bool isUnlocked;
 }

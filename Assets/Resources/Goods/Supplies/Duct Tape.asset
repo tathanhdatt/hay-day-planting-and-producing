@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7f6e28d722d4b368ec9142ef2415b08, type: 3}
   m_Name: Duct Tape
   m_EditorClassIdentifier: 
-  productName: Duct  Tape
+  goodsName: Duct Tape
   graphic: {fileID: -7820179105983898557, guid: 35014be870c816f4ea40dc2505e4bc7c, type: 3}
   quantity: 0
+  level: 1
+  isUnlocked: 1
