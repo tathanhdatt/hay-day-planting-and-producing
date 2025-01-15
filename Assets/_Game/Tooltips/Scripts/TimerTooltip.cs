@@ -21,6 +21,10 @@ public class TimerTooltip : MonoBehaviour
 
     [SerializeField, Required]
     private Button skipButton;
+    
+    [Line]
+    [SerializeField, Required]
+    private SnappingCamera snappingCamera;
 
     private ICurrency currency;
     private Timer timer;
@@ -51,6 +55,7 @@ public class TimerTooltip : MonoBehaviour
     public void Show(Timer timer)
     {
         if (timer == null) return;
+        this.snappingCamera.SetSource(timer.transform);
         gameObject.SetActive(true);
         this.timer = timer;
         this.timerName.SetText(this.timer.Name);

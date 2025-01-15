@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
 
-[CreateAssetMenu(fileName = "New Supply Requirement", menuName = "Goods/Upgrade/Goods Requirement")]
-public class SupplyRequirement : ScriptableObject
+[Serializable]
+public class GoodsRequirement 
 {
     public int requiredQuantity;
     public Goods goods;

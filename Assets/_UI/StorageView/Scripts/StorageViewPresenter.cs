@@ -50,7 +50,7 @@ public abstract class StorageViewPresenter : BaseViewPresenter
                 $"There is no upgrade information for {this.database.capacity} capacity.");
         }
 
-        foreach (SupplyRequirement requirement in upgradeInfo.requirements)
+        foreach (GoodsRequirement requirement in upgradeInfo.requirements)
         {
             this.upgradeView.GenerateSupply(requirement);
         }
@@ -95,7 +95,7 @@ public abstract class StorageViewPresenter : BaseViewPresenter
         this.storageView.SetActiveStorage(true);
     }
 
-    private void OnConfirmBuyGoodsHandler(SupplyRequirement requirement)
+    private void OnConfirmBuyGoodsHandler(GoodsRequirement requirement)
     {
         int gem = requirement.GetGemToBuy();
         if (this.currency.IsEnough(CurrencyType.Gem, gem))
@@ -143,7 +143,7 @@ public abstract class StorageViewPresenter : BaseViewPresenter
 
     private void ConsumeGoodsToUpgrade(UpgradeInformation upgradeInfo)
     {
-        foreach (SupplyRequirement requirement in upgradeInfo.requirements)
+        foreach (GoodsRequirement requirement in upgradeInfo.requirements)
         {
             requirement.goods.quantity -= requirement.requiredQuantity;
         }
@@ -151,7 +151,7 @@ public abstract class StorageViewPresenter : BaseViewPresenter
 
     private void IncreaseRequiredQuantity(UpgradeInformation upgradeInfo)
     {
-        foreach (SupplyRequirement requirement in upgradeInfo.requirements)
+        foreach (GoodsRequirement requirement in upgradeInfo.requirements)
         {
             requirement.requiredQuantity += upgradeInfo.additionalSupplyEachLevel;
         }

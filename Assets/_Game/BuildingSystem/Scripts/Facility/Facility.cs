@@ -1,5 +1,6 @@
 ﻿using System;
 using Dt.Attribute;
+using Lean.Touch;
 using UnityEngine;
 
 public abstract class Facility : MonoBehaviour
@@ -13,23 +14,22 @@ public abstract class Facility : MonoBehaviour
     [SerializeField]
     private Timer buildingTimer;
 
-    [SerializeField, Required]
-    private SpriteRenderer graphic;
-
     [SerializeField]
     private BoundsInt bounds;
 
     [SerializeField, ReadOnly]
-    private bool canFocus;
+    protected bool isBuilding;
 
-    private TimerTooltip tooltip;
+    [SerializeField, ReadOnly]
+    private TimerTooltip timerTooltip;
 
     public event Action OnFirstTimePlaced;
 
     public void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout,
         TimerTooltip tooltip)
     {
-        this.tooltip = tooltip;
+        this.timerTooltip = tooltip;
+        this.isBuilding = false;
         InitializeBuildingTimer();
         InitializeInteractionDetector();
         InitializeDraggableObject(buildingSystem, gridLayout);
@@ -37,7 +37,15 @@ public abstract class Facility : MonoBehaviour
 
     private void InitializeBuildingTimer()
     {
-        this.buildingTimer?.Initialize();
+        if (this.buildingTimer == null) return;
+        this.buildingTimer.Initialize();
+        this.buildingTimer.OnFinished += OnFinishedHandler;
+    }
+
+    private void OnFinishedHandler()
+    {
+        this.buildingTimer.OnFinished -= OnFinishedHandler;
+        this.isBuilding = false;
     }
 
     private void InitializeInteractionDetector()
@@ -48,7 +56,9 @@ public abstract class Facility : MonoBehaviour
         this.interactionDetector.OnFingerMove += OnFingerMoveHandler;
         this.interactionDetector.OnFingerDown += OnFingerDownHandler;
         this.interactionDetector.OnFingerUp += OnFingerUpHandler;
+        this.interactionDetector.OnFingerUpdate += OnFingerUpdateHandler;
     }
+
 
     private void InitializeDraggableObject(BuildingSystem buildingSystem, GridLayout gridLayout)
     {
@@ -64,8 +74,10 @@ public abstract class Facility : MonoBehaviour
         this.draggableObject.enabled = true;
     }
 
+
     public void StartBuilding(TimeSpan buildingTimeSpan)
     {
+        this.isBuilding = true;
         this.buildingTimer.StartTimer("Building", buildingTimeSpan);
     }
 
@@ -75,44 +87,41 @@ public abstract class Facility : MonoBehaviour
         OnFirstTimePlaced?.Invoke();
     }
 
-    private void OnMouseUpAsButton()
+    protected virtual void OnFingerDownOutHandler()
     {
-        this.tooltip.Show(this.buildingTimer);
-    }
-
-    private void OnFingerDownOutHandler()
-    {
-        if (this.tooltip.CurrentTimer == this.buildingTimer)
+        if (this.timerTooltip.CurrentTimer == this.buildingTimer)
         {
-            this.tooltip.Hide();
+            this.timerTooltip.Hide();
         }
     }
 
-    protected virtual void OnFingerDownHandler()
+    protected virtual void OnFingerDownHandler(LeanFinger finger)
     {
-        this.canFocus = true;
     }
 
-    protected virtual void OnFingerMoveHandler()
+    protected virtual void OnFingerMoveHandler(LeanFinger finger)
     {
-        this.canFocus = false;
-        this.tooltip.Hide();
+        this.timerTooltip.Hide();
     }
 
 
-    protected virtual void OnFingerUpHandler()
+    protected virtual void OnFingerUpHandler(LeanFinger finger)
     {
-        if (this.canFocus)
+        this.draggableObject?.OnFingerUpHandler(finger);
+        if (this.isBuilding)
         {
-            Focus();
+            ShowBuildingTimer();
         }
     }
 
-    private void Focus()
+    protected virtual void OnFingerUpdateHandler(LeanFinger finger)
     {
-        Vector3 center = transform.position;
-        center.y += this.graphic.bounds.size.y / 2;
-        Messenger.Broadcast(Message.MoveCameraTo, center);
+        this.draggableObject?.OnFingerUpdateHandler(finger);
+    }
+
+    private void ShowBuildingTimer()
+    {
+        this.timerTooltip.Show(this.buildingTimer);
     }
 
     public void SetDraggable(bool draggable)
@@ -138,5 +147,6 @@ public abstract class Facility : MonoBehaviour
         this.interactionDetector.OnFingerMove -= OnFingerMoveHandler;
         this.interactionDetector.OnFingerDown -= OnFingerDownHandler;
         this.interactionDetector.OnFingerUp -= OnFingerUpHandler;
+        this.interactionDetector.OnFingerUpdate -= OnFingerUpdateHandler;
     }
 }

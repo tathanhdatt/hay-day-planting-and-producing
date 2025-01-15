@@ -22,6 +22,7 @@ public class DraggableObject : MonoBehaviour
 
     private BoundsInt bounds;
     public event Action OnFirstTimePlaced;
+    public event Action OnPlaced;
 
     public void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout, BoundsInt bounds)
     {
@@ -31,21 +32,16 @@ public class DraggableObject : MonoBehaviour
         this.isPlaced = false;
     }
 
-
     private void OnEnable()
     {
         GameState.isEditing = true;
         SetInteractingLayer();
-        LeanTouch.OnFingerUpdate += OnFingerUpdateHandler;
-        LeanTouch.OnFingerUp += OnFingerUpHandler;
     }
 
     private void OnDisable()
     {
         GameState.isEditing = false;
         ResetSortingLayer();
-        LeanTouch.OnFingerUpdate -= OnFingerUpdateHandler;
-        LeanTouch.OnFingerUp -= OnFingerUpHandler;
     }
 
     private void SetInteractingLayer()
@@ -58,7 +54,15 @@ public class DraggableObject : MonoBehaviour
         this.graphic.sortingLayerName = SortingLayerName.Facility;
     }
 
-    private void OnFingerUpdateHandler(LeanFinger finger)
+    public void OnFingerUpdateHandler(LeanFinger finger)
+    {
+        if (enabled)
+        {
+            UpdatePosition(finger);
+        }
+    }
+
+    private void UpdatePosition(LeanFinger finger)
     {
         Vector3 worldPos = finger.GetWorldPosition(CameraConstant.ZPosition);
         worldPos.z = 0;
@@ -66,10 +70,13 @@ public class DraggableObject : MonoBehaviour
         transform.position = this.gridLayout.CellToLocalInterpolated(gridPos);
     }
 
-    private void OnFingerUpHandler(LeanFinger finger)
+    public void OnFingerUpHandler(LeanFinger finger)
     {
-        UpdateBoundsPosition();
-        TryPlace();
+        if (enabled)
+        {
+            UpdateBoundsPosition();
+            TryPlace();
+        }
     }
 
     public void ClearAndSaveOldPosition()
@@ -123,6 +130,7 @@ public class DraggableObject : MonoBehaviour
     {
         this.buildingSystem.PlaceTilesInArea(this.bounds);
         enabled = false;
+        OnPlaced?.Invoke();
     }
 
     private void UpdateBoundsPosition()

@@ -15,7 +15,7 @@ MonoBehaviour:
   goods:
   - {fileID: 11400000, guid: 8aeb71d44b92d6b4ea371df1bc63bb43, type: 2}
   - {fileID: 11400000, guid: 0de315ef36a4228408183870bec67618, type: 2}
-  capacity: 75
+  capacity: 50
   requirements:
   - {fileID: 11400000, guid: a86409cdd1ec55f479c98857a8e9a6d9, type: 2}
   - {fileID: 11400000, guid: 716a952e39d004c4588d801a3978c443, type: 2}

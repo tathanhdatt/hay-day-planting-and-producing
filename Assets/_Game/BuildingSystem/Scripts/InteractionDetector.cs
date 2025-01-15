@@ -19,10 +19,10 @@ public class InteractionDetector : MonoBehaviour
 
     public event Action OnAllowedEditing;
     public event Action OnFingerDownOut;
-    public event Action OnFingerMove;
-    public event Action OnFingerDown;
-    public event Action OnFingerUp;
-
+    public event Action<LeanFinger> OnFingerMove;
+    public event Action<LeanFinger> OnFingerDown;
+    public event Action<LeanFinger> OnFingerUp;
+    public event Action<LeanFinger> OnFingerUpdate;
 
     public void Initialize()
     {
@@ -39,7 +39,7 @@ public class InteractionDetector : MonoBehaviour
         {
             this.holdingTimeSpan = 0;
             this.isHolding = true;
-            OnFingerDown?.Invoke();
+            OnFingerDown?.Invoke(finger);
         }
         else
         {
@@ -49,10 +49,11 @@ public class InteractionDetector : MonoBehaviour
 
     private void OnFingerUpdateHandler(LeanFinger finger)
     {
+        OnFingerUpdate?.Invoke(finger);
         bool isFingerMoved = finger.ScreenDelta != Vector2.zero;
         if (isFingerMoved)
         {
-            OnFingerMoved();
+            OnFingerMoved(finger);
         }
         else
         {
@@ -67,13 +68,13 @@ public class InteractionDetector : MonoBehaviour
         if (finger.IsOverGui) return;
         if (IsCurrentFingerInBounds(finger))
         {
-            OnFingerUp?.Invoke();
+            OnFingerUp?.Invoke(finger);
         }
     }
 
-    private void OnFingerMoved()
+    private void OnFingerMoved(LeanFinger finger)
     {
-        OnFingerMove?.Invoke();
+        OnFingerMove?.Invoke(finger);
         this.isHolding = false;
     }
 
