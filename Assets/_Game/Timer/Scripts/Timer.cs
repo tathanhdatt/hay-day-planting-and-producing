@@ -74,22 +74,26 @@ public class Timer : MonoBehaviour
             time.Append(timeLeftSpan.Days);
             time.Append("d ");
         }
-        else if (timeLeftSpan.Hours > 0)
+
+        if (timeLeftSpan.Hours > 0)
         {
             time.Append(timeLeftSpan.Hours);
             time.Append("h ");
         }
-        else if (timeLeftSpan.Minutes > 0)
+
+        if (timeLeftSpan.Minutes > 0)
         {
             time.Append(timeLeftSpan.Minutes);
             time.Append("m ");
         }
-        else if (timeLeftSpan.Seconds >= 0)
+
+        if (timeLeftSpan.Seconds >= 0)
         {
             time.Append(timeLeftSpan.Seconds);
             time.Append("s");
         }
-        else
+
+        if (this.timeLeft < double.Epsilon)
         {
             time.Append("Finished!");
         }

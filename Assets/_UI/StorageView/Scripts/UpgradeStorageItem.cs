@@ -22,11 +22,11 @@ public class UpgradeStorageItem : MonoBehaviour
     private Image enoughIcon;
 
     [SerializeField, ReadOnly]
-    private SupplyRequirement requirement;
+    private GoodsRequirement requirement;
 
-    public event Action<SupplyRequirement> OnConfirmBuyGoods;
+    public event Action<GoodsRequirement> OnConfirmBuyGoods;
 
-    public void Initialize(SupplyRequirement requirement)
+    public void Initialize(GoodsRequirement requirement)
     {
         this.requirement = requirement;
         this.buyButton.OnConfirm += OnConfirmHandler;

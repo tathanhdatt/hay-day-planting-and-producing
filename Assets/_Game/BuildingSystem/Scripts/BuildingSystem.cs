@@ -15,9 +15,12 @@ public class BuildingSystem : MonoBehaviour
     [SerializeField, Required]
     private TileBase occupiedTile;
     
-    [Line]
+    [Title("Tooltip")]
     [SerializeField, Required]
-    private TimerTooltip tooltip;
+    private TimerTooltip timerTooltip;
+    
+    [SerializeField, Required]
+    private GoodsTooltip goodsTooltip;
 
     [Line]
     [SerializeField]
@@ -39,7 +42,7 @@ public class BuildingSystem : MonoBehaviour
     {
         foreach (Facility availableFacility in this.availableFacilities)
         {
-            availableFacility.Initialize(this, this.gridLayout, this.tooltip);
+            availableFacility.Initialize(this, this.gridLayout, this.timerTooltip);
             availableFacility.SetDraggable(false);
             availableFacility.SetPlaced(true);
         }
@@ -55,8 +58,12 @@ public class BuildingSystem : MonoBehaviour
     {
         this.facility = Instantiate(
             this.currentItemInfo.prefab, this.mainTilemap.transform);
-        this.facility.Initialize(this, this.gridLayout, this.tooltip);
+        this.facility.Initialize(this, this.gridLayout, this.timerTooltip);
         this.facility.SetDraggable(true);
+        if (this.facility is ProductionFacility productionFacility)
+        {
+            productionFacility.SetTooltip(this.goodsTooltip);
+        }
         this.facility.OnFirstTimePlaced += OnFirstTimePlacedHandler;
     }
 

@@ -9,7 +9,7 @@ public class UpgradeInformation : ScriptableObject
     public int toCapacity;
     public int additionalCapacityEachLevel;
     public int additionalSupplyEachLevel;
-    public List<SupplyRequirement> requirements;
+    public List<GoodsRequirement> requirements;
 
     public bool IsInRangeCapacity(int capacity)
     {
@@ -22,7 +22,7 @@ public class UpgradeInformation : ScriptableObject
 
     public bool CanUpgrade()
     {
-        foreach (SupplyRequirement requirement in this.requirements)
+        foreach (GoodsRequirement requirement in this.requirements)
         {
             if (requirement.requiredQuantity > requirement.goods.quantity)
             {

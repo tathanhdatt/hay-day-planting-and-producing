@@ -16,4 +16,4 @@ MonoBehaviour:
   graphic: {fileID: -1660761858345613354, guid: 56f73b1d30c951b40b980f63f4a92a3e, type: 3}
   quantity: 0
   level: 1
-  isUnlocked: 0
+  isUnlocked: 1

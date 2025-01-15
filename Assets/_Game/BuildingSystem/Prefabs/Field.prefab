@@ -176,7 +176,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1676649958633235210}
-  - component: {fileID: 1778937167857324460}
+  - component: {fileID: 1460372666203698498}
   - component: {fileID: 1136315669024522095}
   - component: {fileID: 863838927808816713}
   - component: {fileID: 4272470163743563289}
@@ -203,7 +203,7 @@ Transform:
   - {fileID: 1795543638628678985}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1778937167857324460
+--- !u!114 &1460372666203698498
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8465266873846961764}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5274036f3056419ab08ce66b26478486, type: 3}
+  m_Script: {fileID: 11500000, guid: da3532734245440fabaff59ddf647f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactionDetector: {fileID: 1136315669024522095}
@@ -223,6 +223,13 @@ MonoBehaviour:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 1, y: 1, z: 1}
   canFocus: 0
+  isBuilding: 0
+  timerTooltip: {fileID: 0}
+  recipes:
+  - {fileID: 11400000, guid: 03d64630e5e8a474e8572187a9eeb27c, type: 2}
+  - {fileID: 11400000, guid: 6571e828ee7aa0e498a41943576534d4, type: 2}
+  goodsTooltip: {fileID: 0}
+  canShowGoodsTooltip: 0
 --- !u!114 &1136315669024522095
 MonoBehaviour:
   m_ObjectHideFlags: 0

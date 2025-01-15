@@ -25,7 +25,7 @@ public abstract class UpgradeStorageView : BaseView
 
     public event Action OnClickBack;
     public event Action OnConfirmUpgrade;
-    public event Action<SupplyRequirement> OnConfirmBuyGoods;
+    public event Action<GoodsRequirement> OnConfirmBuyGoods;
 
     public override async UniTask Initialize()
     {
@@ -39,7 +39,7 @@ public abstract class UpgradeStorageView : BaseView
         OnConfirmUpgrade?.Invoke();
     }
 
-    public void GenerateSupply(SupplyRequirement requirement)
+    public void GenerateSupply(GoodsRequirement requirement)
     {
         UpgradeStorageItem item = Instantiate(this.prefab, this.content);
         item.Initialize(requirement);
@@ -47,7 +47,7 @@ public abstract class UpgradeStorageView : BaseView
         item.OnConfirmBuyGoods += OnConfirmBuyGoodsHandler;
     }
 
-    private void OnConfirmBuyGoodsHandler(SupplyRequirement requirement)
+    private void OnConfirmBuyGoodsHandler(GoodsRequirement requirement)
     {
         OnConfirmBuyGoods?.Invoke(requirement);
     }

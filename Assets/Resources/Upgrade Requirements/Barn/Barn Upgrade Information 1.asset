@@ -17,6 +17,9 @@ MonoBehaviour:
   additionalCapacityEachLevel: 25
   additionalSupplyEachLevel: 1
   requirements:
-  - {fileID: 11400000, guid: 1ea12ff183dac93439ca5e2122b0786f, type: 2}
-  - {fileID: 11400000, guid: f221dee478427e749955d4402f92fe55, type: 2}
-  - {fileID: 11400000, guid: 7ecb17e31bece51478794a33849ce31e, type: 2}
+  - requiredQuantity: 1
+    goods: {fileID: 11400000, guid: 8d04d083c37eee14d87b08ab30779bd8, type: 2}
+  - requiredQuantity: 1
+    goods: {fileID: 11400000, guid: 16c4aa1e80d2aa640806fbf4faa56563, type: 2}
+  - requiredQuantity: 1
+    goods: {fileID: 11400000, guid: 6c542b689b2e7fc4f97ec998b57f30c0, type: 2}
