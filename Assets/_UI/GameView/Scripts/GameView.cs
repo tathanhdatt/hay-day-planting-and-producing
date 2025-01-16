@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Dt.Attribute;
