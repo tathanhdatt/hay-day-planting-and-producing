@@ -35,12 +35,16 @@ public class DraggableObject : MonoBehaviour
     private void OnEnable()
     {
         GameState.isEditing = true;
+        LeanTouch.OnFingerUpdate += OnFingerUpdateHandler;
+        LeanTouch.OnFingerUp += OnFingerUpHandler;
         SetInteractingLayer();
     }
 
     private void OnDisable()
     {
         GameState.isEditing = false;
+        LeanTouch.OnFingerUpdate -= OnFingerUpdateHandler;
+        LeanTouch.OnFingerUp -= OnFingerUpHandler;
         ResetSortingLayer();
     }
 

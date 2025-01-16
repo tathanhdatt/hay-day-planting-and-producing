@@ -1,12 +1,11 @@
 ﻿using System;
 using Dt.Attribute;
-using Lean.Touch;
 using UnityEngine;
 
 public abstract class Facility : MonoBehaviour
 {
     [SerializeField, Required]
-    private InteractionDetector interactionDetector;
+    protected InteractionDetector interactionDetector;
 
     [SerializeField]
     private DraggableObject draggableObject;
@@ -21,11 +20,11 @@ public abstract class Facility : MonoBehaviour
     protected bool isBuilding;
 
     [SerializeField, ReadOnly]
-    private TimerTooltip timerTooltip;
+    protected TimerTooltip timerTooltip;
 
     public event Action OnFirstTimePlaced;
 
-    public void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout,
+    public virtual void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout,
         TimerTooltip tooltip)
     {
         this.timerTooltip = tooltip;
@@ -46,17 +45,14 @@ public abstract class Facility : MonoBehaviour
     {
         this.buildingTimer.OnFinished -= OnFinishedHandler;
         this.isBuilding = false;
+        this.timerTooltip.Hide();
     }
 
     private void InitializeInteractionDetector()
     {
         this.interactionDetector.Initialize();
         this.interactionDetector.OnAllowedEditing += OnAllowedEditingHandler;
-        this.interactionDetector.OnFingerDownOut += OnFingerDownOutHandler;
-        this.interactionDetector.OnFingerMove += OnFingerMoveHandler;
-        this.interactionDetector.OnFingerDown += OnFingerDownHandler;
-        this.interactionDetector.OnFingerUp += OnFingerUpHandler;
-        this.interactionDetector.OnFingerUpdate += OnFingerUpdateHandler;
+        this.interactionDetector.OnFingerTap += OnFingerTapHandler;
     }
 
 
@@ -74,7 +70,6 @@ public abstract class Facility : MonoBehaviour
         this.draggableObject.enabled = true;
     }
 
-
     public void StartBuilding(TimeSpan buildingTimeSpan)
     {
         this.isBuilding = true;
@@ -87,41 +82,22 @@ public abstract class Facility : MonoBehaviour
         OnFirstTimePlaced?.Invoke();
     }
 
-    protected virtual void OnFingerDownOutHandler()
+    protected virtual void OnFingerTapHandler()
     {
-        if (this.timerTooltip.CurrentTimer == this.buildingTimer)
-        {
-            this.timerTooltip.Hide();
-        }
+        ShowTooltips();
     }
 
-    protected virtual void OnFingerDownHandler(LeanFinger finger)
+    protected virtual void ShowTooltips()
     {
+        ShowBuildingTimerTooltip();
     }
 
-    protected virtual void OnFingerMoveHandler(LeanFinger finger)
+    private void ShowBuildingTimerTooltip()
     {
-        this.timerTooltip.Hide();
-    }
-
-
-    protected virtual void OnFingerUpHandler(LeanFinger finger)
-    {
-        this.draggableObject?.OnFingerUpHandler(finger);
         if (this.isBuilding)
         {
-            ShowBuildingTimer();
+            this.timerTooltip.Show(this.buildingTimer);
         }
-    }
-
-    protected virtual void OnFingerUpdateHandler(LeanFinger finger)
-    {
-        this.draggableObject?.OnFingerUpdateHandler(finger);
-    }
-
-    private void ShowBuildingTimer()
-    {
-        this.timerTooltip.Show(this.buildingTimer);
     }
 
     public void SetDraggable(bool draggable)
@@ -143,10 +119,6 @@ public abstract class Facility : MonoBehaviour
         }
 
         this.interactionDetector.OnAllowedEditing -= OnAllowedEditingHandler;
-        this.interactionDetector.OnFingerDownOut -= OnFingerDownOutHandler;
-        this.interactionDetector.OnFingerMove -= OnFingerMoveHandler;
-        this.interactionDetector.OnFingerDown -= OnFingerDownHandler;
-        this.interactionDetector.OnFingerUp -= OnFingerUpHandler;
-        this.interactionDetector.OnFingerUpdate -= OnFingerUpdateHandler;
+        this.interactionDetector.OnFingerTap -= OnFingerTapHandler;
     }
 }

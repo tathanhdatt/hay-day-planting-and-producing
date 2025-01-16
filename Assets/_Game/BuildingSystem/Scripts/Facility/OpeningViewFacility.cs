@@ -8,25 +8,24 @@ public class OpeningViewFacility : Facility
     private OpenableView view;
 
     [SerializeField, ReadOnly]
-    private bool canOpen;
+    private bool isOverUI;
 
-    protected override void OnFingerUpHandler(LeanFinger finger)
+    public override void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout,
+        TimerTooltip tooltip)
     {
-        if (!this.canOpen) return;
-        base.OnFingerUpHandler(finger);
+        base.Initialize(buildingSystem, gridLayout, tooltip);
+        LeanTouch.OnFingerDown += OnFingerDownHandler;
+    }
+
+    private void OnFingerDownHandler(LeanFinger finger)
+    {
+        this.isOverUI = finger.IsOverGui;
+    }
+
+    protected override void OnFingerTapHandler()
+    {
+        base.OnFingerTapHandler();
+        if (this.isOverUI) return;
         Messenger.Broadcast(Message.OpenView, this.view);
-    }
-
-    protected override void OnFingerMoveHandler(LeanFinger finger)
-    {
-        base.OnFingerMoveHandler(finger);
-        this.canOpen = false;
-    }
-
-
-    protected override void OnFingerDownHandler(LeanFinger finger)
-    {
-        base.OnFingerDownHandler(finger);
-        this.canOpen = true;
     }
 }

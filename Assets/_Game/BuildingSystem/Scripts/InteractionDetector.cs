@@ -18,42 +18,31 @@ public class InteractionDetector : MonoBehaviour
     private bool isHolding;
 
     public event Action OnAllowedEditing;
-    public event Action OnFingerDownOut;
-    public event Action<LeanFinger> OnFingerMove;
-    public event Action<LeanFinger> OnFingerDown;
-    public event Action<LeanFinger> OnFingerUp;
-    public event Action<LeanFinger> OnFingerUpdate;
+    public event Action OnFingerTap;
 
     public void Initialize()
     {
         LeanTouch.OnFingerDown += OnFingerDownHandler;
         LeanTouch.OnFingerUpdate += OnFingerUpdateHandler;
         LeanTouch.OnFingerUp += OnFingerUpHandler;
+        LeanTouch.OnFingerTap += OnFingerTapHandler;
     }
 
 
     private void OnFingerDownHandler(LeanFinger finger)
     {
         if (finger.IsOverGui) return;
-        if (IsCurrentFingerInBounds(finger))
-        {
-            this.holdingTimeSpan = 0;
-            this.isHolding = true;
-            OnFingerDown?.Invoke(finger);
-        }
-        else
-        {
-            OnFingerDownOut?.Invoke();
-        }
+        if (!IsCurrentFingerInBounds(finger)) return;
+        this.holdingTimeSpan = 0;
+        this.isHolding = true;
     }
 
     private void OnFingerUpdateHandler(LeanFinger finger)
     {
-        OnFingerUpdate?.Invoke(finger);
         bool isFingerMoved = finger.ScreenDelta != Vector2.zero;
         if (isFingerMoved)
         {
-            OnFingerMoved(finger);
+            OnFingerMoved();
         }
         else
         {
@@ -65,17 +54,20 @@ public class InteractionDetector : MonoBehaviour
     {
         this.holdingTimeSpan = 0;
         this.isHolding = false;
+    }
+
+    private void OnFingerMoved()
+    {
+        this.isHolding = false;
+    }
+
+    private void OnFingerTapHandler(LeanFinger finger)
+    {
         if (finger.IsOverGui) return;
         if (IsCurrentFingerInBounds(finger))
         {
-            OnFingerUp?.Invoke(finger);
+            OnFingerTap?.Invoke();
         }
-    }
-
-    private void OnFingerMoved(LeanFinger finger)
-    {
-        OnFingerMove?.Invoke(finger);
-        this.isHolding = false;
     }
 
     private bool IsCurrentFingerInBounds(LeanFinger finger)
@@ -117,5 +109,6 @@ public class InteractionDetector : MonoBehaviour
         LeanTouch.OnFingerDown -= OnFingerDownHandler;
         LeanTouch.OnFingerUpdate -= OnFingerUpdateHandler;
         LeanTouch.OnFingerUp -= OnFingerUpHandler;
+        LeanTouch.OnFingerTap -= OnFingerTapHandler;
     }
 }
