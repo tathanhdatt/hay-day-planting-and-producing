@@ -18,5 +18,10 @@ MonoBehaviour:
     goods: {fileID: 11400000, guid: 8aeb71d44b92d6b4ea371df1bc63bb43, type: 2}
   days: 0
   hours: 0
-  minutes: 2
-  seconds: 0
+  minutes: 0
+  seconds: 20
+  growingGraphics:
+  - {fileID: -424353319313006763, guid: a0ff686196747774c83843692657b69a, type: 3}
+  - {fileID: 8432832155159901199, guid: 712720603e59b8c4183e946e1a578535, type: 3}
+  - {fileID: -8242049793857664761, guid: d33ee31c9d8e2624fb3f080b25ee27ba, type: 3}
+  - {fileID: -7017564858684936059, guid: 395db0bcb00b44e4588a63805b2fcca6, type: 3}

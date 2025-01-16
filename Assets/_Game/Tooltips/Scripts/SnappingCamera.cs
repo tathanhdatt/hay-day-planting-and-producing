@@ -6,7 +6,6 @@ public class SnappingCamera : MonoBehaviour
     [SerializeField, Required]
     private Camera cam;
 
-
     [SerializeField, Required]
     private RectTransform bound;
 
