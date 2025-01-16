@@ -19,6 +19,9 @@ namespace Core.Game
         private TimerTooltip timerTooltip;
 
         [SerializeField, Required]
+        private GoodsTooltip goodsTooltip;
+
+        [SerializeField, Required]
         private GoodsDatabase barnDatabase;
 
         [SerializeField, Required]
@@ -44,7 +47,7 @@ namespace Core.Game
             InitLevelRequirement();
             InitLevelStorage();
             InitBuildingSystem();
-            InitTimerTooltip();
+            InitTooltips();
         }
 
 
@@ -63,7 +66,7 @@ namespace Core.Game
 
         private void InitLevelRequirement()
         {
-            LevelXpDatabase database = Resources.Load<LevelXpDatabase>("Level Experience Database");
+            LevelXpDatabase database = Resources.Load<LevelXpDatabase>("Level experience Database");
             this.levelRequirement = new LevelRequirement(database);
         }
 
@@ -83,9 +86,10 @@ namespace Core.Game
             this.buildingSystem.Initialize(Currency);
         }
 
-        private void InitTimerTooltip()
+        private void InitTooltips()
         {
             this.timerTooltip.Initialize(Currency);
+            this.goodsTooltip.Initialize();
         }
 
         private async void Start()
