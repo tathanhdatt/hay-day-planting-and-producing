@@ -1,7 +1,6 @@
 ﻿using System;
 using DG.Tweening;
 using Dt.Attribute;
-using Lean.Touch;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,6 +8,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class TwiceClickButton : MonoBehaviour, IDeselectHandler
 {
+    private const string clickAgainMessage = "Click again to confirm!";
+
     [SerializeField, Required]
     private Button button;
 
@@ -60,8 +61,7 @@ public class TwiceClickButton : MonoBehaviour, IDeselectHandler
         {
             OnClick?.Invoke();
             this.isClicked = true;
-            // TODO: Popup click again
-            Debug.Log("Click again to confirm");
+            Messenger.Broadcast(Message.PopupDialog, clickAgainMessage);
             ClickedScaleEffect();
         }
     }
