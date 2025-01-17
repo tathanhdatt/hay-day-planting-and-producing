@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class StorageViewPresenter : BaseViewPresenter
 {
+    private const string notEnoughUpgradeSupplies = "You do not have enough upgrade supplies!";
     private readonly GoodsDatabase database;
     private readonly ILevelXpStorage levelXpStorage;
     private readonly ICurrency currency;
@@ -106,10 +107,10 @@ public abstract class StorageViewPresenter : BaseViewPresenter
         }
         else
         {
-            // TODO: Notify not enough money
-            Debug.Log($"Not enough gem to buy {requirement.goods.goodsName}");
+            NotifyNotEnoughGem(gem);
         }
     }
+
 
     private void Refresh()
     {
@@ -119,10 +120,17 @@ public abstract class StorageViewPresenter : BaseViewPresenter
         UpdateIndicator();
     }
 
+    private void NotifyNotEnoughGem(int gem)
+    {
+        string message = $"You need {gem} <sprite=\"diamond\" index=0> gem to buy!";
+        Messenger.Broadcast(Message.PopupDialog, message);
+    }
+
     private void OnConfirmUpgradeHandler()
     {
         UpgradeBarnStorage();
     }
+
 
     private void UpgradeBarnStorage()
     {
@@ -136,8 +144,7 @@ public abstract class StorageViewPresenter : BaseViewPresenter
         }
         else
         {
-            // TODO: Notify not enough supply to upgrade
-            Debug.Log("Not enough quantity to upgrade barn");
+            Messenger.Broadcast(Message.PopupDialog, notEnoughUpgradeSupplies);
         }
     }
 
