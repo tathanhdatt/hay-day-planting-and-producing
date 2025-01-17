@@ -32,11 +32,17 @@ public class CropFacility : GoodsFacility
 
     private async void OnFreeSlotHandler()
     {
+        IncreaseGoodsQuantity();
         this.graphic.sprite = this.currentRecipe.finishedGraphic;
         await UniTask.WaitForSeconds(0.6f);
         this.graphic.sprite = this.defaultGraphic;
         this.canHarvest = false;
         this.harvestTooltip.Hide();
+    }
+
+    protected virtual void IncreaseGoodsQuantity()
+    {
+        this.currentRecipe.product.quantity++;
     }
 
     private void OnHeartbeatHandler(int time)
@@ -49,6 +55,7 @@ public class CropFacility : GoodsFacility
         base.OnProducedFinishedHandler();
         this.canHarvest = true;
     }
+
 
     public void SetHarvestTooltip(HarvestTooltip tooltip)
     {
