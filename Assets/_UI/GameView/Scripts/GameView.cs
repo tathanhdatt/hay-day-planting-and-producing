@@ -1,6 +1,5 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using Dt.Attribute;
 using TMPro;
 using UnityEngine;
@@ -9,8 +8,6 @@ using UnityEngine.UI;
 public class GameView : BaseView
 {
     [Title("Level")]
-    [SerializeField, Required]
-    private Image levelXpBar;
 
     [SerializeField, Required]
     private TMP_Text levelText;
@@ -18,14 +15,9 @@ public class GameView : BaseView
     [SerializeField, Required]
     private TMP_Text levelXpText;
 
-    [SerializeField]
-    private float xpBarUpdateDuration;
-
-    [SerializeField, ReadOnly]
-    private float maxXpBarWidth;
+    [SerializeField, Required]
+    private DeltaSizeFillBar levelXpFillBar;
     
-    private Tweener xpBarTweener;
-
     [Title("Currency")]
     [SerializeField, Required]
     private TMP_Text coinText;
@@ -68,7 +60,6 @@ public class GameView : BaseView
         this.addCoinButton.onClick.AddListener(() => OnClickAddCoin?.Invoke());
         this.addGemButton.onClick.AddListener(() => OnClickAddGem?.Invoke());
         this.addXpButton.onClick.AddListener(() => OnClickAddXp?.Invoke());
-        this.maxXpBarWidth = ((RectTransform)this.levelXpBar.transform.parent.transform).rect.width;
     }
 
     public void SetCoinText(int coin)
@@ -80,31 +71,7 @@ public class GameView : BaseView
     {
         this.gemText.SetText(gem.ToString());
     }
-
-    public async void FillLevelXpBar(float percentage)
-    {
-        this.xpBarTweener?.Complete();
-        Vector2 sizeDelta = GetLevelXpBarSize();
-        sizeDelta.x = percentage * this.maxXpBarWidth;
-        this.xpBarTweener = this.levelXpBar.rectTransform
-            .DOSizeDelta(sizeDelta, this.xpBarUpdateDuration);
-        this.xpBarTweener.SetEase(Ease.OutQuart);
-        await this.xpBarTweener.AsyncWaitForCompletion();
-    }
-
-    public void SetFillBar(float percentage)
-    {
-        this.xpBarTweener?.Complete();
-        Vector2 sizeDelta = GetLevelXpBarSize();
-        sizeDelta.x = percentage * this.maxXpBarWidth;
-        this.levelXpBar.rectTransform.sizeDelta = sizeDelta;
-    }
-
-    private Vector2 GetLevelXpBarSize()
-    {
-        return this.levelXpBar.rectTransform.sizeDelta;
-    }
-
+    
     public void SetLevel(int level)
     {
         this.levelText.SetText(level.ToString());
@@ -114,5 +81,15 @@ public class GameView : BaseView
     {
         string xpProgression = $"{currentXp}/{requiredXp}";
         this.levelXpText.SetText(xpProgression);
+    }
+
+    public void SetFillBar(int percentage)
+    {
+        this.levelXpFillBar.SetFillBar(percentage);
+    }
+
+    public void FillLevelXpBar(float percentage)
+    {
+        this.levelXpFillBar.FillBar(percentage);
     }
 }

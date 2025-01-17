@@ -3,7 +3,7 @@ using Dt.Attribute;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FillBar : MonoBehaviour
+public class SliceImageFillBar : MonoBehaviour
 {
     [SerializeField, Required]
     private Image fillImage;

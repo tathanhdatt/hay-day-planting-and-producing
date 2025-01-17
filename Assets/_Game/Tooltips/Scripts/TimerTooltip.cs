@@ -14,9 +14,6 @@ public class TimerTooltip : MonoBehaviour
     private TMP_Text timerName;
 
     [SerializeField, Required]
-    private Image fill;
-
-    [SerializeField, Required]
     private TMP_Text timeLeftText;
 
     [SerializeField, Required]
@@ -24,6 +21,9 @@ public class TimerTooltip : MonoBehaviour
 
     [SerializeField, Required]
     private TwiceClickButton skipButton;
+    
+    [SerializeField, Required]
+    private DeltaSizeFillBar deltaSizeFillBar;
 
     [Line]
     [SerializeField, Required]
@@ -72,7 +72,7 @@ public class TimerTooltip : MonoBehaviour
             return;
         }
 
-        this.fill.fillAmount = this.timer.GetTimeLeftPercentage();
+        this.deltaSizeFillBar.SetFillBar(this.timer.GetTimeLeftPercentage());
         this.timeLeftText.SetText(this.timer.GetFormattedTimeLeft());
         string price = $"{GetGemToSkip().ToString()}<sprite=\"diamond\" index=0>";
         this.skipPriceText.SetText(price);
