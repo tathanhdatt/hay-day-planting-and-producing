@@ -2670,6 +2670,7 @@ MonoBehaviour:
   snappingCamera: {fileID: 2038262345}
   cleaner: {fileID: 759687486}
   clickOutsideHider: {fileID: 2038262346}
+  background: {fileID: 703370196}
 --- !u!114 &2038262345
 MonoBehaviour:
   m_ObjectHideFlags: 0
