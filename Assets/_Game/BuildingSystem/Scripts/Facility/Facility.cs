@@ -38,12 +38,12 @@ public abstract class Facility : MonoBehaviour
     {
         if (this.buildingTimer == null) return;
         this.buildingTimer.Initialize();
-        this.buildingTimer.OnFinished += OnFinishedHandler;
+        this.buildingTimer.OnFinished += OnFinishedBuildHandler;
     }
 
-    private void OnFinishedHandler()
+    protected virtual void OnFinishedBuildHandler()
     {
-        this.buildingTimer.OnFinished -= OnFinishedHandler;
+        this.buildingTimer.OnFinished -= OnFinishedBuildHandler;
         this.isBuilding = false;
         this.timerTooltip.Hide();
     }
