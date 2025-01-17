@@ -14,14 +14,14 @@ public class BuildingSystem : MonoBehaviour
 
     [SerializeField, Required]
     private TileBase occupiedTile;
-    
+
     [Title("Tooltip")]
     [SerializeField, Required]
     private TimerTooltip timerTooltip;
-    
+
     [SerializeField, Required]
     private GoodsTooltip goodsTooltip;
-    
+
     [SerializeField, Required]
     private HarvestTooltip harvestTooltip;
 
@@ -33,11 +33,13 @@ public class BuildingSystem : MonoBehaviour
 
     private ICurrency currency;
     private ShopItemInfo currentItemInfo;
+    private ILevelXpStorage levelXpStorage;
 
-    public void Initialize(ICurrency currency)
+    public void Initialize(ICurrency currency, ILevelXpStorage levelXpStorage)
     {
         Messenger.AddListener<ShopItemInfo>(Message.SpawnItem, SpawnItemHandler);
         this.currency = currency;
+        this.levelXpStorage = levelXpStorage;
         InitializeAvailableFacilities();
     }
 
@@ -65,13 +67,15 @@ public class BuildingSystem : MonoBehaviour
         this.facility.SetDraggable(true);
         if (this.facility is GoodsFacility goodsFacility)
         {
-            goodsFacility.SetGoodsTooltip(this.goodsTooltip);
+            goodsFacility.AddGoodsTooltip(this.goodsTooltip)
+                .AddLevelXpStorage(this.levelXpStorage);
         }
 
         if (this.facility is CropFacility cropFacility)
         {
             cropFacility.SetHarvestTooltip(this.harvestTooltip);
         }
+
         this.facility.OnFirstTimePlaced += OnFirstTimePlacedHandler;
     }
 

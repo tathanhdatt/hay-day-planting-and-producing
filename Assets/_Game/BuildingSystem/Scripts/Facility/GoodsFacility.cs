@@ -33,6 +33,8 @@ public abstract class GoodsFacility : Facility
 
     [SerializeField, ReadOnly]
     protected bool isProducing;
+    
+    protected ILevelXpStorage levelXpStorage;
 
     public override void Initialize(BuildingSystem buildingSystem,
         GridLayout gridLayout, TimerTooltip tooltip)
@@ -119,9 +121,16 @@ public abstract class GoodsFacility : Facility
         await UniTask.WaitUntil(() => !this.isProducing);
     }
 
-    public void SetGoodsTooltip(GoodsTooltip tooltip)
+    public GoodsFacility AddGoodsTooltip(GoodsTooltip tooltip)
     {
         this.goodsTooltip = tooltip;
+        return this;
+    }
+
+    public GoodsFacility AddLevelXpStorage(ILevelXpStorage levelXpStorage)
+    {
+        this.levelXpStorage = levelXpStorage;
+        return this;
     }
 
     protected override void ShowTooltips()
