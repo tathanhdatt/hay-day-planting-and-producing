@@ -19,14 +19,14 @@ public class UIDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
 
     [SerializeField]
     private Ease snappingEase;
-
+    
     [Line]
     [SerializeField, ReadOnly]
     private Vector3 startPosition;
 
     [SerializeField, ReadOnly]
     private Camera cam;
-
+    
     private Tweener snappingTweener;
     
     public event Action OnFingerDown;
@@ -57,6 +57,7 @@ public class UIDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!enabled) return;
         Vector3 pos = this.cam.ScreenToWorldPoint(eventData.position);
         pos.z = 0;
         transform.position = pos;
