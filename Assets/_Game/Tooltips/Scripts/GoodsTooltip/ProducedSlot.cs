@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ProducedSlot : MonoBehaviour
 {
+    private const string notEnoughMaterialsMessage = "Not enough materials!";
+
     [SerializeField, ReadOnly]
     private bool isFull;
 
@@ -17,8 +19,28 @@ public class ProducedSlot : MonoBehaviour
     {
         if (!enabled) return;
         if (this.isFull) return;
-        this.isFull = true;
-        OnAddRecipe?.Invoke(recipe);
+        if (IsEnoughMaterials(recipe))
+        {
+            this.isFull = true;
+            OnAddRecipe?.Invoke(recipe);
+        }
+        else
+        {
+            Messenger.Broadcast(Message.PopupDialog, notEnoughMaterialsMessage);
+        }
+    }
+
+    private bool IsEnoughMaterials(GoodsRecipe recipe)
+    {
+        foreach (GoodsRequirement requirement in recipe.materials)
+        {
+            if (requirement.requiredQuantity > requirement.goods.quantity)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void FreeSlot()

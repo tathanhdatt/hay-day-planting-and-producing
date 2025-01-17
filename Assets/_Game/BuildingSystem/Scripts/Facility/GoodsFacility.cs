@@ -34,15 +34,14 @@ public abstract class GoodsFacility : Facility
     [SerializeField, ReadOnly]
     protected bool isProducing;
 
-    public override void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout,
-        TimerTooltip tooltip)
+    public override void Initialize(BuildingSystem buildingSystem,
+        GridLayout gridLayout, TimerTooltip tooltip)
     {
         base.Initialize(buildingSystem, gridLayout, tooltip);
         InitializeSlots();
         this.producedTimer.Initialize(false);
         this.producedTimer.OnFinished += OnProducedFinishedHandler;
     }
-
 
     protected virtual void OnProducedFinishedHandler()
     {
@@ -92,30 +91,17 @@ public abstract class GoodsFacility : Facility
         while (this.productionQueue.Count > 0)
         {
             this.currentRecipe = this.productionQueue.Dequeue();
-            if (IsEnoughRecipes())
-            {
-                await ProduceCurrentRecipe();
-            }
-            else
-            {
-                // TODO: Notify not enough recipes
-            }
+            ConsumeMaterialsAndRefreshContent();
+            await ProduceCurrentRecipe();
         }
 
         this.isProducing = false;
     }
 
-    private bool IsEnoughRecipes()
+    private void ConsumeMaterialsAndRefreshContent()
     {
-        foreach (GoodsRequirement requirement in this.currentRecipe.recipes)
-        {
-            if (requirement.requiredQuantity > requirement.goods.quantity)
-            {
-                return false;
-            }
-        }
-
-        return true;
+        this.currentRecipe.ConsumeMaterials();
+        this.goodsTooltip.RefreshContent();
     }
 
     private async UniTask ProduceCurrentRecipe()

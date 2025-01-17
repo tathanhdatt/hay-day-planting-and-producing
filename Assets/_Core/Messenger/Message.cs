@@ -5,4 +5,5 @@
     public const string SpawnItem = "SpawnItem";
     public const string MoveCameraTo = "MoveCameraTo";
     public const string OpenView = "OpenView";
+    public const string PopupDialog = "PopupDialog";
 }
