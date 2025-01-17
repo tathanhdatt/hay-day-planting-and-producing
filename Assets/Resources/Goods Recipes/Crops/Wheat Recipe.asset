@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wheat Recipe
   m_EditorClassIdentifier: 
   product: {fileID: 11400000, guid: 8aeb71d44b92d6b4ea371df1bc63bb43, type: 2}
-  recipes:
+  materials:
   - requiredQuantity: 1
     goods: {fileID: 11400000, guid: 8aeb71d44b92d6b4ea371df1bc63bb43, type: 2}
   days: 0

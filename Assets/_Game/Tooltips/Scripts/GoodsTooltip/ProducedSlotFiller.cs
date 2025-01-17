@@ -10,10 +10,7 @@ public class ProducedSlotFiller : MonoBehaviour
     private ProducedSlotDetector detector;
 
     [SerializeField, Required]
-    private Image graphic;
-
-    [SerializeField, Required]
-    private TMP_Text quantity;
+    private GoodsItem goodsItem;
 
     [SerializeField, ReadOnly]
     private GoodsRecipe recipe;
@@ -27,12 +24,17 @@ public class ProducedSlotFiller : MonoBehaviour
     public void Show(GoodsRecipe recipe)
     {
         this.recipe = recipe;
-        this.graphic.sprite = recipe.product.graphic;
-        this.quantity.SetText(this.recipe.product.quantity.ToString());
+        this.goodsItem.Initialize(this.recipe.product);
+        Refresh();
     }
 
     private void OnDetectedSlotHandler(ProducedSlot slot)
     {
         slot.AddRecipe(this.recipe);
+    }
+
+    public void Refresh()
+    {
+        this.goodsItem.Refresh();
     }
 }

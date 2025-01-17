@@ -8,7 +8,7 @@ public class GoodsTooltip : MonoBehaviour
 {
     [SerializeField, Required]
     private SnappingCamera snappingCamera;
-    
+
     [SerializeField, Required]
     private ClickOutsideHider clickOutsideHider;
 
@@ -97,6 +97,17 @@ public class GoodsTooltip : MonoBehaviour
     private void DisableContent()
     {
         this.content.gameObject.SetActive(false);
+    }
+
+    public void RefreshContent()
+    {
+        foreach (ProducedSlotFiller slotFiller in this.producedSlotFillers)
+        {
+            if (slotFiller.gameObject.activeSelf)
+            {
+                slotFiller.Refresh();
+            }
+        }
     }
 
     public void ResetContent()
