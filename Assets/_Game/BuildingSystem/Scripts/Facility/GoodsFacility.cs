@@ -38,7 +38,7 @@ public abstract class GoodsFacility : Facility
         TimerTooltip tooltip)
     {
         base.Initialize(buildingSystem, gridLayout, tooltip);
-        InitializeProducers();
+        InitializeSlots();
         this.producedTimer.Initialize(false);
         this.producedTimer.OnFinished += OnProducedFinishedHandler;
     }
@@ -47,14 +47,16 @@ public abstract class GoodsFacility : Facility
     protected virtual void OnProducedFinishedHandler()
     {
         this.isProducing = false;
+        this.slots.First().SetIsProducing(false);
         this.timerTooltip.Hide();
         this.graphic.sprite = this.currentRecipe.growingGraphics.Last();
     }
 
-    private void InitializeProducers()
+    private void InitializeSlots()
     {
         foreach (ProducedSlot slot in this.slots)
         {
+            slot.enabled = false;
             slot.OnAddRecipe += OnAddRecipeHandler;
         }
     }
@@ -71,19 +73,54 @@ public abstract class GoodsFacility : Facility
         Produce();
     }
 
+    protected override void OnFinishedBuildHandler()
+    {
+        base.OnFinishedBuildHandler();
+        EnableProducedSlots();
+    }
+
+    private void EnableProducedSlots()
+    {
+        foreach (ProducedSlot slot in this.slots)
+        {
+            slot.enabled = true;
+        }
+    }
+
     private async void Produce()
     {
         while (this.productionQueue.Count > 0)
         {
             this.currentRecipe = this.productionQueue.Dequeue();
-            await ProduceCurrentRecipe();
+            if (IsEnoughRecipes())
+            {
+                await ProduceCurrentRecipe();
+            }
+            else
+            {
+                // TODO: Notify not enough recipes
+            }
         }
 
         this.isProducing = false;
     }
 
+    private bool IsEnoughRecipes()
+    {
+        foreach (GoodsRequirement requirement in this.currentRecipe.recipes)
+        {
+            if (requirement.requiredQuantity > requirement.goods.quantity)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private async UniTask ProduceCurrentRecipe()
     {
+        this.slots.First().SetIsProducing(true);
         this.graphic.sprite = this.currentRecipe.growingGraphics[0];
         TimeSpan producedTime = new TimeSpan(
             this.currentRecipe.days,
