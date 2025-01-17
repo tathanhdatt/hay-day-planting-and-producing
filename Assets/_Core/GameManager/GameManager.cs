@@ -21,16 +21,20 @@ namespace Core.Game
 
         [SerializeField, Required]
         private GoodsTooltip goodsTooltip;
-        
+
         [SerializeField, Required]
         private HarvestTooltip harvestTooltip;
 
-        [Line]
+        [Title("Database")]
         [SerializeField, Required]
         private GoodsDatabase barnDatabase;
 
         [SerializeField, Required]
         private GoodsDatabase siloDatabase;
+
+        [Line]
+        [SerializeField, Required]
+        private DialogManager dialogManager;
 
         private IAudioService audioService;
         private ILevelRequirement levelRequirement;
@@ -108,10 +112,12 @@ namespace Core.Game
         private async UniTask OnEnter()
         {
             Messenger.AddListener<OpenableView>(Message.OpenView, OpenViewHandler);
+            Messenger.AddListener<string>(Message.PopupDialog, PopupHandler);
             await this.presenter.GetViewPresenter<GameViewPresenter>().Show();
             Currency.SetAmount(CurrencyType.Coin, 1000);
             Currency.SetAmount(CurrencyType.Gem, 1000);
         }
+
 
         private async void OpenViewHandler(OpenableView openableView)
         {
@@ -128,6 +134,21 @@ namespace Core.Game
                     break;
             }
         }
+
+        private void PopupHandler(string content)
+        {
+            if (!this.dialogManager.TryGetDialog(out PopupDialog dialog)) return;
+            dialog.SetContent(content);
+            dialog.Show();
+            dialog.OnHide += OnPopupDialogHideHandler;
+        }
+
+        private void OnPopupDialogHideHandler(Dialog dialog)
+        {
+            dialog.OnHide -= OnPopupDialogHideHandler;
+            this.dialogManager.AddDialog(dialog as PopupDialog);
+        }
+
 
         public void Dispose()
         {

@@ -82,8 +82,14 @@ public class DraggedShopItem : MonoBehaviour,
         this.punchIconTweener = this.draggingIcon
             .DOPunchScale(this.draggingIcon.localScale * 1.02f, 0.2f);
         if (this.info.isEnoughCurrency) return;
-        // TODO: Notify not enough coin or gem
-        Debug.Log($"Not enough {this.info.currencyType}");
+        NotifyNotEnoughCurrency();
+    }
+
+    private void NotifyNotEnoughCurrency()
+    {
+        string type = this.info.currencyType == CurrencyType.Coin ? "coin" : "diamond";
+        string message = $"Not enough {this.info.price} <sprite=\"{type}\" index=0>";
+        Messenger.Broadcast(Message.PopupDialog, message);
     }
 
     public void OnPointerUp(PointerEventData eventData)
