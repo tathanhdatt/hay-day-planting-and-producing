@@ -42,7 +42,8 @@ public class CropFacility : GoodsFacility
 
     private void IncreaseGoodsQuantity()
     {
-        this.currentRecipe.product.quantity++;
+        this.currentRecipe.product.quantity += ExchangeRate.CropPerSeed;
+        this.levelXpStorage.AddXp(this.currentRecipe.xpReward);
     }
 
     private void OnHeartbeatHandler(int time)

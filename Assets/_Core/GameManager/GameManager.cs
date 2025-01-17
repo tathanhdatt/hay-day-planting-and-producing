@@ -92,7 +92,7 @@ namespace Core.Game
                 InitCurrency();
             }
 
-            this.buildingSystem.Initialize(Currency);
+            this.buildingSystem.Initialize(Currency, LevelXpStorage);
         }
 
         private void InitTooltips()

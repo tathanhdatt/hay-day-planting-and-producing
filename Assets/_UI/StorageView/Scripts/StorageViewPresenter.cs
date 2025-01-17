@@ -171,6 +171,7 @@ public abstract class StorageViewPresenter : BaseViewPresenter
 
     private void UpdateIndicator()
     {
+        this.storageView.SetIndicator(0);
         float storagePercentage = this.database.GetOccupiedSlots() / (float)this.database.capacity;
         this.storageView.MoveIndicator(storagePercentage);
     }

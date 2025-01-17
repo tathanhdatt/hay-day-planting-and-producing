@@ -77,13 +77,26 @@ public abstract class StorageView : BaseView
     public void MoveIndicator(float percentage)
     {
         this.indicatorMoveTweener?.Kill(true);
-        percentage = Mathf.Clamp01(percentage);
-        float indicatorPositionX = Mathf.Lerp(
-            this.leftIndicatorBound.localPosition.x,
-            this.rightIndicatorBound.localPosition.x,
-            percentage);
+        float indicatorPositionX = GetIndicatorX(percentage);
         this.indicatorMoveTweener =
             this.indicator.DOLocalMoveX(indicatorPositionX, this.indicatorMoveDuration);
         this.indicatorMoveTweener.SetEase(this.indicatorMoveEase);
+    }
+
+    public void SetIndicator(float percentage)
+    {
+        float x = GetIndicatorX(percentage);
+        Vector3 position = this.indicator.localPosition;
+        position.x = x;
+        this.indicator.localPosition = position;
+    }
+
+    private float GetIndicatorX(float percentage)
+    {
+        percentage = Mathf.Clamp01(percentage);
+        return Mathf.Lerp(
+            this.leftIndicatorBound.localPosition.x,
+            this.rightIndicatorBound.localPosition.x,
+            percentage);
     }
 }
