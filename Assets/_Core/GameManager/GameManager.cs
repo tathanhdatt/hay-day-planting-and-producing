@@ -115,7 +115,7 @@ namespace Core.Game
             Messenger.AddListener<string>(Message.PopupDialog, PopupHandler);
             await this.presenter.GetViewPresenter<GameViewPresenter>().Show();
             Currency.SetAmount(CurrencyType.Coin, 1000);
-            Currency.SetAmount(CurrencyType.Gem, 1000);
+            Currency.SetAmount(CurrencyType.Gem, 0);
         }
 
 

@@ -2015,6 +2015,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Timer Tooltip
       objectReference: {fileID: 0}
+    - target: {fileID: 1183891753351723062, guid: 3a174c06d21b36e4b91566625bc5cf05, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4316061173492052189, guid: 3a174c06d21b36e4b91566625bc5cf05, type: 3}
       propertyPath: cam
       value: 

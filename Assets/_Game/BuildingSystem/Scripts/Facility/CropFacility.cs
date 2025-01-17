@@ -40,7 +40,7 @@ public class CropFacility : GoodsFacility
         this.harvestTooltip.Hide();
     }
 
-    protected virtual void IncreaseGoodsQuantity()
+    private void IncreaseGoodsQuantity()
     {
         this.currentRecipe.product.quantity++;
     }
