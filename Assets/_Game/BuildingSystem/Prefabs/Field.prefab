@@ -249,10 +249,13 @@ MonoBehaviour:
   currentRecipe: {fileID: 0}
   slots:
   - {fileID: 2512629041084220070}
-  goodsTooltip: {fileID: 0}
   producedTimer: {fileID: 2350002099010763093}
+  goodsTooltip: {fileID: 0}
   hideGoodsTooltipOnDrag: 1
   isProducing: 0
+  defaultGraphic: {fileID: 2202885217157402906, guid: 53b9ff8ecf2d518409750104b490651f, type: 3}
+  harvestTooltip: {fileID: 0}
+  canHarvest: 0
 --- !u!114 &1136315669024522095
 MonoBehaviour:
   m_ObjectHideFlags: 0

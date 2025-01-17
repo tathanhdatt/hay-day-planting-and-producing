@@ -14,4 +14,5 @@ public class GoodsRecipe : ScriptableObject
     public int seconds;
     [Title("Growing Graphic")]
     public List<Sprite> growingGraphics;
+    public Sprite finishedGraphic;
 }

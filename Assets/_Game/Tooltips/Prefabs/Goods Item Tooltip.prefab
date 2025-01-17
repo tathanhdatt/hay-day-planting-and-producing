@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3216928150486508566}
   - component: {fileID: 5128666191175717402}
   - component: {fileID: 406166159898541939}
+  - component: {fileID: 376716004657010350}
   - component: {fileID: 507760748041096400}
   - component: {fileID: 9196358246000186156}
   m_Layer: 5
@@ -54,12 +55,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41d50d01fbca44afbbab563e2fd15b8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goodsItem: {fileID: 5128666191175717402}
-  drag: {fileID: 406166159898541939}
-  detectSlotCollider: {fileID: 507760748041096400}
+  detector: {fileID: 376716004657010350}
+  graphic: {fileID: 382268873975425279}
+  quantity: {fileID: 6132780362659111447}
   recipe: {fileID: 0}
-  lastProducedSlot: {fileID: 0}
-  lastCollider2D: {fileID: 0}
 --- !u!114 &5128666191175717402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,6 +92,22 @@ MonoBehaviour:
   snappingEase: 12
   startPosition: {x: 0, y: 0, z: 0}
   cam: {fileID: 0}
+--- !u!114 &376716004657010350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291190405480035713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf41b10b44ac4e2e9497776c8c0bd83a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drag: {fileID: 406166159898541939}
+  detectSlotCollider: {fileID: 507760748041096400}
+  lastProducedSlot: {fileID: 0}
+  lastCollider2D: {fileID: 0}
 --- !u!61 &507760748041096400
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -137,7 +152,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 180, y: 180}
+  m_Size: {x: 100, y: 100}
   m_EdgeRadius: 0
 --- !u!50 &9196358246000186156
 Rigidbody2D:
@@ -443,7 +458,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3983580212497651500, guid: e0e3e0ef8c4eedf4d8225a246a033133, type: 3}
+  m_Sprite: {fileID: -974973042195011187, guid: d24c1caa4c71810449638a77ad916516, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
