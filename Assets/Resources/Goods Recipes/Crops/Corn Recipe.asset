@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Corn Recipe
   m_EditorClassIdentifier: 
   product: {fileID: 11400000, guid: 0de315ef36a4228408183870bec67618, type: 2}
-  recipes:
+  materials:
   - requiredQuantity: 1
     goods: {fileID: 11400000, guid: 0de315ef36a4228408183870bec67618, type: 2}
   days: 0

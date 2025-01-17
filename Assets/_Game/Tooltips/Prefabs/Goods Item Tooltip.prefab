@@ -56,8 +56,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detector: {fileID: 376716004657010350}
-  graphic: {fileID: 382268873975425279}
-  quantity: {fileID: 6132780362659111447}
+  goodsItem: {fileID: 5128666191175717402}
   recipe: {fileID: 0}
 --- !u!114 &5128666191175717402
 MonoBehaviour:

@@ -6,7 +6,7 @@ using UnityEngine;
 public class GoodsRecipe : ScriptableObject
 {
     public Goods product;
-    public List<GoodsRequirement> recipes;
+    public List<GoodsRequirement> materials;
     [Title("Produce Time")]
     public int days;
     public int hours;
@@ -15,4 +15,12 @@ public class GoodsRecipe : ScriptableObject
     [Title("Growing Graphic")]
     public List<Sprite> growingGraphics;
     public Sprite finishedGraphic;
+
+    public void ConsumeMaterials()
+    {
+        foreach (GoodsRequirement requirement in this.materials)
+        {
+            requirement.goods.quantity -= requirement.requiredQuantity;
+        }
+    }
 }
