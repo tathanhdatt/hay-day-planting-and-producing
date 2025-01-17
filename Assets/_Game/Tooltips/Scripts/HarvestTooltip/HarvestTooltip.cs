@@ -34,7 +34,7 @@ public class HarvestTooltip : MonoBehaviour
     private void OnFingerUpHandler(LeanFinger finger)
     {
         if (this.background.enabled) return;
-        gameObject.SetActive(false);
+        Hide();
     }
 
     public void Show(Transform source)
@@ -42,5 +42,10 @@ public class HarvestTooltip : MonoBehaviour
         this.background.enabled = true;
         this.snappingCamera.SetSource(source);
         gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
     }
 }
