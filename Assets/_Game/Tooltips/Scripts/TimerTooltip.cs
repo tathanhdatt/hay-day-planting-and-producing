@@ -23,7 +23,7 @@ public class TimerTooltip : MonoBehaviour
     private TMP_Text skipPriceText;
 
     [SerializeField, Required]
-    private Button skipButton;
+    private TwiceClickButton skipButton;
 
     [Line]
     [SerializeField, Required]
@@ -35,11 +35,11 @@ public class TimerTooltip : MonoBehaviour
     public void Initialize(ICurrency currency)
     {
         this.currency = currency;
-        this.skipButton.onClick.AddListener(OnClickSkipHandler);
+        this.skipButton.OnConfirm += OnConfirmSkipHandler;
         this.clickOutsideHider.Initialize();
     }
 
-    private void OnClickSkipHandler()
+    private void OnConfirmSkipHandler()
     {
         int gem = GetGemToSkip();
         if (this.currency.IsEnough(CurrencyType.Gem, gem))
@@ -49,8 +49,8 @@ public class TimerTooltip : MonoBehaviour
         }
         else
         {
-            // TODO: Notify not enough gem
-            Debug.Log($"Not enough {gem} gems");
+            string message = $"Not enough {gem} <sprite=\"diamond\" index=0>";
+            Messenger.Broadcast(Message.PopupDialog, message);
         }
     }
 
