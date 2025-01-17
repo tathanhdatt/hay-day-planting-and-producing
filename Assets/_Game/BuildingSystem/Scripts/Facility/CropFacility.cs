@@ -36,6 +36,7 @@ public class CropFacility : GoodsFacility
         await UniTask.WaitForSeconds(0.6f);
         this.graphic.sprite = this.defaultGraphic;
         this.canHarvest = false;
+        this.harvestTooltip.Hide();
     }
 
     private void OnHeartbeatHandler(int time)

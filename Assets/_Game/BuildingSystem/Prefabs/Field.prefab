@@ -142,7 +142,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!60 &8267699766855789836
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -319,3 +319,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFull: 0
+  isProducing: 0
