@@ -17,22 +17,27 @@ public class PopupDialog : Dialog
 
     [SerializeField]
     private float flyUpDistance;
-    
+
     [Line]
     [SerializeField, ReadOnly]
     private Vector3 startPosition;
 
     private Tweener flyUpTweener;
 
+    private void Awake()
+    {
+        this.startPosition = transform.position;
+    }
+
     public override void Show()
     {
         base.Show();
-        this.startPosition = transform.position;
         FlyUp();
     }
 
     private void FlyUp()
     {
+        transform.position = this.startPosition;
         this.flyUpTweener?.Kill();
         this.flyUpTweener = transform.DOMoveY(
             transform.position.y + this.flyUpDistance,
@@ -43,7 +48,6 @@ public class PopupDialog : Dialog
 
     private void OnCompleteHandler()
     {
-        transform.position = this.startPosition;
         Hide();
     }
 
