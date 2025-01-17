@@ -15,12 +15,17 @@ namespace Core.Game
         [SerializeField, Required]
         private BuildingSystem buildingSystem;
 
+        [Title("Tooltips")]
         [SerializeField, Required]
         private TimerTooltip timerTooltip;
 
         [SerializeField, Required]
         private GoodsTooltip goodsTooltip;
+        
+        [SerializeField, Required]
+        private HarvestTooltip harvestTooltip;
 
+        [Line]
         [SerializeField, Required]
         private GoodsDatabase barnDatabase;
 
@@ -90,6 +95,7 @@ namespace Core.Game
         {
             this.timerTooltip.Initialize(Currency);
             this.goodsTooltip.Initialize();
+            this.harvestTooltip.Initialize();
         }
 
         private async void Start()

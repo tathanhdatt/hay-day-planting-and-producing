@@ -1,5 +1,4 @@
 ﻿using Dt.Attribute;
-using Lean.Touch;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +8,7 @@ public class TimerTooltip : MonoBehaviour
     private const int numberOfGemPer10Minutes = 1;
 
     [SerializeField, Required]
-    private RectTransform content;
+    private ClickOutsideHider clickOutsideHider;
 
     [SerializeField, Required]
     private TMP_Text timerName;
@@ -37,21 +36,7 @@ public class TimerTooltip : MonoBehaviour
     {
         this.currency = currency;
         this.skipButton.onClick.AddListener(OnClickSkipHandler);
-        LeanTouch.OnFingerDown += OnFingerDownHandler;
-    }
-
-    private void OnFingerDownHandler(LeanFinger finger)
-    {
-        HideIfClickOutside(finger);
-    }
-
-    private void HideIfClickOutside(LeanFinger finger)
-    {
-        if (!gameObject.activeSelf) return;
-        Vector3 fingerPos = finger.GetWorldPosition(CameraConstant.ZPosition);
-        fingerPos = this.content.InverseTransformPoint(fingerPos);
-        if (this.content.rect.Contains(fingerPos)) return;
-        Hide();
+        this.clickOutsideHider.Initialize();
     }
 
     private void OnClickSkipHandler()

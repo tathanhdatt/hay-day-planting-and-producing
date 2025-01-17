@@ -21,6 +21,9 @@ public class BuildingSystem : MonoBehaviour
     
     [SerializeField, Required]
     private GoodsTooltip goodsTooltip;
+    
+    [SerializeField, Required]
+    private HarvestTooltip harvestTooltip;
 
     [Line]
     [SerializeField]
@@ -60,9 +63,14 @@ public class BuildingSystem : MonoBehaviour
             this.currentItemInfo.prefab, this.mainTilemap.transform);
         this.facility.Initialize(this, this.gridLayout, this.timerTooltip);
         this.facility.SetDraggable(true);
-        if (this.facility is ProductionFacility productionFacility)
+        if (this.facility is GoodsFacility goodsFacility)
         {
-            productionFacility.SetTooltip(this.goodsTooltip);
+            goodsFacility.SetGoodsTooltip(this.goodsTooltip);
+        }
+
+        if (this.facility is CropFacility cropFacility)
+        {
+            cropFacility.SetHarvestTooltip(this.harvestTooltip);
         }
         this.facility.OnFirstTimePlaced += OnFirstTimePlacedHandler;
     }
