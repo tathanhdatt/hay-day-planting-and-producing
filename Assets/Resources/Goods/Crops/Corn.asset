@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goodsName: Corn
   graphic: {fileID: -7944502702452990849, guid: e40e309f04c4fea449ac78f374def258, type: 3}
-  quantity: 9
+  quantity: 40
   level: 1
   isUnlocked: 1

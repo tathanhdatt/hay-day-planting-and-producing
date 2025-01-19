@@ -181,6 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detector: {fileID: 8519719947336121120}
+  goodsDatabase: {fileID: 11400000, guid: ea43bc202ae468d4cb9fa8dfb84a2ced, type: 2}
 --- !u!114 &8519719947336121120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,7 +223,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6372116441966616929}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}

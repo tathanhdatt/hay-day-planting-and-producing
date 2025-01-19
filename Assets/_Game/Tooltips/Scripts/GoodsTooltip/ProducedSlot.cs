@@ -12,6 +12,11 @@ public class ProducedSlot : MonoBehaviour
     [SerializeField, ReadOnly]
     private bool isProducing;
 
+    [SerializeField, ReadOnly]
+    private GoodsRecipe recipe;
+
+    public GoodsRecipe Recipe => this.recipe;
+
     public event Action<GoodsRecipe> OnAddRecipe;
     public event Action OnFreeSlot;
 
@@ -19,10 +24,12 @@ public class ProducedSlot : MonoBehaviour
     {
         if (!enabled) return;
         if (this.isFull) return;
+        this.recipe = null;
         if (IsEnoughMaterials(recipe))
         {
             this.isFull = true;
             OnAddRecipe?.Invoke(recipe);
+            this.recipe = recipe;
         }
         else
         {
@@ -45,10 +52,15 @@ public class ProducedSlot : MonoBehaviour
 
     public void FreeSlot()
     {
-        if (!this.isFull) return;
-        if (this.isProducing) return;
         this.isFull = false;
         OnFreeSlot?.Invoke();
+    }
+
+    public bool CanFreeSlot()
+    {
+        if (!this.isFull) return false;
+        if (this.isProducing) return false;
+        return true;
     }
 
     public void SetIsProducing(bool isProducing)

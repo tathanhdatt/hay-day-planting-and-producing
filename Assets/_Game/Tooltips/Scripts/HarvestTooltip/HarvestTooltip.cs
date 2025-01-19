@@ -26,7 +26,7 @@ public class HarvestTooltip : MonoBehaviour
     }
 
 
-    private void OnCleanedHandler()
+    private void OnCleanedHandler(ProducedSlot slot)
     {
         this.background.enabled = false;
     }

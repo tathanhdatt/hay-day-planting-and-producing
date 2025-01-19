@@ -32,18 +32,10 @@ public class CropFacility : GoodsFacility
 
     private async void OnFreeSlotHandler()
     {
-        IncreaseGoodsQuantity();
         this.graphic.sprite = this.currentRecipe.finishedGraphic;
         await UniTask.WaitForSeconds(0.6f);
         this.graphic.sprite = this.defaultGraphic;
         this.canHarvest = false;
-        this.harvestTooltip.Hide();
-    }
-
-    private void IncreaseGoodsQuantity()
-    {
-        this.currentRecipe.product.quantity += ExchangeRate.CropPerSeed;
-        this.levelXpStorage.AddXp(this.currentRecipe.xpReward);
     }
 
     private void OnHeartbeatHandler(int time)

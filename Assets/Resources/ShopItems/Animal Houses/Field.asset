@@ -20,11 +20,11 @@ MonoBehaviour:
   currencyType: 0
   price: 1
   additionalQuantityEachLevel: 3
-  quantity: 71
-  maxQuantity: 99999
+  quantity: 92
+  maxQuantity: 100008
   prefab: {fileID: 1460372666203698498, guid: 9d81c0c4f606d6a4a8a3052460c08eb0, type: 3}
   days: 0
   hours: 0
-  minutes: 3
-  seconds: 3
+  minutes: 0
+  seconds: 0
   isEnoughCurrency: 1
