@@ -1,6 +1,5 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using Dt.Attribute;
 using TMPro;
 using UnityEngine;
@@ -28,21 +27,7 @@ public abstract class StorageView : BaseView
 
     [Title("Storage Bar")]
     [SerializeField, Required]
-    private Transform indicator;
-
-    [SerializeField, Required]
-    private Transform leftIndicatorBound;
-
-    [SerializeField, Required]
-    private Transform rightIndicatorBound;
-
-    [SerializeField]
-    private float indicatorMoveDuration;
-
-    [SerializeField]
-    private Ease indicatorMoveEase;
-
-    private Tweener indicatorMoveTweener;
+    private IndicatorFillBar storageFillBar;
 
     public event Action OnClickExit;
     public event Action OnClickUpgrade;
@@ -76,27 +61,11 @@ public abstract class StorageView : BaseView
 
     public void MoveIndicator(float percentage)
     {
-        this.indicatorMoveTweener?.Kill(true);
-        float indicatorPositionX = GetIndicatorX(percentage);
-        this.indicatorMoveTweener =
-            this.indicator.DOLocalMoveX(indicatorPositionX, this.indicatorMoveDuration);
-        this.indicatorMoveTweener.SetEase(this.indicatorMoveEase);
+        this.storageFillBar.MoveIndicator(percentage);
     }
 
     public void SetIndicator(float percentage)
     {
-        float x = GetIndicatorX(percentage);
-        Vector3 position = this.indicator.localPosition;
-        position.x = x;
-        this.indicator.localPosition = position;
-    }
-
-    private float GetIndicatorX(float percentage)
-    {
-        percentage = Mathf.Clamp01(percentage);
-        return Mathf.Lerp(
-            this.leftIndicatorBound.localPosition.x,
-            this.rightIndicatorBound.localPosition.x,
-            percentage);
+        this.storageFillBar.SetIndicator(percentage);
     }
 }

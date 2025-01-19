@@ -36,6 +36,16 @@ public class ProducedSlotDetector : MonoBehaviour
         this.detectSlotCollider.enabled = false;
     }
 
+    private void OnEnable()
+    {
+        this.detectSlotCollider.enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        this.detectSlotCollider.enabled = false;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         bool isNewCollider = this.lastCollider2D != other;

@@ -1,7 +1,5 @@
 ﻿using Dt.Attribute;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(ProducedSlotDetector))]
 public class ProducedSlotFiller : MonoBehaviour

@@ -8,7 +8,10 @@ public class ProducedSlotCleaner : MonoBehaviour
     [SerializeField, Required]
     private ProducedSlotDetector detector;
 
-    public event Action OnCleaned;
+    [SerializeField, Required]
+    private GoodsDatabase goodsDatabase;
+
+    public event Action<ProducedSlot> OnCleaned;
 
     public void Initialize()
     {
@@ -18,7 +21,16 @@ public class ProducedSlotCleaner : MonoBehaviour
 
     private void OnDetectedSlotHandler(ProducedSlot slot)
     {
-        slot.FreeSlot();
-        OnCleaned?.Invoke();
+        if (!slot.CanFreeSlot()) return;
+        bool isFull = this.goodsDatabase.GetOccupiedSlots() >= this.goodsDatabase.capacity;
+        if (isFull)
+        {
+            Messenger.Broadcast(Message.PopupDialog, "Silo is full!");
+        }
+        else
+        {
+            slot.FreeSlot();
+            OnCleaned?.Invoke(slot);
+        }
     }
 }

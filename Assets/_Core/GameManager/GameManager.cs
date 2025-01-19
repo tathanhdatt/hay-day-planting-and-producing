@@ -15,6 +15,9 @@ namespace Core.Game
         [SerializeField, Required]
         private BuildingSystem buildingSystem;
 
+        [SerializeField, Required]
+        private ItemCollector itemCollector;
+
         [Title("Tooltips")]
         [SerializeField, Required]
         private TimerTooltip timerTooltip;
@@ -37,6 +40,7 @@ namespace Core.Game
         private DialogManager dialogManager;
 
         private IAudioService audioService;
+        private IPoolService poolService;
         private ILevelRequirement levelRequirement;
         public ILevelXpStorage LevelXpStorage { get; private set; }
         public ICurrency Currency { get; private set; }
@@ -52,9 +56,11 @@ namespace Core.Game
         {
             Application.targetFrameRate = 60;
             InitAudioService();
+            InitPoolingService();
             InitCurrency();
             InitLevelRequirement();
             InitLevelStorage();
+            InitItemCollector();
             InitBuildingSystem();
             InitTooltips();
         }
@@ -64,6 +70,12 @@ namespace Core.Game
         {
             this.audioService = FindAnyObjectByType<NativeAudioService>();
             ServiceLocator.Register(this.audioService);
+        }
+
+        private void InitPoolingService()
+        {
+            this.poolService = FindAnyObjectByType<NativePoolService>();
+            ServiceLocator.Register(this.poolService);
         }
 
         private void InitCurrency()
@@ -83,6 +95,12 @@ namespace Core.Game
         {
             LevelXpStorage = new LevelXpStorage(this.levelRequirement);
             LevelXpStorage.SetCurrentLevel(1);
+        }
+
+        private void InitItemCollector()
+        {
+            this.itemCollector.Initialize(LevelXpStorage, Currency, 
+                this.siloDatabase, this.barnDatabase);
         }
 
         private void InitBuildingSystem()

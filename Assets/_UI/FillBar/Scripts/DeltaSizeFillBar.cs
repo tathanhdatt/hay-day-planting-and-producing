@@ -28,7 +28,7 @@ public class DeltaSizeFillBar : MonoBehaviour
 
     public async void FillBar(float percentage)
     {
-        this.fillTweener?.Complete();
+        this.fillTweener?.Kill();
         Vector2 sizeDelta = GetDeltaSize();
         sizeDelta.x = percentage * this.maxWidth;
         this.fillTweener = this.fillImage.rectTransform

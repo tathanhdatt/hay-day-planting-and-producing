@@ -7,7 +7,7 @@ public class GoodsRecipe : ScriptableObject
 {
     public Goods product;
     public List<GoodsRequirement> materials;
-    public int xpReward;
+    public List<GoodsReward> rewards;
     [Title("Produce Time")]
     public int days;
     public int hours;
