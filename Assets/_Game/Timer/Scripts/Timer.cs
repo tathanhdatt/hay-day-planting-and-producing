@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Text;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using Dt.Attribute;
 using UnityEngine;
 
@@ -28,14 +26,17 @@ public class Timer : MonoBehaviour
 
     public string Name { get; private set; }
     public double TimeLeft => this.timeLeft;
+    public bool IsFinished => this.isFinished;
 
     public event Action<int> OnHeartbeat;
+    public event Action OnStarted;
     public event Action OnFinished;
 
     public void Initialize(bool isDestroyOnFinished = true)
     {
         enabled = false;
         this.isDestroyOnFinished = isDestroyOnFinished;
+        this.isFinished = true;
     }
 
     public void StartTimer(string name, TimeSpan timeSpan, int heartbeat = 1)
@@ -47,6 +48,7 @@ public class Timer : MonoBehaviour
         CalculateFinishedTime();
         ResetState();
         enabled = true;
+        OnStarted?.Invoke();
         StartInvokeHeartbeat();
     }
 
@@ -153,5 +155,15 @@ public class Timer : MonoBehaviour
         }
 
         return time.ToString();
+    }
+
+    public int GetGemToSkip()
+    {
+        if (this.timeLeft < 600)
+        {
+            return ExchangeRate.GemPer10Minutes;
+        }
+
+        return (int)(this.timeLeft / 60 * ExchangeRate.GemPer10Minutes);
     }
 }

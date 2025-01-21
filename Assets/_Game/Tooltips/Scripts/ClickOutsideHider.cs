@@ -1,11 +1,12 @@
-﻿using Dt.Attribute;
+﻿using System.Collections.Generic;
+using Dt.Attribute;
 using Lean.Touch;
 using UnityEngine;
 
 public class ClickOutsideHider : MonoBehaviour
 {
     [SerializeField, Required]
-    private RectTransform content;
+    private List<RectTransform> contents;
 
     public void Initialize()
     {
@@ -21,8 +22,13 @@ public class ClickOutsideHider : MonoBehaviour
     {
         if (!gameObject.activeSelf) return;
         Vector3 fingerPos = finger.GetWorldPosition(CameraConstant.ZPosition);
-        fingerPos = this.content.InverseTransformPoint(fingerPos);
-        if (this.content.rect.Contains(fingerPos)) return;
+        foreach (RectTransform content in this.contents)
+        {
+            Vector3 localPos = content.InverseTransformPoint(fingerPos);
+            localPos.z = 0;
+            if (content.rect.Contains(localPos)) return;
+        }
+
         Hide();
     }
 

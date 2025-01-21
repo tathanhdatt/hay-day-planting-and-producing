@@ -20,7 +20,10 @@ public class BuildingSystem : MonoBehaviour
     private TimerTooltip timerTooltip;
 
     [SerializeField, Required]
-    private GoodsTooltip goodsTooltip;
+    private CropTooltip cropTooltip;
+
+    [SerializeField, Required]
+    private ProductionTooltip productionTooltip;
 
     [SerializeField, Required]
     private HarvestTooltip harvestTooltip;
@@ -32,14 +35,14 @@ public class BuildingSystem : MonoBehaviour
     private Facility facility;
 
     private ICurrency currency;
-    private ShopItemInfo currentItemInfo;
-    private ILevelXpStorage levelXpStorage;
+    private ItemInfo currentItemInfo;
+    private GoodsDatabase barnDatabase;
 
-    public void Initialize(ICurrency currency, ILevelXpStorage levelXpStorage)
+    public void Initialize(ICurrency currency, GoodsDatabase barnDatabase)
     {
-        Messenger.AddListener<ShopItemInfo>(Message.SpawnItem, SpawnItemHandler);
+        Messenger.AddListener<ItemInfo>(Message.SpawnItem, SpawnItemHandler);
         this.currency = currency;
-        this.levelXpStorage = levelXpStorage;
+        this.barnDatabase = barnDatabase;
         InitializeAvailableFacilities();
     }
 
@@ -53,7 +56,7 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
-    private void SpawnItemHandler(ShopItemInfo info)
+    private void SpawnItemHandler(ItemInfo info)
     {
         this.currentItemInfo = info;
         InitializeFacility();
@@ -65,18 +68,24 @@ public class BuildingSystem : MonoBehaviour
             this.currentItemInfo.prefab, this.mainTilemap.transform);
         this.facility.Initialize(this, this.gridLayout, this.timerTooltip);
         this.facility.SetDraggable(true);
-        if (this.facility is GoodsFacility goodsFacility)
-        {
-            goodsFacility.AddGoodsTooltip(this.goodsTooltip)
-                .AddLevelXpStorage(this.levelXpStorage);
-        }
-
-        if (this.facility is CropFacility cropFacility)
-        {
-            cropFacility.SetHarvestTooltip(this.harvestTooltip);
-        }
-
+        SetFacilityParams();
         this.facility.OnFirstTimePlaced += OnFirstTimePlacedHandler;
+    }
+
+    private void SetFacilityParams()
+    {
+        switch (this.facility)
+        {
+            case CropFacility cropFacility:
+                cropFacility.SetCropTooltip(this.cropTooltip);
+                cropFacility.SetHarvestTooltip(this.harvestTooltip);
+                break;
+            case ProductionFacility productionFacility:
+                productionFacility.SetProduction(this.productionTooltip);
+                productionFacility.SetInfo(this.currentItemInfo);
+                productionFacility.SetDatabase(this.barnDatabase);
+                break;
+        }
     }
 
     private void Build()

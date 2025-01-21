@@ -21,13 +21,17 @@ public class NativePoolService : MonoBehaviour, IPoolService
         }
 
         bool hasInstance = this.pools[typeof(T)].Count > 0;
+        T go;
         if (hasInstance)
         {
-            return this.pools[typeof(T)].Pop() as T;
+            go = this.pools[typeof(T)].Pop() as T;
+            go?.transform.SetParent(parent);
+        }
+        else
+        {
+            go = Instantiate(prefab, parent);
         }
 
-        T go = Instantiate(prefab, parent);
-        go.gameObject.SetActive(true);
         return go;
     }
 

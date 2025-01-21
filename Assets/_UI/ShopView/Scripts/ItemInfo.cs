@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Shop Item", menuName = "Shop Item")]
-public class ShopItemInfo : ScriptableObject
+public class ItemInfo : ScriptableObject
 {
     [Title("Information")]
     public Sprite icon;
@@ -12,6 +12,8 @@ public class ShopItemInfo : ScriptableObject
     public int unlockLevel;
     public CurrencyType currencyType;
     public int price;
+    [Line]
+    public int numberOfSlot;
 
     [Title("Quantity")]
     public int additionalQuantityEachLevel;

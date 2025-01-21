@@ -6,6 +6,9 @@ public class CropFacility : GoodsFacility
 {
     [Title("Crop facility")]
     [SerializeField, Required]
+    protected SpriteRenderer graphic;
+
+    [SerializeField, Required]
     private Sprite defaultGraphic;
 
     [SerializeField, ReadOnly]
@@ -47,6 +50,13 @@ public class CropFacility : GoodsFacility
     {
         base.OnProducedFinishedHandler();
         this.canHarvest = true;
+        this.graphic.sprite = this.currentRecipe.growingGraphics.Last();
+    }
+
+    protected override async UniTask ProduceCurrentRecipe()
+    {
+        this.graphic.sprite = this.currentRecipe.growingGraphics[0];
+        await base.ProduceCurrentRecipe();
     }
 
 

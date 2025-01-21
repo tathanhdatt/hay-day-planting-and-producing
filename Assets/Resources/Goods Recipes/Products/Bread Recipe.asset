@@ -13,6 +13,22 @@ MonoBehaviour:
   m_Name: Bread Recipe
   m_EditorClassIdentifier: 
   product: {fileID: 11400000, guid: 9cafc31b1a789cb43bb3925d72806ee9, type: 2}
-  recipes:
+  materials:
   - requiredQuantity: 3
     goods: {fileID: 11400000, guid: 8aeb71d44b92d6b4ea371df1bc63bb43, type: 2}
+  rewards:
+  - type: 0
+    quantityRange:
+      start: 20
+      end: 21
+  - type: 2
+    quantityRange:
+      start: 3
+      end: 4
+  days: 0
+  hours: 0
+  minutes: 0
+  seconds: 4
+  growingGraphics:
+  - {fileID: -1660761858345613354, guid: 56f73b1d30c951b40b980f63f4a92a3e, type: 3}
+  finishedGraphic: {fileID: -1660761858345613354, guid: 56f73b1d30c951b40b980f63f4a92a3e, type: 3}

@@ -9,7 +9,7 @@ public class ShopItemHolder : MonoBehaviour
     private ShopItem shopItemPrefab;
 
     [SerializeField, Required]
-    private ShopItemInfo[] shopItems;
+    private ItemInfo[] shopItems;
 
     [SerializeField, Required]
     private Transform holder;
@@ -18,7 +18,7 @@ public class ShopItemHolder : MonoBehaviour
     private ShopItemType itemType;
 
     public ShopItemType ItemType => this.itemType;
-    public ShopItemInfo[] ItemInfos => this.shopItems;
+    public ItemInfo[] ItemInfos => this.shopItems;
     
     private readonly List<ShopItem> items = new List<ShopItem>();
 
@@ -30,7 +30,7 @@ public class ShopItemHolder : MonoBehaviour
     private async UniTask InstantiateItems(Transform draggingBound)
     {
         await UniTask.CompletedTask;
-        foreach (ShopItemInfo info in this.shopItems)
+        foreach (ItemInfo info in this.shopItems)
         {
             ShopItem newItem = Instantiate(this.shopItemPrefab, this.holder);
             this.items.Add(newItem);
@@ -48,7 +48,7 @@ public class ShopItemHolder : MonoBehaviour
 
     public void OnUpdateLevel()
     {
-        foreach (ShopItemInfo info in ItemInfos)
+        foreach (ItemInfo info in ItemInfos)
         {
             info.UpdateQuantity();
         }

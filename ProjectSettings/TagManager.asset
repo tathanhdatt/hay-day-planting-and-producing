@@ -44,6 +44,9 @@ TagManager:
   - name: Facility
     uniqueID: 2698406463
     locked: 0
+  - name: Collectible Item
+    uniqueID: 2042099137
+    locked: 0
   - name: Tooltip
     uniqueID: 413717759
     locked: 0
