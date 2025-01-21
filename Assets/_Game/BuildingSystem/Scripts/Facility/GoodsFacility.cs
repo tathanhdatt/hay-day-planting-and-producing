@@ -6,14 +6,12 @@ using UnityEngine;
 
 public abstract class GoodsFacility : Facility
 {
-    private readonly Queue<GoodsRecipe> productionQueue = new Queue<GoodsRecipe>(10);
-
     [Title("Goods facility")]
-    [SerializeField, Required]
-    protected SpriteRenderer graphic;
+    [SerializeField, ReadOnly]
+    protected List<GoodsRecipe> productionQueue = new List<GoodsRecipe>(10);
 
     [SerializeField]
-    private List<GoodsRecipe> recipes;
+    protected List<GoodsRecipe> recipes;
 
     [SerializeField, ReadOnly]
     protected GoodsRecipe currentRecipe;
@@ -26,15 +24,13 @@ public abstract class GoodsFacility : Facility
 
     [Title("Goods Tooltip")]
     [SerializeField, ReadOnly]
-    private GoodsTooltip goodsTooltip;
+    protected CropTooltip cropTooltip;
 
     [SerializeField]
     private bool hideGoodsTooltipOnDrag;
 
     [SerializeField, ReadOnly]
     protected bool isProducing;
-    
-    protected ILevelXpStorage levelXpStorage;
 
     public override void Initialize(BuildingSystem buildingSystem,
         GridLayout gridLayout, TimerTooltip tooltip)
@@ -50,7 +46,6 @@ public abstract class GoodsFacility : Facility
         this.isProducing = false;
         this.slots.First().SetIsProducing(false);
         this.timerTooltip.Hide();
-        this.graphic.sprite = this.currentRecipe.growingGraphics.Last();
     }
 
     private void InitializeSlots()
@@ -66,10 +61,10 @@ public abstract class GoodsFacility : Facility
     {
         if (this.hideGoodsTooltipOnDrag)
         {
-            this.goodsTooltip.HideContent();
+            this.cropTooltip.HideContent();
         }
 
-        this.productionQueue.Enqueue(recipe);
+        this.productionQueue.Add(recipe);
         if (this.isProducing) return;
         Produce();
     }
@@ -92,7 +87,7 @@ public abstract class GoodsFacility : Facility
     {
         while (this.productionQueue.Count > 0)
         {
-            this.currentRecipe = this.productionQueue.Dequeue();
+            this.currentRecipe = this.productionQueue.RemoveLast();
             ConsumeMaterialsAndRefreshContent();
             await ProduceCurrentRecipe();
         }
@@ -103,13 +98,12 @@ public abstract class GoodsFacility : Facility
     private void ConsumeMaterialsAndRefreshContent()
     {
         this.currentRecipe.ConsumeMaterials();
-        this.goodsTooltip.RefreshContent();
+        this.cropTooltip.RefreshContent();
     }
 
-    private async UniTask ProduceCurrentRecipe()
+    protected virtual async UniTask ProduceCurrentRecipe()
     {
         this.slots.First().SetIsProducing(true);
-        this.graphic.sprite = this.currentRecipe.growingGraphics[0];
         TimeSpan producedTime = new TimeSpan(
             this.currentRecipe.days,
             this.currentRecipe.hours,
@@ -121,16 +115,9 @@ public abstract class GoodsFacility : Facility
         await UniTask.WaitUntil(() => !this.isProducing);
     }
 
-    public GoodsFacility AddGoodsTooltip(GoodsTooltip tooltip)
+    public void SetCropTooltip(CropTooltip tooltip)
     {
-        this.goodsTooltip = tooltip;
-        return this;
-    }
-
-    public GoodsFacility AddLevelXpStorage(ILevelXpStorage levelXpStorage)
-    {
-        this.levelXpStorage = levelXpStorage;
-        return this;
+        this.cropTooltip = tooltip;
     }
 
     protected override void ShowTooltips()
@@ -143,6 +130,6 @@ public abstract class GoodsFacility : Facility
     {
         if (this.isBuilding) return;
         if (this.isProducing) return;
-        this.goodsTooltip.Show(this.recipes, transform);
+        this.cropTooltip.Show(this.recipes, transform);
     }
 }

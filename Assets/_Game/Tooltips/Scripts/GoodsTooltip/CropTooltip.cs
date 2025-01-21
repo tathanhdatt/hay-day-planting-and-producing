@@ -4,7 +4,7 @@ using Lean.Touch;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GoodsTooltip : MonoBehaviour
+public class CropTooltip : MonoBehaviour
 {
     [SerializeField, Required]
     private SnappingCamera snappingCamera;

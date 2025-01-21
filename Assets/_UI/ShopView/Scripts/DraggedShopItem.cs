@@ -26,9 +26,9 @@ public class DraggedShopItem : MonoBehaviour,
     private Transform draggingBound;
 
     private Tweener punchIconTweener;
-    private ShopItemInfo info;
+    private ItemInfo info;
 
-    public void Initialize(Transform draggingBound, RectTransform draggingIcon, ShopItemInfo info)
+    public void Initialize(Transform draggingBound, RectTransform draggingIcon, ItemInfo info)
     {
         this.draggingBound = draggingBound;
         this.draggingIcon = draggingIcon;

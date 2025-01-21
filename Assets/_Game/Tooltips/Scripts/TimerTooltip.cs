@@ -1,11 +1,9 @@
 ﻿using Dt.Attribute;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TimerTooltip : MonoBehaviour
 {
-    private const int numberOfGemPer10Minutes = 1;
 
     [SerializeField, Required]
     private ClickOutsideHider clickOutsideHider;
@@ -41,10 +39,10 @@ public class TimerTooltip : MonoBehaviour
 
     private void OnConfirmSkipHandler()
     {
-        int gem = GetGemToSkip();
+        int gem = this.timer.GetGemToSkip();
         if (this.currency.IsEnough(CurrencyType.Gem, gem))
         {
-            this.timer?.SkipTimer();
+            this.timer.SkipTimer();
             this.currency.SubtractAmount(CurrencyType.Gem, gem);
         }
         else
@@ -74,19 +72,11 @@ public class TimerTooltip : MonoBehaviour
 
         this.deltaSizeFillBar.SetFillBar(this.timer.GetTimeLeftPercentage());
         this.timeLeftText.SetText(this.timer.GetFormattedTimeLeft());
-        string price = $"{GetGemToSkip().ToString()}<sprite=\"diamond\" index=0>";
+        string price = $"{this.timer.GetGemToSkip().ToString()}<sprite=\"diamond\" index=0>";
         this.skipPriceText.SetText(price);
     }
 
-    private int GetGemToSkip()
-    {
-        if (this.timer.TimeLeft < 600)
-        {
-            return numberOfGemPer10Minutes;
-        }
-
-        return (int)(this.timer.TimeLeft / 60 * numberOfGemPer10Minutes);
-    }
+    
 
     public void Hide()
     {

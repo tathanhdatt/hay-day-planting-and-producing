@@ -17,6 +17,9 @@ public class InteractionDetector : MonoBehaviour
     [SerializeField, ReadOnly]
     private bool isHolding;
 
+    [SerializeField, ReadOnly]
+    private bool isOverGui;
+
     public event Action OnAllowedEditing;
     public event Action OnFingerTap;
 
@@ -31,7 +34,8 @@ public class InteractionDetector : MonoBehaviour
 
     private void OnFingerDownHandler(LeanFinger finger)
     {
-        if (finger.IsOverGui) return;
+        this.isOverGui = finger.IsOverGui;
+        if (this.isOverGui) return;
         if (!IsCurrentFingerInBounds(finger)) return;
         this.holdingTimeSpan = 0;
         this.isHolding = true;
@@ -63,7 +67,7 @@ public class InteractionDetector : MonoBehaviour
 
     private void OnFingerTapHandler(LeanFinger finger)
     {
-        if (finger.IsOverGui) return;
+        if (this.isOverGui) return;
         if (IsCurrentFingerInBounds(finger))
         {
             OnFingerTap?.Invoke();

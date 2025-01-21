@@ -29,4 +29,9 @@ public class GoodsDatabase : ScriptableObject
         }
         return occupied;
     }
+
+    public int GetAvailableSlots()
+    {
+        return this.capacity - GetOccupiedSlots();
+    }
 }

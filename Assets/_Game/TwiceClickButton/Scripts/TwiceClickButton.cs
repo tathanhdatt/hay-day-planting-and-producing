@@ -56,6 +56,7 @@ public class TwiceClickButton : MonoBehaviour, IDeselectHandler
             this.scaleTweener?.Kill(true);
             OnClick?.Invoke();
             OnConfirm?.Invoke();
+            ResetState();
         }
         else
         {

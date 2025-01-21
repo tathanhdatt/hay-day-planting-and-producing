@@ -44,9 +44,9 @@ public class ShopItem : MonoBehaviour
     private Material grayScaleMaterial;
 
     [SerializeField, ReadOnly]
-    private ShopItemInfo info;
+    private ItemInfo info;
 
-    public async UniTask Initialize(ShopItemInfo info, Transform draggingBound)
+    public async UniTask Initialize(ItemInfo info, Transform draggingBound)
     {
         this.draggedShopItem.Initialize(draggingBound, this.icon.transform as RectTransform, info);
         this.info = info;

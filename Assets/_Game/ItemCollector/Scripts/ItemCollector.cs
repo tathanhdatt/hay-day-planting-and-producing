@@ -79,6 +79,10 @@ public class ItemCollector : MonoBehaviour
         this.siloDatabase = siloDatabase;
         this.barnDatabase = barnDatabase;
         this.cleaner.OnCleaned += OnCleanedHandler;
+        Messenger.AddListener<Goods, int, Vector3>(
+            Message.CollectGoods, OnCollectGoodsHandler);
+        Messenger.AddListener<List<GoodsReward>, Vector3>(
+            Message.CollectRewards, OnCollectRewardsHandler);
     }
 
     private void OnCleanedHandler(ProducedSlot slot)
@@ -93,12 +97,12 @@ public class ItemCollector : MonoBehaviour
         goods.quantity += quantity;
         GoodsCollectedItem collectedItem = GetCollectedItem(this.goodsPrefab, position);
         collectedItem.Initialize(goods.graphic, quantity, this.goodsTarget.position, goods);
+        ShowDatabase(collectedItem);
         collectedItem.OnDisappear += OnGoodsDisappearHandler;
     }
 
-    private void OnGoodsDisappearHandler(GoodsCollectedItem item)
+    private void ShowDatabase(GoodsCollectedItem item)
     {
-        item.OnDisappear -= OnGoodsDisappearHandler;
         bool isCrop = this.siloDatabase.goods.Contains(item.Goods);
         if (isCrop)
         {
@@ -110,9 +114,15 @@ public class ItemCollector : MonoBehaviour
             this.icon.sprite = this.barnIcon;
             ShowDatabase(this.barnDatabase);
         }
+    }
 
+    private void OnGoodsDisappearHandler(GoodsCollectedItem item)
+    {
+        item.OnDisappear -= OnGoodsDisappearHandler;
         ServiceLocator.GetService<IPoolService>().Despawn(item);
     }
+
+    private UniTask currentTask;
 
     private async void ShowDatabase(GoodsDatabase database)
     {
@@ -120,7 +130,8 @@ public class ItemCollector : MonoBehaviour
         this.indicatorFillBar.transform.parent.gameObject.SetActive(true);
         this.indicatorFillBar.MoveIndicator(storagePercentage);
         this.capacityText.SetText($"{database.GetOccupiedSlots()}/{database.capacity}");
-        await UniTask.WaitForSeconds(1);
+        this.currentTask = UniTask.WaitForSeconds(2);
+        await this.currentTask;
         this.indicatorFillBar.transform.parent.gameObject.SetActive(false);
     }
 
@@ -159,7 +170,6 @@ public class ItemCollector : MonoBehaviour
     {
         T collectedItem = ServiceLocator
             .GetService<IPoolService>().Spawn(prefab, transform);
-        collectedItem.transform.SetParent(transform);
         collectedItem.transform.position = position;
         collectedItem.gameObject.SetActive(true);
         return collectedItem;

@@ -36,7 +36,7 @@ public class ShopViewPresenter : BaseViewPresenter
         ShopItemHolder[] itemHolders = this.shopView.ItemHolders;
         foreach (ShopItemHolder itemHolder in itemHolders)
         {
-            foreach (ShopItemInfo itemInfo in itemHolder.ItemInfos)
+            foreach (ItemInfo itemInfo in itemHolder.ItemInfos)
             {
                 if (itemInfo.currencyType != type) continue;
                 itemInfo.isEnoughCurrency = this.currency.IsEnough(type, itemInfo.price);

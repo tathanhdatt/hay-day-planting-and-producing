@@ -23,7 +23,10 @@ namespace Core.Game
         private TimerTooltip timerTooltip;
 
         [SerializeField, Required]
-        private GoodsTooltip goodsTooltip;
+        private CropTooltip cropTooltip;
+        
+        [SerializeField, Required]
+        private ProductionTooltip productionTooltip;
 
         [SerializeField, Required]
         private HarvestTooltip harvestTooltip;
@@ -110,13 +113,14 @@ namespace Core.Game
                 InitCurrency();
             }
 
-            this.buildingSystem.Initialize(Currency, LevelXpStorage);
+            this.buildingSystem.Initialize(Currency, this.barnDatabase);
         }
 
         private void InitTooltips()
         {
             this.timerTooltip.Initialize(Currency);
-            this.goodsTooltip.Initialize();
+            this.cropTooltip.Initialize();
+            this.productionTooltip.Initialize(Currency);
             this.harvestTooltip.Initialize();
         }
 
@@ -133,7 +137,7 @@ namespace Core.Game
             Messenger.AddListener<string>(Message.PopupDialog, PopupHandler);
             await this.presenter.GetViewPresenter<GameViewPresenter>().Show();
             Currency.SetAmount(CurrencyType.Coin, 1000);
-            Currency.SetAmount(CurrencyType.Gem, 0);
+            Currency.SetAmount(CurrencyType.Gem, 1000);
         }
 
 
