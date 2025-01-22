@@ -49,6 +49,7 @@ namespace Core.Game
         public ICurrency Currency { get; private set; }
         public GoodsDatabase BarnDatabase => this.barnDatabase;
         public GoodsDatabase SiloDatabase => this.siloDatabase;
+        public ISaveManager SaveManager { get; private set; }
 
         private void Awake()
         {

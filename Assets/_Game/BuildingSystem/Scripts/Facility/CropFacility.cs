@@ -1,8 +1,10 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using System.Globalization;
+using Cysharp.Threading.Tasks;
 using Dt.Attribute;
 using UnityEngine;
 
-public class CropFacility : GoodsFacility
+public class CropFacility : SingleSlotFacility
 {
     [Title("Crop facility")]
     [SerializeField, Required]
@@ -17,20 +19,17 @@ public class CropFacility : GoodsFacility
     [SerializeField, ReadOnly]
     private bool canHarvest;
 
-    public override void Initialize(BuildingSystem buildingSystem,
-        GridLayout gridLayout, TimerTooltip tooltip)
+    public override void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout,
+        TimerTooltip tooltip, ItemInfo info, FacilityData data = null)
     {
-        base.Initialize(buildingSystem, gridLayout, tooltip);
-        RegisterFreeSlotEvents();
         this.producedTimer.OnHeartbeat += OnHeartbeatHandler;
+        base.Initialize(buildingSystem, gridLayout, tooltip, info, data);
+        RegisterFreeSlotEvents();
     }
 
     private void RegisterFreeSlotEvents()
     {
-        foreach (ProducedSlot slot in this.slots)
-        {
-            slot.OnFreeSlot += OnFreeSlotHandler;
-        }
+        this.slot.OnFreeSlot += OnFreeSlotHandler;
     }
 
     private async void OnFreeSlotHandler()
@@ -39,10 +38,13 @@ public class CropFacility : GoodsFacility
         await UniTask.WaitForSeconds(0.6f);
         this.graphic.sprite = this.defaultGraphic;
         this.canHarvest = false;
+        (this.data as ProducibleFacilityData)?.productNames.RemoveFirst();
     }
 
     private void OnHeartbeatHandler(int time)
     {
+        Debug.Log(time);
+        time = Math.Clamp(time, 0, this.currentRecipe.growingGraphics.Count);
         this.graphic.sprite = this.currentRecipe.growingGraphics[time - 1];
     }
 
@@ -53,10 +55,10 @@ public class CropFacility : GoodsFacility
         this.graphic.sprite = this.currentRecipe.growingGraphics.Last();
     }
 
-    protected override async UniTask ProduceCurrentRecipe()
+    protected override void ProduceCurrentRecipe()
     {
-        this.graphic.sprite = this.currentRecipe.growingGraphics[0];
-        await base.ProduceCurrentRecipe();
+        // this.graphic.sprite = this.currentRecipe.growingGraphics[0];
+        base.ProduceCurrentRecipe();
     }
 
 

@@ -27,9 +27,6 @@ public class ProductionFacility : Facility
 
     [Line]
     [SerializeField, ReadOnly]
-    private ItemInfo facilityInfo;
-
-    [SerializeField, ReadOnly]
     protected GoodsRecipe currentRecipe;
 
     [SerializeField, ReadOnly]
@@ -47,10 +44,10 @@ public class ProductionFacility : Facility
     [SerializeField, ReadOnly]
     private GoodsDatabase barnDatabase;
 
-    public override void Initialize(BuildingSystem buildingSystem,
-        GridLayout gridLayout, TimerTooltip tooltip)
+    public override void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout, 
+        TimerTooltip tooltip, ItemInfo info, FacilityData data = null)
     {
-        base.Initialize(buildingSystem, gridLayout, tooltip);
+        base.Initialize(buildingSystem, gridLayout, tooltip, info, data);
         this.producedTimer.Initialize(false);
         this.producedTimer.OnFinished += OnProducedFinishedHandler;
     }
@@ -129,11 +126,6 @@ public class ProductionFacility : Facility
     {
         this.productionTooltip.OnHidden -= OnProductionTooltipHiddenHandler;
         this.productionTooltip.OnAddRecipe -= OnAddRecipeHandler;
-    }
-
-    public void SetInfo(ItemInfo info)
-    {
-        this.facilityInfo = info;
     }
 
     public void SetDatabase(GoodsDatabase database)

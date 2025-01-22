@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using Dt.Attribute;
 using UnityEngine;
@@ -71,8 +72,16 @@ public class Timer : MonoBehaviour
 
     private void StartInvokeHeartbeat()
     {
+        if (this.timeSpan.TotalSeconds <= 0) return;
         float timeInterval = (float)this.timeSpan.TotalSeconds / this.heartbeat;
-        InvokeRepeating(nameof(InvokeHeartbeat), 0, timeInterval);
+        try
+        {
+            InvokeRepeating(nameof(InvokeHeartbeat), 0, timeInterval);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 
     private void InvokeHeartbeat()
@@ -122,6 +131,17 @@ public class Timer : MonoBehaviour
         return (float)(this.timeLeft / this.timeSpan.TotalSeconds);
     }
 
+    public void Subtract(TimeSpan timeSpan)
+    {
+        CancelInvoke(nameof(InvokeHeartbeat));
+        this.timeLeft -= timeSpan.TotalSeconds;
+        this.finishTime -= timeSpan;
+        float timeInterval = (float)this.timeSpan.TotalSeconds / this.heartbeat;
+        int numberOfHeartbeatsSkipped = (int)Math.Floor(timeSpan.TotalSeconds / timeInterval);
+        numberOfHeartbeatsSkipped = Math.Clamp(numberOfHeartbeatsSkipped, 0, this.heartbeat);
+        OnHeartbeat?.Invoke(numberOfHeartbeatsSkipped + 1);
+    }
+
     public string GetFormattedTimeLeft()
     {
         StringBuilder time = new StringBuilder();
@@ -165,5 +185,10 @@ public class Timer : MonoBehaviour
         }
 
         return (int)(this.timeLeft / 60 * ExchangeRate.GemPer10Minutes);
+    }
+
+    public string GetFinishTimeString()
+    {
+        return this.finishTime.ToString(CultureInfo.InvariantCulture);
     }
 }
