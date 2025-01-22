@@ -2712,7 +2712,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5858762376160851657, guid: 9a32ebf17579086419af5ed085c065d3, type: 3}
       propertyPath: shopItems.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5858762376160851657, guid: 9a32ebf17579086419af5ed085c065d3, type: 3}
       propertyPath: 'shopItems.Array.data[0]'
@@ -2800,7 +2800,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6835138724370845555, guid: 9a32ebf17579086419af5ed085c065d3, type: 3}
       propertyPath: shopItems.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6835138724370845555, guid: 9a32ebf17579086419af5ed085c065d3, type: 3}
       propertyPath: 'shopItems.Array.data[1]'
