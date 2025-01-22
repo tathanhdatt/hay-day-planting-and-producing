@@ -11,9 +11,9 @@ public class OpeningViewFacility : Facility
     private bool isOverUI;
 
     public override void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout,
-        TimerTooltip tooltip)
+        TimerTooltip tooltip, ItemInfo info, FacilityData data = null)
     {
-        base.Initialize(buildingSystem, gridLayout, tooltip);
+        base.Initialize(buildingSystem, gridLayout, tooltip, info, data);
         LeanTouch.OnFingerDown += OnFingerDownHandler;
     }
 

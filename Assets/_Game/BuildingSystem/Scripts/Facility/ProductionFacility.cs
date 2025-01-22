@@ -27,9 +27,6 @@ public class ProductionFacility : Facility
 
     [Line]
     [SerializeField, ReadOnly]
-    private ItemInfo facilityInfo;
-
-    [SerializeField, ReadOnly]
     protected GoodsRecipe currentRecipe;
 
     [SerializeField, ReadOnly]
@@ -47,26 +44,83 @@ public class ProductionFacility : Facility
     [SerializeField, ReadOnly]
     private GoodsDatabase barnDatabase;
 
-    public override void Initialize(BuildingSystem buildingSystem,
-        GridLayout gridLayout, TimerTooltip tooltip)
+    private TimeSpan producedTime;
+    private TimeSpan passedTime;
+
+    public override void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout,
+        TimerTooltip tooltip, ItemInfo info, FacilityData data = null)
     {
-        base.Initialize(buildingSystem, gridLayout, tooltip);
+        base.Initialize(buildingSystem, gridLayout, tooltip, info, data);
         this.producedTimer.Initialize(false);
         this.producedTimer.OnFinished += OnProducedFinishedHandler;
+        if (data != null)
+        {
+            LoadData(data as ProducibleFacilityData);
+        }
     }
 
     private void OnProducedFinishedHandler()
     {
         this.producingIcons.RemoveFirst();
-        this.productionTooltip.Refresh();
+        this.productionTooltip.RefreshIfActive();
+        SpawnProduct(this.currentRecipe);
+        this.isProducing = false;
+    }
+
+    private void SpawnProduct(GoodsRecipe recipe)
+    {
         CollectibleItem item =
             ServiceLocator.GetService<IPoolService>().Spawn(this.prefab, transform);
         int index = this.collectibles.Count % this.productSpawnPoints.Length;
         Vector3 pos = this.productSpawnPoints[index].position;
         item.SetPosition(pos);
-        item.Show(this.currentRecipe);
+        item.Show(recipe);
         this.collectibles.Add(item);
-        this.isProducing = false;
+    }
+
+    private void LoadData(ProducibleFacilityData data)
+    {
+        this.data = data;
+        foreach (GoodsRecipe recipe in this.recipes)
+        {
+            string productInRecipeName = recipe.product.goodsName;
+            foreach (string productName in data.productNames)
+            {
+                if (productInRecipeName != productName) continue;
+                LoadRecipe(recipe, data);
+            }
+
+            foreach (string collectibleProductName in data.collectibleProductNames)
+            {
+                if (productInRecipeName != collectibleProductName) continue;
+                SpawnProduct(recipe);
+            }
+        }
+    }
+
+    private void LoadRecipe(GoodsRecipe recipe, ProducibleFacilityData data)
+    {
+        if (this.currentRecipe != null)
+        {
+            OnAddRecipeHandler(recipe);
+            return;
+        }
+
+        DateTime finishedTime = DateTime.Parse(data.finishedProducingTime);
+        TimeSpan remainTime = finishedTime - DateTime.Now;
+        OnAddRecipeHandler(recipe);
+        Produce();
+        this.passedTime = this.producedTime - remainTime;
+        if (remainTime <= TimeSpan.Zero)
+        {
+            this.passedTime = DateTime.Now - finishedTime;
+            this.producedTimer.SkipTimer();
+        }
+        else
+        {
+            this.passedTime = this.producedTime - remainTime;
+            this.producedTimer.Subtract(this.passedTime);
+        }
     }
 
     protected override void OnFingerTapHandler()
@@ -95,34 +149,35 @@ public class ProductionFacility : Facility
         return true;
     }
 
-    private async void OnAddRecipeHandler(GoodsRecipe recipe)
+    private void OnAddRecipeHandler(GoodsRecipe recipe)
     {
         this.recipesQueue.Add(recipe);
         this.producingIcons.Add(recipe.growingGraphics.Last());
-        this.productionTooltip.Refresh();
+        this.productionTooltip.RefreshIfActive();
         if (this.isProducing) return;
-        await Produce();
+        Produce();
     }
 
-    private async UniTask Produce()
+    private async void Produce()
     {
         while (this.recipesQueue.Count > 0)
         {
             this.isProducing = true;
-            this.currentRecipe = this.recipesQueue.RemoveLast();
-            TimeSpan produceTime = new TimeSpan(
+            this.currentRecipe = this.recipesQueue.RemoveFirst();
+            this.producedTime = new TimeSpan(
                 this.currentRecipe.days,
                 this.currentRecipe.hours,
                 this.currentRecipe.minutes,
                 this.currentRecipe.seconds);
-            this.producedTimer.StartTimer(string.Empty, produceTime);
+            this.producedTimer.StartTimer(string.Empty, this.producedTime);
+            if (this.passedTime > TimeSpan.Zero)
+            {
+                this.producedTimer.Subtract(this.passedTime);
+                this.passedTime -= this.producedTime;
+            }
+
             await UniTask.WaitUntil(() => !this.isProducing);
         }
-    }
-
-    public void SetProduction(ProductionTooltip tooltip)
-    {
-        this.productionTooltip = tooltip;
     }
 
     private void OnProductionTooltipHiddenHandler()
@@ -131,9 +186,50 @@ public class ProductionFacility : Facility
         this.productionTooltip.OnAddRecipe -= OnAddRecipeHandler;
     }
 
-    public void SetInfo(ItemInfo info)
+    protected override void UpdateData()
     {
-        this.facilityInfo = info;
+        this.data ??= new ProducibleFacilityData();
+        base.UpdateData();
+    }
+
+    private ProducibleFacilityData GetProducibleData()
+    {
+        this.data ??= new ProducibleFacilityData();
+        return this.data as ProducibleFacilityData;
+    }
+
+    public override FacilityData GetData()
+    {
+        ProducibleFacilityData producibleFacilityData = GetProducibleData();
+        producibleFacilityData.productNames.Clear();
+        producibleFacilityData.collectibleProductNames.Clear();
+        SaveProducingItems(producibleFacilityData);
+        SaveCollectibleItems(producibleFacilityData);
+        return base.GetData();
+    }
+
+    private void SaveProducingItems(ProducibleFacilityData producibleFacilityData)
+    {
+        if (!this.isProducing) return;
+        producibleFacilityData.productNames.Add(this.currentRecipe.product.goodsName);
+        producibleFacilityData.finishedProducingTime = this.producedTimer.GetFinishTimeString();
+        foreach (GoodsRecipe recipe in this.recipesQueue)
+        {
+            producibleFacilityData.productNames.Add(recipe.product.goodsName);
+        }
+    }
+
+    private void SaveCollectibleItems(ProducibleFacilityData producibleFacilityData)
+    {
+        foreach (CollectibleItem item in this.collectibles)
+        {
+            producibleFacilityData.collectibleProductNames.Add(item.name);
+        }
+    }
+
+    public void SetProduction(ProductionTooltip tooltip)
+    {
+        this.productionTooltip = tooltip;
     }
 
     public void SetDatabase(GoodsDatabase database)

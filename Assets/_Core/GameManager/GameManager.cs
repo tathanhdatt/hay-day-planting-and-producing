@@ -1,5 +1,4 @@
-﻿using System;
-using Core.AudioService;
+﻿using Core.AudioService;
 using Core.Service;
 using Cysharp.Threading.Tasks;
 using Dt.Attribute;
@@ -7,7 +6,7 @@ using UnityEngine;
 
 namespace Core.Game
 {
-    public class GameManager : MonoBehaviour, IDisposable
+    public class GameManager : MonoBehaviour
     {
         [SerializeField, Required]
         private GamePresenter presenter;
@@ -24,7 +23,7 @@ namespace Core.Game
 
         [SerializeField, Required]
         private CropTooltip cropTooltip;
-        
+
         [SerializeField, Required]
         private ProductionTooltip productionTooltip;
 
@@ -49,6 +48,7 @@ namespace Core.Game
         public ICurrency Currency { get; private set; }
         public GoodsDatabase BarnDatabase => this.barnDatabase;
         public GoodsDatabase SiloDatabase => this.siloDatabase;
+        public ISaveManager SaveManager { get; private set; }
 
         private void Awake()
         {
@@ -58,6 +58,7 @@ namespace Core.Game
         private void Initialize()
         {
             Application.targetFrameRate = 60;
+            InitSaveManager();
             InitAudioService();
             InitPoolingService();
             InitCurrency();
@@ -66,6 +67,11 @@ namespace Core.Game
             InitItemCollector();
             InitBuildingSystem();
             InitTooltips();
+        }
+
+        private void InitSaveManager()
+        {
+            SaveManager = new SaveManager();
         }
 
 
@@ -96,13 +102,14 @@ namespace Core.Game
 
         private void InitLevelStorage()
         {
-            LevelXpStorage = new LevelXpStorage(this.levelRequirement);
+            string data = SaveManager.Load(SaveId.Level);
+            LevelXpStorage = new LevelXpStorage(this.levelRequirement, data);
             LevelXpStorage.SetCurrentLevel(1);
         }
 
         private void InitItemCollector()
         {
-            this.itemCollector.Initialize(LevelXpStorage, Currency, 
+            this.itemCollector.Initialize(LevelXpStorage, Currency,
                 this.siloDatabase, this.barnDatabase);
         }
 
@@ -113,7 +120,8 @@ namespace Core.Game
                 InitCurrency();
             }
 
-            this.buildingSystem.Initialize(Currency, this.barnDatabase);
+            string data = SaveManager.Load(SaveId.Building);
+            this.buildingSystem.Initialize(Currency, this.barnDatabase, data);
         }
 
         private void InitTooltips()
@@ -136,10 +144,31 @@ namespace Core.Game
             Messenger.AddListener<OpenableView>(Message.OpenView, OpenViewHandler);
             Messenger.AddListener<string>(Message.PopupDialog, PopupHandler);
             await this.presenter.GetViewPresenter<GameViewPresenter>().Show();
-            Currency.SetAmount(CurrencyType.Coin, 1000);
-            Currency.SetAmount(CurrencyType.Gem, 1000);
+            LoadCurrency();
         }
 
+        private void LoadCurrency()
+        {
+            string coinAmount = SaveManager.Load(SaveId.Coin);
+            if (coinAmount.IsNullOrEmpty())
+            {
+                Currency.SetAmount(CurrencyType.Coin, 1000);
+            }
+            else
+            {
+                Currency.SetAmount(CurrencyType.Coin, int.Parse(coinAmount));
+            }
+
+            string gemAmount = SaveManager.Load(SaveId.Gem);
+            if (gemAmount.IsNullOrEmpty())
+            {
+                Currency.SetAmount(CurrencyType.Gem, 100);
+            }
+            else
+            {
+                Currency.SetAmount(CurrencyType.Gem, int.Parse(gemAmount));
+            }
+        }
 
         private async void OpenViewHandler(OpenableView openableView)
         {
@@ -171,9 +200,12 @@ namespace Core.Game
             this.dialogManager.AddDialog(dialog as PopupDialog);
         }
 
-
-        public void Dispose()
+        private void OnApplicationQuit()
         {
+            SaveManager.SaveData(SaveId.Building, this.buildingSystem.GetJsonData());
+            SaveManager.SaveData(SaveId.Coin, Currency.GetAmount(CurrencyType.Coin).ToString());
+            SaveManager.SaveData(SaveId.Gem, Currency.GetAmount(CurrencyType.Gem).ToString());
+            SaveManager.SaveData(SaveId.Level, LevelXpStorage.GetJsonData());
         }
     }
 }

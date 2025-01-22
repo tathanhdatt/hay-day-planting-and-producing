@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d246714ffb64c31818447f78d33c7bf, type: 3}
   m_Name: Bakery
   m_EditorClassIdentifier: 
+  type: 1
   icon: {fileID: -507290251830010220, guid: c75a492a70541cd4284a316a2052a463, type: 3}
   title: Bakery
   description: Bakery
@@ -21,11 +22,11 @@ MonoBehaviour:
   price: 20
   numberOfSlot: 3
   additionalQuantityEachLevel: 0
-  quantity: 38
+  quantity: 61
   maxQuantity: 99999999
   prefab: {fileID: 1575041539325146188, guid: 5fa58e593ce22ef47a92118b5949d3fd, type: 3}
   days: 0
   hours: 0
-  minutes: 0
+  minutes: 4
   seconds: 0
   isEnoughCurrency: 1

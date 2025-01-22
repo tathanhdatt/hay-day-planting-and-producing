@@ -618,7 +618,7 @@ MonoBehaviour:
   yMin: -35
   yMax: 15
   cam: {fileID: 519420031}
-  speedInEditing: 2
+  speedInEditing: 1
   moveToCenterDuration: 1
   lastTouchPos: {x: 0, y: 0, z: 0}
   canMove: 0

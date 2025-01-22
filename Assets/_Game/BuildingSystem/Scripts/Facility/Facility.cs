@@ -16,19 +16,26 @@ public abstract class Facility : MonoBehaviour
     [SerializeField]
     private BoundsInt bounds;
 
+    [Line]
     [SerializeField, ReadOnly]
     protected bool isBuilding;
 
     [SerializeField, ReadOnly]
     protected TimerTooltip timerTooltip;
 
+    [SerializeField, ReadOnly]
+    protected ItemInfo facilityInfo;
+
+    protected FacilityData data;
     public event Action OnFirstTimePlaced;
 
     public virtual void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout,
-        TimerTooltip tooltip)
+        TimerTooltip tooltip, ItemInfo info, FacilityData data = null)
     {
         this.timerTooltip = tooltip;
         this.isBuilding = false;
+        this.facilityInfo = info;
+        this.data = data;
         InitializeBuildingTimer();
         InitializeInteractionDetector();
         InitializeDraggableObject(buildingSystem, gridLayout);
@@ -46,6 +53,7 @@ public abstract class Facility : MonoBehaviour
         this.buildingTimer.OnFinished -= OnFinishedBuildHandler;
         this.isBuilding = false;
         this.timerTooltip.Hide();
+        this.data.isBuilding = false;
     }
 
     private void InitializeInteractionDetector()
@@ -74,12 +82,35 @@ public abstract class Facility : MonoBehaviour
     {
         this.isBuilding = true;
         this.buildingTimer.StartTimer("Building", buildingTimeSpan);
+        this.data.isBuilding = true;
+        this.data.finishedBuildingTime = this.buildingTimer.GetFinishTimeString();
+    }
+
+    public void ContinueBuilding(DateTime finishTime)
+    {
+        TimeSpan remainBuildingTime = finishTime - DateTime.Now;
+        TimeSpan totalBuildTime = new TimeSpan(
+            this.facilityInfo.days,
+            this.facilityInfo.hours,
+            this.facilityInfo.minutes,
+            this.facilityInfo.seconds);
+        StartBuilding(totalBuildTime);
+        this.buildingTimer.Subtract(totalBuildTime - remainBuildingTime);
     }
 
     private void OnFirstTimePlacedHandler()
     {
         this.draggableObject.OnFirstTimePlaced -= OnFirstTimePlacedHandler;
+        UpdateData();
         OnFirstTimePlaced?.Invoke();
+    }
+
+    protected virtual void UpdateData()
+    {
+        this.data ??= new FacilityData();
+        this.data.id = $"{this.facilityInfo.type.ToString()}";
+        this.data.type = this.facilityInfo.type;
+        this.data.position = transform.position;
     }
 
     protected virtual void OnFingerTapHandler()
@@ -98,6 +129,11 @@ public abstract class Facility : MonoBehaviour
         {
             this.timerTooltip.Show(this.buildingTimer);
         }
+    }
+
+    public void TryPlace()
+    {
+        this.draggableObject.TryPlace();
     }
 
     public void SetDraggable(bool draggable)
@@ -120,5 +156,10 @@ public abstract class Facility : MonoBehaviour
 
         this.interactionDetector.OnAllowedEditing -= OnAllowedEditingHandler;
         this.interactionDetector.OnFingerTap -= OnFingerTapHandler;
+    }
+
+    public virtual FacilityData GetData()
+    {
+        return this.data;
     }
 }

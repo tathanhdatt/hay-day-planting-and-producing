@@ -10,4 +10,5 @@ public interface ILevelXpStorage
     void AddXp(int levelXp);
     float GetXpPercent();
     int GetRequiredXp();
+    string GetJsonData();
 }

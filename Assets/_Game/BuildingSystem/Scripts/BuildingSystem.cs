@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Dt.Attribute;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.Windows;
 
 public class BuildingSystem : MonoBehaviour
 {
+    private readonly List<Facility> placedFacilities = new List<Facility>(10);
+
     [SerializeField, Required]
     private GridLayout gridLayout;
 
@@ -33,24 +37,77 @@ public class BuildingSystem : MonoBehaviour
     private List<Facility> availableFacilities;
 
     private Facility facility;
-
+    private ItemInfo[] itemsInfos;
     private ICurrency currency;
     private ItemInfo currentItemInfo;
     private GoodsDatabase barnDatabase;
 
-    public void Initialize(ICurrency currency, GoodsDatabase barnDatabase)
+    public void Initialize(ICurrency currency, GoodsDatabase barnDatabase, string data)
     {
         Messenger.AddListener<ItemInfo>(Message.SpawnItem, SpawnItemHandler);
         this.currency = currency;
         this.barnDatabase = barnDatabase;
+        LoadData(data);
         InitializeAvailableFacilities();
+    }
+
+    private void LoadData(string json)
+    {
+        if (string.IsNullOrEmpty(json)) return;
+        BuildingSystemData data = JsonUtility.FromJson<BuildingSystemData>(json);
+        this.itemsInfos = Resources.LoadAll<ItemInfo>("ShopItems");
+        foreach (FacilityData fac in data.facilities)
+        {
+            LoadFacility(fac);
+        }
+
+        foreach (ProducibleFacilityData fac in data.producibleFacilities)
+        {
+            LoadFacility(fac);
+        }
+    }
+
+    private void LoadFacility(FacilityData data)
+    {
+        ItemInfo info = TryGetInfo(data.type);
+        this.currentItemInfo = info;
+        InitializeFacility(data);
+        this.facility.transform.position = data.position;
+        this.facility.TryPlace();
+        ContinueBuildFacilityIfNeeded(data);
+    }
+
+    private void ContinueBuildFacilityIfNeeded(FacilityData data)
+    {
+        if (!data.isBuilding) return;
+        DateTime finishedTime = DateTime.Parse(data.finishedBuildingTime);
+        this.facility.ContinueBuilding(finishedTime);
+        this.facility.OnFirstTimePlaced += OnFirstTimePlacedHandler;
+    }
+
+    private ItemInfo TryGetInfo(ItemType type)
+    {
+        ItemInfo info = null;
+        foreach (ItemInfo inf in this.itemsInfos)
+        {
+            if (inf.type != type) continue;
+            info = inf;
+            break;
+        }
+
+        if (info == null)
+        {
+            Debug.LogError($"Can not find info type of {type}");
+        }
+
+        return info;
     }
 
     private void InitializeAvailableFacilities()
     {
         foreach (Facility availableFacility in this.availableFacilities)
         {
-            availableFacility.Initialize(this, this.gridLayout, this.timerTooltip);
+            availableFacility.Initialize(this, this.gridLayout, this.timerTooltip, null);
             availableFacility.SetDraggable(false);
             availableFacility.SetPlaced(true);
         }
@@ -60,16 +117,18 @@ public class BuildingSystem : MonoBehaviour
     {
         this.currentItemInfo = info;
         InitializeFacility();
+        AllowDragCurrentFacility();
+        this.facility.OnFirstTimePlaced += OnFirstTimePlacedHandler;
     }
 
-    private void InitializeFacility()
+    private void InitializeFacility(FacilityData data = null)
     {
         this.facility = Instantiate(
             this.currentItemInfo.prefab, this.mainTilemap.transform);
-        this.facility.Initialize(this, this.gridLayout, this.timerTooltip);
-        this.facility.SetDraggable(true);
         SetFacilityParams();
-        this.facility.OnFirstTimePlaced += OnFirstTimePlacedHandler;
+        this.facility.Initialize(this, this.gridLayout,
+            this.timerTooltip, this.currentItemInfo, data);
+        this.placedFacilities.Add(this.facility);
     }
 
     private void SetFacilityParams()
@@ -82,10 +141,14 @@ public class BuildingSystem : MonoBehaviour
                 break;
             case ProductionFacility productionFacility:
                 productionFacility.SetProduction(this.productionTooltip);
-                productionFacility.SetInfo(this.currentItemInfo);
                 productionFacility.SetDatabase(this.barnDatabase);
                 break;
         }
+    }
+
+    private void AllowDragCurrentFacility()
+    {
+        this.facility.SetDraggable(true);
     }
 
     private void Build()
@@ -155,5 +218,27 @@ public class BuildingSystem : MonoBehaviour
         }
 
         return true;
+    }
+
+    public string GetJsonData()
+    {
+        BuildingSystemData data = new BuildingSystemData();
+        data.facilities = new List<FacilityData>(this.placedFacilities.Count);
+        data.producibleFacilities = new List<ProducibleFacilityData>(this.placedFacilities.Count);
+        foreach (Facility fac in this.placedFacilities)
+        {
+            FacilityData d = fac.GetData();
+            if (d is ProducibleFacilityData p)
+            {
+                data.producibleFacilities.Add(p);
+            }
+            else
+            {
+                data.facilities.Add(d);
+            }
+        }
+
+        string json = JsonUtility.ToJson(data);
+        return json;
     }
 }

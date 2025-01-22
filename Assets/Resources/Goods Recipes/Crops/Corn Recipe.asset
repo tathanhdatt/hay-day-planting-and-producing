@@ -28,7 +28,7 @@ MonoBehaviour:
   days: 0
   hours: 0
   minutes: 0
-  seconds: 4
+  seconds: 30
   growingGraphics:
   - {fileID: 7478140159987596566, guid: 37d5f2f74de052445acd510b2a599129, type: 3}
   - {fileID: 8695173799731028777, guid: 770921ea523c4d84a8242023831c545f, type: 3}

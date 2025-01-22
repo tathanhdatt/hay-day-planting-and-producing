@@ -1,8 +1,10 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using System.Globalization;
+using Cysharp.Threading.Tasks;
 using Dt.Attribute;
 using UnityEngine;
 
-public class CropFacility : GoodsFacility
+public class CropFacility : SingleSlotFacility
 {
     [Title("Crop facility")]
     [SerializeField, Required]
@@ -17,25 +19,23 @@ public class CropFacility : GoodsFacility
     [SerializeField, ReadOnly]
     private bool canHarvest;
 
-    public override void Initialize(BuildingSystem buildingSystem,
-        GridLayout gridLayout, TimerTooltip tooltip)
+    public override void Initialize(BuildingSystem buildingSystem, GridLayout gridLayout,
+        TimerTooltip tooltip, ItemInfo info, FacilityData data = null)
     {
-        base.Initialize(buildingSystem, gridLayout, tooltip);
-        RegisterFreeSlotEvents();
         this.producedTimer.OnHeartbeat += OnHeartbeatHandler;
+        base.Initialize(buildingSystem, gridLayout, tooltip, info, data);
+        RegisterFreeSlotEvents();
     }
 
     private void RegisterFreeSlotEvents()
     {
-        foreach (ProducedSlot slot in this.slots)
-        {
-            slot.OnFreeSlot += OnFreeSlotHandler;
-        }
+        this.slot.OnFreeSlot += OnFreeSlotHandler;
     }
 
     private async void OnFreeSlotHandler()
     {
         this.graphic.sprite = this.currentRecipe.finishedGraphic;
+        this.currentRecipe = null;
         await UniTask.WaitForSeconds(0.6f);
         this.graphic.sprite = this.defaultGraphic;
         this.canHarvest = false;
@@ -52,13 +52,6 @@ public class CropFacility : GoodsFacility
         this.canHarvest = true;
         this.graphic.sprite = this.currentRecipe.growingGraphics.Last();
     }
-
-    protected override async UniTask ProduceCurrentRecipe()
-    {
-        this.graphic.sprite = this.currentRecipe.growingGraphics[0];
-        await base.ProduceCurrentRecipe();
-    }
-
 
     public void SetHarvestTooltip(HarvestTooltip tooltip)
     {

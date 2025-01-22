@@ -70,7 +70,12 @@ public class DraggableObject : MonoBehaviour
     {
         Vector3 worldPos = finger.GetWorldPosition(CameraConstant.ZPosition);
         worldPos.z = 0;
-        Vector3Int gridPos = this.gridLayout.WorldToCell(worldPos);
+        SetPosition(worldPos);
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        Vector3Int gridPos = this.gridLayout.WorldToCell(position);
         transform.position = this.gridLayout.CellToLocalInterpolated(gridPos);
     }
 
@@ -78,7 +83,6 @@ public class DraggableObject : MonoBehaviour
     {
         if (enabled)
         {
-            UpdateBoundsPosition();
             TryPlace();
         }
     }
@@ -90,8 +94,9 @@ public class DraggableObject : MonoBehaviour
         this.buildingSystem.ClearTilesInArea(this.bounds);
     }
 
-    private void TryPlace()
+    public void TryPlace()
     {
+        UpdateBoundsPosition();
         if (this.isPlaced)
         {
             TryReplace();
@@ -116,7 +121,7 @@ public class DraggableObject : MonoBehaviour
         }
     }
 
-    private void PlaceFirstTime()
+    public void PlaceFirstTime()
     {
         if (this.buildingSystem.CanPlace(this.bounds))
         {

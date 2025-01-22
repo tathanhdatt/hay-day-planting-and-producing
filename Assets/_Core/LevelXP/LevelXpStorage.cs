@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 public class LevelXpStorage : ILevelXpStorage
 {
@@ -11,9 +12,18 @@ public class LevelXpStorage : ILevelXpStorage
     public event Action<int> OnLevelUpdated;
     public event Action<int> OnXpUpdated;
 
-    public LevelXpStorage(ILevelRequirement levelRequirement)
+    public LevelXpStorage(ILevelRequirement levelRequirement, string data)
     {
         this.levelRequirement = levelRequirement;
+        LoadData(data);
+    }
+
+    private void LoadData(string data)
+    {
+        if (data.IsNullOrEmpty()) return;
+        LevelXpData levelXpData = JsonUtility.FromJson<LevelXpData>(data);
+        this.currentLevel = levelXpData.currentLevel;
+        this.currentXp = levelXpData.currentXp;
     }
 
     public int GetCurrentLevel()
@@ -61,5 +71,15 @@ public class LevelXpStorage : ILevelXpStorage
     public int GetRequiredXp()
     {
         return this.requiredXp;
+    }
+
+    public string GetJsonData()
+    {
+        LevelXpData data = new LevelXpData
+        {
+            currentLevel = this.currentLevel,
+            currentXp = this.currentXp,
+        };
+        return JsonUtility.ToJson(data);
     }
 }
