@@ -228,17 +228,20 @@ public class BuildingSystem : MonoBehaviour
         foreach (Facility fac in this.placedFacilities)
         {
             FacilityData d = fac.GetData();
-            if (d is ProducibleFacilityData p)
+            switch (d)
             {
-                data.producibleFacilities.Add(p);
-            }
-            else
-            {
-                data.facilities.Add(d);
+                case null:
+                    continue;
+                case ProducibleFacilityData p:
+                    data.producibleFacilities.Add(p);
+                    break;
+                default:
+                    data.facilities.Add(d);
+                    break;
             }
         }
 
-        string json = JsonUtility.ToJson(data);
+        string json = JsonUtility.ToJson(data, true);
         return json;
     }
 }

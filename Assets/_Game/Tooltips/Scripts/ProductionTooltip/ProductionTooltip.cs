@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 public class ProductionTooltip : MonoBehaviour
 {
-    public const int MaxSlot = 5;
-
     [SerializeField, Required]
     private SnappingCamera snappingCamera;
 
@@ -93,7 +91,7 @@ public class ProductionTooltip : MonoBehaviour
         if (this.currency.IsEnough(CurrencyType.Gem, ExchangeRate.GemPerProductionSlot))
         {
             int slot = this.currentInfo.numberOfSlot + 1;
-            slot = Math.Clamp(slot, 1, MaxSlot);
+            slot = Math.Clamp(slot, 1, this.currentInfo.maxSlot);
             this.currentInfo.numberOfSlot = slot;
             UpdateSlots();
         }
@@ -172,7 +170,7 @@ public class ProductionTooltip : MonoBehaviour
 
     private void UpdateSlots()
     {
-        if (this.currentInfo.numberOfSlot == MaxSlot)
+        if (this.currentInfo.numberOfSlot == this.currentInfo.maxSlot)
         {
             this.addSlotButton.gameObject.SetActive(false);
         }

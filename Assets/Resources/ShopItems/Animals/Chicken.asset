@@ -10,21 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d246714ffb64c31818447f78d33c7bf, type: 3}
-  m_Name: Field
+  m_Name: Chicken
   m_EditorClassIdentifier: 
   type: 0
-  icon: {fileID: 2202885217157402906, guid: 53b9ff8ecf2d518409750104b490651f, type: 3}
-  title: Field
+  icon: {fileID: 5336855417275088078, guid: 73cbc9a19d05c9046a8fc1a16922e8d4, type: 3}
+  title: Chicken
   description: 
   isUnlocked: 1
   unlockLevel: 1
   currencyType: 0
-  price: 1
-  numberOfSlot: 1
-  additionalQuantityEachLevel: 3
-  quantity: 0
+  price: 0
+  numberOfSlot: 0
+  maxSlot: 0
+  additionalQuantityEachLevel: 0
+  quantity: 1
   maxQuantity: 6
-  prefab: {fileID: 1460372666203698498, guid: 9d81c0c4f606d6a4a8a3052460c08eb0, type: 3}
+  prefab: {fileID: 480446902384143167, guid: f1aac5fc366b1854b90142cd6c487e6a, type: 3}
   days: 0
   hours: 0
   minutes: 0

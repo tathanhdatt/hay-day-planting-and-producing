@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using Dt.Attribute;
 using UnityEngine;
 
-public abstract class SingleSlotFacility : Facility
+public class SingleSlotFacility : Facility
 {
     [Title("Goods facility")]
     [SerializeField, ReadOnly]
@@ -22,9 +22,6 @@ public abstract class SingleSlotFacility : Facility
     [SerializeField, Required]
     protected Timer producedTimer;
 
-    [Title("Goods Tooltip")]
-    [SerializeField, ReadOnly]
-    protected CropTooltip cropTooltip;
 
     [SerializeField]
     private bool hideGoodsTooltipOnDrag;
@@ -60,12 +57,8 @@ public abstract class SingleSlotFacility : Facility
         this.slot.OnAddRecipe += OnAddRecipeHandler;
     }
 
-    private void OnAddRecipeHandler(GoodsRecipe recipe)
+    protected virtual void OnAddRecipeHandler(GoodsRecipe recipe)
     {
-        if (this.hideGoodsTooltipOnDrag)
-        {
-            this.cropTooltip.HideContent();
-        }
 
         this.productionQueue.Add(recipe);
         if (this.isProducing) return;
@@ -78,7 +71,6 @@ public abstract class SingleSlotFacility : Facility
         {
             this.currentRecipe = this.productionQueue.RemoveLast();
             this.currentRecipe.ConsumeMaterials();
-            this.cropTooltip.RefreshContent();
             ProduceCurrentRecipe();
             await UniTask.WaitUntil(() => !this.isProducing);
         }
@@ -86,7 +78,7 @@ public abstract class SingleSlotFacility : Facility
         this.isProducing = false;
     }
 
-    private void ProduceCurrentRecipe()
+    protected virtual void ProduceCurrentRecipe()
     {
         this.slot.SetIsProducing(true);
         this.producedTime = CreateProducedTime();
@@ -130,24 +122,6 @@ public abstract class SingleSlotFacility : Facility
 
             break;
         }
-    }
-
-    public void SetCropTooltip(CropTooltip tooltip)
-    {
-        this.cropTooltip = tooltip;
-    }
-
-    protected override void ShowTooltips()
-    {
-        base.ShowTooltips();
-        ShowGoodsTooltip();
-    }
-
-    protected virtual void ShowGoodsTooltip()
-    {
-        if (this.isBuilding) return;
-        if (this.isProducing) return;
-        this.cropTooltip.Show(this.recipes, transform);
     }
 
     protected override void UpdateData()

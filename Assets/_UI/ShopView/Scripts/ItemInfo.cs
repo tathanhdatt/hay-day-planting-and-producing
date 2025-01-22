@@ -15,6 +15,7 @@ public class ItemInfo : ScriptableObject
     public int price;
     [Line]
     public int numberOfSlot;
+    public int maxSlot;
 
     [Title("Quantity")]
     public int additionalQuantityEachLevel;

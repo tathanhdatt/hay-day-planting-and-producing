@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using Dt.Attribute;
 using UnityEngine;
 
@@ -15,6 +13,9 @@ public class CropFacility : SingleSlotFacility
 
     [SerializeField, ReadOnly]
     private HarvestTooltip harvestTooltip;
+
+    [SerializeField, ReadOnly]
+    protected CropTooltip cropTooltip;
 
     [SerializeField, ReadOnly]
     private bool canHarvest;
@@ -46,6 +47,18 @@ public class CropFacility : SingleSlotFacility
         this.graphic.sprite = this.currentRecipe.growingGraphics[time - 1];
     }
 
+    protected override void OnAddRecipeHandler(GoodsRecipe recipe)
+    {
+        this.cropTooltip.HideContent();
+        base.OnAddRecipeHandler(recipe);
+    }
+
+    protected override void ProduceCurrentRecipe()
+    {
+        this.cropTooltip.RefreshContent();
+        base.ProduceCurrentRecipe();
+    }
+
     protected override void OnProducedFinishedHandler()
     {
         base.OnProducedFinishedHandler();
@@ -58,9 +71,15 @@ public class CropFacility : SingleSlotFacility
         this.harvestTooltip = tooltip;
     }
 
+    public void SetCropTooltip(CropTooltip tooltip)
+    {
+        this.cropTooltip = tooltip;
+    }
+
     protected override void ShowTooltips()
     {
         base.ShowTooltips();
+        ShowGoodsTooltip();
         ShowProductionTimer();
     }
 
@@ -72,7 +91,7 @@ public class CropFacility : SingleSlotFacility
         }
     }
 
-    protected override void ShowGoodsTooltip()
+    private void ShowGoodsTooltip()
     {
         if (this.canHarvest)
         {
@@ -80,8 +99,15 @@ public class CropFacility : SingleSlotFacility
         }
         else
         {
-            base.ShowGoodsTooltip();
+            ShowCropTooltip();
         }
+    }
+
+    private void ShowCropTooltip()
+    {
+        if (this.isBuilding) return;
+        if (this.isProducing) return;
+        this.cropTooltip.Show(this.recipes, transform);
     }
 
     private void ShowHarvestTooltip()

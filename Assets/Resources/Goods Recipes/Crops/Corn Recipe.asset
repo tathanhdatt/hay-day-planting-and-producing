@@ -18,17 +18,57 @@ MonoBehaviour:
     goods: {fileID: 11400000, guid: 0de315ef36a4228408183870bec67618, type: 2}
   rewards:
   - type: 0
+    item: {fileID: 0}
     quantityRange:
       start: 1
       end: 7
+    rate: 1
   - type: 2
+    item: {fileID: 0}
     quantityRange:
       start: 1
       end: 2
+    rate: 1
+  - type: 3
+    item: {fileID: 11400000, guid: 8d04d083c37eee14d87b08ab30779bd8, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
+  - type: 3
+    item: {fileID: 11400000, guid: 16c4aa1e80d2aa640806fbf4faa56563, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
+  - type: 3
+    item: {fileID: 11400000, guid: 433bbe284393f7747b0b1b8af5da15c1, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
+  - type: 3
+    item: {fileID: 11400000, guid: 6c542b689b2e7fc4f97ec998b57f30c0, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
+  - type: 3
+    item: {fileID: 11400000, guid: 5c9b100cde77fa145840ecf010d652cc, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
+  - type: 3
+    item: {fileID: 11400000, guid: 6b007e3ea06d11940baa18907bae3a0a, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
   days: 0
   hours: 0
-  minutes: 0
-  seconds: 30
+  minutes: 5
+  seconds: 0
   growingGraphics:
   - {fileID: 7478140159987596566, guid: 37d5f2f74de052445acd510b2a599129, type: 3}
   - {fileID: 8695173799731028777, guid: 770921ea523c4d84a8242023831c545f, type: 3}
