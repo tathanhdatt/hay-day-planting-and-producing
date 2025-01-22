@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goodsName: Duct Tape
   graphic: {fileID: -7820179105983898557, guid: 35014be870c816f4ea40dc2505e4bc7c, type: 3}
-  quantity: 0
+  quantity: 8
   level: 1
   isUnlocked: 1

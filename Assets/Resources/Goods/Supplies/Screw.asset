@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goodsName: Screw
   graphic: {fileID: 2531822210571077860, guid: 117ebf7faba530b419d3fe70d0ce854e, type: 3}
-  quantity: 0
+  quantity: 8
   level: 1
   isUnlocked: 1

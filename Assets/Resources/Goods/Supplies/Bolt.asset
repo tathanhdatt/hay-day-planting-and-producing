@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goodsName: Bolt
   graphic: {fileID: -7430558899833497709, guid: 868d16bba80209f4a93fbd1a436da7fd, type: 3}
-  quantity: 0
+  quantity: 8
   level: 1
   isUnlocked: 1

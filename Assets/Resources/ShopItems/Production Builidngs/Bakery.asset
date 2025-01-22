@@ -23,11 +23,11 @@ MonoBehaviour:
   numberOfSlot: 3
   maxSlot: 5
   additionalQuantityEachLevel: 0
-  quantity: 1
+  quantity: 0
   maxQuantity: 1
   prefab: {fileID: 1575041539325146188, guid: 5fa58e593ce22ef47a92118b5949d3fd, type: 3}
   days: 0
   hours: 0
   minutes: 0
-  seconds: 10
+  seconds: 20
   isEnoughCurrency: 1

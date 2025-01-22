@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goodsName: Corn Bread
   graphic: {fileID: 8766177340170402106, guid: 492735a4fb4d8454a84fc4af94ae6421, type: 3}
-  quantity: 1
+  quantity: 0
   level: 1
   isUnlocked: 1

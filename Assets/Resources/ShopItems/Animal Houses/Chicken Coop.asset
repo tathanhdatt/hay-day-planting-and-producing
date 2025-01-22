@@ -23,7 +23,7 @@ MonoBehaviour:
   numberOfSlot: 0
   maxSlot: 6
   additionalQuantityEachLevel: 0
-  quantity: 1
+  quantity: 0
   maxQuantity: 1
   prefab: {fileID: 2629218928601626848, guid: 326d86d1aa96bce449b73e9f8ab67335, type: 3}
   days: 0

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goodsName: Wood Panel
   graphic: {fileID: 204808394351542232, guid: 8707b65fff90abc46af115158a272b20, type: 3}
-  quantity: 0
+  quantity: 8
   level: 1
   isUnlocked: 1

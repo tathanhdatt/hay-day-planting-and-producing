@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goodsName: Nail
   graphic: {fileID: -6236935491567674646, guid: f858aa5b091c45847b329ab127565861, type: 3}
-  quantity: 0
+  quantity: 8
   level: 1
   isUnlocked: 1

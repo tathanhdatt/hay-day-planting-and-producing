@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goodsName: Plank
   graphic: {fileID: -2080620203782119094, guid: 7e81ef70f44059540911da208f883113, type: 3}
-  quantity: 0
+  quantity: 8
   level: 1
   isUnlocked: 1
