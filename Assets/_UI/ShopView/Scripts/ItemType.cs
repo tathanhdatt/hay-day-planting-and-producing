@@ -2,5 +2,6 @@
 {
     Field = 0,
     Bakery = 1,
-    ChickenCoop = 2,
+    FeedMill = 2,
+    ChickenCoop = 3,
 }

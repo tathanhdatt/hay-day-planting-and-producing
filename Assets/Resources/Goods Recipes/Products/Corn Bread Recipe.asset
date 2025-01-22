@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cdb6458f13704a42b82528b55cad90d7, type: 3}
-  m_Name: Bread Recipe
+  m_Name: Corn Bread Recipe
   m_EditorClassIdentifier: 
-  product: {fileID: 11400000, guid: 9cafc31b1a789cb43bb3925d72806ee9, type: 2}
+  product: {fileID: 11400000, guid: e9e8d30be1f09a4439355717675e6c46, type: 2}
   materials:
-  - requiredQuantity: 3
+  - requiredQuantity: 2
     goods: {fileID: 11400000, guid: 8aeb71d44b92d6b4ea371df1bc63bb43, type: 2}
+  - requiredQuantity: 3
+    goods: {fileID: 11400000, guid: 0de315ef36a4228408183870bec67618, type: 2}
   rewards:
   - type: 0
     item: {fileID: 0}
@@ -31,8 +33,8 @@ MonoBehaviour:
     rate: 1
   days: 0
   hours: 0
-  minutes: 1
+  minutes: 5
   seconds: 0
   growingGraphics:
-  - {fileID: -1660761858345613354, guid: 56f73b1d30c951b40b980f63f4a92a3e, type: 3}
-  finishedGraphic: {fileID: -1660761858345613354, guid: 56f73b1d30c951b40b980f63f4a92a3e, type: 3}
+  - {fileID: 8766177340170402106, guid: 492735a4fb4d8454a84fc4af94ae6421, type: 3}
+  finishedGraphic: {fileID: 8766177340170402106, guid: 492735a4fb4d8454a84fc4af94ae6421, type: 3}

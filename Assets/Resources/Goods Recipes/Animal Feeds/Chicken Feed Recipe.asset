@@ -10,29 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cdb6458f13704a42b82528b55cad90d7, type: 3}
-  m_Name: Bread Recipe
+  m_Name: Chicken Feed Recipe
   m_EditorClassIdentifier: 
-  product: {fileID: 11400000, guid: 9cafc31b1a789cb43bb3925d72806ee9, type: 2}
+  product: {fileID: 11400000, guid: 7518e0a1a7e38ab4e91a49ed5424f36a, type: 2}
   materials:
-  - requiredQuantity: 3
+  - requiredQuantity: 4
     goods: {fileID: 11400000, guid: 8aeb71d44b92d6b4ea371df1bc63bb43, type: 2}
+  - requiredQuantity: 2
+    goods: {fileID: 11400000, guid: 0de315ef36a4228408183870bec67618, type: 2}
   rewards:
   - type: 0
     item: {fileID: 0}
     quantityRange:
-      start: 20
-      end: 21
+      start: 7
+      end: 8
     rate: 1
   - type: 2
     item: {fileID: 0}
     quantityRange:
-      start: 3
-      end: 4
+      start: 1
+      end: 2
     rate: 1
   days: 0
   hours: 0
-  minutes: 1
+  minutes: 4
   seconds: 0
-  growingGraphics:
-  - {fileID: -1660761858345613354, guid: 56f73b1d30c951b40b980f63f4a92a3e, type: 3}
-  finishedGraphic: {fileID: -1660761858345613354, guid: 56f73b1d30c951b40b980f63f4a92a3e, type: 3}
+  growingGraphics: []
+  finishedGraphic: {fileID: 0}

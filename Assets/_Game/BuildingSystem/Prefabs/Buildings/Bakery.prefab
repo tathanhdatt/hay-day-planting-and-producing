@@ -683,16 +683,17 @@ MonoBehaviour:
     m_Size: {x: 3, y: 3, z: 1}
   isBuilding: 0
   timerTooltip: {fileID: 0}
+  facilityInfo: {fileID: 0}
   productSpawnPoints:
   - {fileID: 8139551740194305720}
   - {fileID: 8662761237903010613}
   - {fileID: 4592633982458459719}
   recipes:
   - {fileID: 11400000, guid: 35b67a17b4b43d14f8a5c475eccf6b1c, type: 2}
+  - {fileID: 11400000, guid: 754d0d658feff6e4e8b10753453da701, type: 2}
   producedTimer: {fileID: 9149179266619715227}
   prefab: {fileID: 5464862561247209557, guid: 9595d60d6938b75498e9e9c7a45c6065, type: 3}
   productionTooltip: {fileID: 0}
-  facilityInfo: {fileID: 0}
   currentRecipe: {fileID: 0}
   isProducing: 0
   producingIcons: []

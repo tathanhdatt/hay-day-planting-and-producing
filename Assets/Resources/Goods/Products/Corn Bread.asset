@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7f6e28d722d4b368ec9142ef2415b08, type: 3}
+  m_Name: Corn Bread
+  m_EditorClassIdentifier: 
+  goodsName: Corn Bread
+  graphic: {fileID: 8766177340170402106, guid: 492735a4fb4d8454a84fc4af94ae6421, type: 3}
+  quantity: 1
+  level: 1
+  isUnlocked: 1

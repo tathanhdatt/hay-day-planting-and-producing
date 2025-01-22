@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d246714ffb64c31818447f78d33c7bf, type: 3}
-  m_Name: Chicken Coop
+  m_Name: Feed Mill
   m_EditorClassIdentifier: 
-  type: 3
-  icon: {fileID: -5144212992877768969, guid: cf185dbb359acf64f9b6aad2e2c640b2, type: 3}
-  title: Chicken Coop
-  description: 
+  type: 2
+  icon: {fileID: -3793809071449288943, guid: c02a0611d22b8eb4db2d6e644418ae3d, type: 3}
+  title: Feed Mill
+  description: Feed Mill
   isUnlocked: 1
   unlockLevel: 1
   currencyType: 0
-  price: 5
-  numberOfSlot: 0
-  maxSlot: 6
+  price: 1100
+  numberOfSlot: 3
+  maxSlot: 5
   additionalQuantityEachLevel: 0
-  quantity: 1
+  quantity: 0
   maxQuantity: 1
-  prefab: {fileID: 2629218928601626848, guid: 326d86d1aa96bce449b73e9f8ab67335, type: 3}
+  prefab: {fileID: 2855332761306895515, guid: dd305d5f453793c44b73b6b7824b74d9, type: 3}
   days: 0
   hours: 0
   minutes: 0
-  seconds: 0
+  seconds: 40
   isEnoughCurrency: 1
