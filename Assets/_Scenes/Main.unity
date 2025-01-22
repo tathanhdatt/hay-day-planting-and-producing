@@ -2117,9 +2117,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2118771672}
     m_Modifications:
+    - target: {fileID: 1823068555271533242, guid: 69e6418754ffccc4aa61f5491c3b0b7c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2251163095471107014, guid: 69e6418754ffccc4aa61f5491c3b0b7c, type: 3}
       propertyPath: m_Name
       value: Game View
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472490292971608132, guid: 69e6418754ffccc4aa61f5491c3b0b7c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948634503732643126, guid: 69e6418754ffccc4aa61f5491c3b0b7c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5003447609387870989, guid: 69e6418754ffccc4aa61f5491c3b0b7c, type: 3}
       propertyPath: m_Pivot.x
