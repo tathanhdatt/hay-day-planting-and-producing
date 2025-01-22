@@ -1,48 +1,36 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Dt.Attribute;
+﻿using System;
+using System.Text;
 using UnityEngine;
+using UnityEngine.Windows;
 
-public class SaveManager : MonoBehaviour, ISaveManager
+public class SaveManager : ISaveManager
 {
-    private List<object> data = new List<object>(100);
-
-    public void Save()
+    private const string saveFileExtension = ".hehe";
+    public string Load(string id)
     {
-    }
-
-    public void Load()
-    {
-    }
-
-    public void Add(object value)
-    {
-        this.data.Add(value);
-    }
-
-    public void SaveData(string id, List<object[]> data)
-    {
-    }
-
-    [Button]
-    public void SaveDate()
-    {
-        var data = new List<object[]>(10);
-        data.Add(new object[] { "id", Vector3.zero, ItemType.Bakery });
-        object[] datas =
+        try
         {
-            "Save Id",
-            data
-        };
-        Vector3[] positions = new Vector3[3];
-        positions[0] = (Vector3.zero);
-        positions[1] = (Vector3.one);
-        positions[2] = (Vector3.back);
+            string filePath = $"{Application.persistentDataPath}/{id}{saveFileExtension}";
+            if (!File.Exists(filePath)) return string.Empty;
+            byte[] bytes = File.ReadAllBytes(filePath);
+            if (bytes == null)
+            {
+                return string.Empty;
+            }
+            string data = Encoding.UTF8.GetString(bytes);
+            return data;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
 
-        object a = Vector3.zero;
-        string json = JsonUtility.ToJson(a);
-        Debug.Log(json);
-        Debug.Log(Application.persistentDataPath);
-        File.WriteAllText(Application.persistentDataPath + "/data.json", json);
+        return string.Empty;
+    }
+
+    public void SaveData(string id, string data)
+    {
+        File.WriteAllBytes($"{Application.persistentDataPath}/{id}{saveFileExtension}",
+            Encoding.UTF8.GetBytes(data));
     }
 }

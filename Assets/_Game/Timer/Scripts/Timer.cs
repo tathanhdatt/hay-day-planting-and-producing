@@ -148,11 +148,6 @@ public class Timer : MonoBehaviour
         float delay = (float)(this.timeLeft % timeInterval);
         InvokeRepeating(nameof(InvokeHeartbeat), delay, timeInterval);
         InvokeHeartbeat();
-        Debug.Log($"Heartbeat: {this.heartbeat}");
-        Debug.Log($"Interval: {timeInterval}");
-        Debug.Log($"Current Heartbeat: {this.currentHeartbeat}");
-        Debug.Log($"Delay: {delay}");
-        Debug.Log($"Time left: {TimeSpan.FromSeconds(this.timeLeft)}");
     }
 
     public string GetFormattedTimeLeft()

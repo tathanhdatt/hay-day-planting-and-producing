@@ -42,18 +42,17 @@ public class BuildingSystem : MonoBehaviour
     private ItemInfo currentItemInfo;
     private GoodsDatabase barnDatabase;
 
-    public void Initialize(ICurrency currency, GoodsDatabase barnDatabase)
+    public void Initialize(ICurrency currency, GoodsDatabase barnDatabase, string data)
     {
         Messenger.AddListener<ItemInfo>(Message.SpawnItem, SpawnItemHandler);
         this.currency = currency;
         this.barnDatabase = barnDatabase;
-        LoadData();
+        LoadData(data);
         InitializeAvailableFacilities();
     }
 
-    private void LoadData()
+    private void LoadData(string json)
     {
-        string json = PlayerPrefs.GetString(PlayerPrefsVar.BuildingSystemData, string.Empty);
         if (string.IsNullOrEmpty(json)) return;
         BuildingSystemData data = JsonUtility.FromJson<BuildingSystemData>(json);
         this.itemsInfos = Resources.LoadAll<ItemInfo>("ShopItems");
@@ -221,7 +220,7 @@ public class BuildingSystem : MonoBehaviour
         return true;
     }
 
-    private void OnApplicationQuit()
+    public string GetJsonData()
     {
         BuildingSystemData data = new BuildingSystemData();
         data.facilities = new List<FacilityData>(this.placedFacilities.Count);
@@ -239,18 +238,7 @@ public class BuildingSystem : MonoBehaviour
             }
         }
 
-        string json = JsonUtility.ToJson(data, true);
-        PlayerPrefs.SetString(PlayerPrefsVar.BuildingSystemData, json);
-        PlayerPrefs.Save();
-        File.WriteAllBytes(Application.persistentDataPath + "/data.json",
-            Encoding.UTF8.GetBytes(json));
-    }
-
-    [Button]
-    private void Test()
-    {
-        var a = DateTime.Parse("01/22/2025 11:03:00");
-        Debug.Log((a - DateTime.Now).TotalSeconds);
-        Debug.Log(new TimeSpan(0, 5, 0).TotalSeconds - (a - DateTime.Now).TotalSeconds);
+        string json = JsonUtility.ToJson(data);
+        return json;
     }
 }

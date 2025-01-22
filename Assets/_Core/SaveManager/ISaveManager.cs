@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-
-public interface ISaveManager
+﻿public interface ISaveManager
 {
-    void Save();
-    void Load();
-    void Add(object value);
-    void SaveData(string id, List<object[]> data);
+    string Load(string id);
+    void SaveData(string id, string data);
 }
