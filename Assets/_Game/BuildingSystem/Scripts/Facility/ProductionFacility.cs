@@ -81,15 +81,20 @@ public class ProductionFacility : Facility
     private void LoadData(ProducibleFacilityData data)
     {
         this.data = data;
+        foreach (string productName in data.productNames)
+        {
+            foreach (GoodsRecipe recipe in this.recipes)
+            {
+                string productInRecipeName = recipe.product.goodsName;
+                if (!productInRecipeName.Equals(productName)) continue;
+                LoadRecipe(recipe, data);
+            }
+        }
+
+
         foreach (GoodsRecipe recipe in this.recipes)
         {
             string productInRecipeName = recipe.product.goodsName;
-            foreach (string productName in data.productNames)
-            {
-                if (productInRecipeName != productName) continue;
-                LoadRecipe(recipe, data);
-            }
-
             foreach (string collectibleProductName in data.collectibleProductNames)
             {
                 if (productInRecipeName != collectibleProductName) continue;
