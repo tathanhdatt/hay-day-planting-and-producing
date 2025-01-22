@@ -16,11 +16,59 @@ MonoBehaviour:
   materials:
   - requiredQuantity: 1
     goods: {fileID: 11400000, guid: 8aeb71d44b92d6b4ea371df1bc63bb43, type: 2}
-  rewards: []
+  rewards:
+  - type: 0
+    item: {fileID: 0}
+    quantityRange:
+      start: 1
+      end: 4
+    rate: 0
+  - type: 2
+    item: {fileID: 0}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0
+  - type: 3
+    item: {fileID: 11400000, guid: 8d04d083c37eee14d87b08ab30779bd8, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
+  - type: 3
+    item: {fileID: 11400000, guid: 16c4aa1e80d2aa640806fbf4faa56563, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
+  - type: 3
+    item: {fileID: 11400000, guid: 433bbe284393f7747b0b1b8af5da15c1, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
+  - type: 3
+    item: {fileID: 11400000, guid: 6c542b689b2e7fc4f97ec998b57f30c0, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
+  - type: 3
+    item: {fileID: 11400000, guid: 5c9b100cde77fa145840ecf010d652cc, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
+  - type: 3
+    item: {fileID: 11400000, guid: 6b007e3ea06d11940baa18907bae3a0a, type: 2}
+    quantityRange:
+      start: 1
+      end: 2
+    rate: 0.28
   days: 0
   hours: 0
-  minutes: 0
-  seconds: 2
+  minutes: 2
+  seconds: 0
   growingGraphics:
   - {fileID: -424353319313006763, guid: a0ff686196747774c83843692657b69a, type: 3}
   - {fileID: 8432832155159901199, guid: 712720603e59b8c4183e946e1a578535, type: 3}

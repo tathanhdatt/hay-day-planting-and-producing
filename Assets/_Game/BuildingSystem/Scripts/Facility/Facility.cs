@@ -98,7 +98,7 @@ public abstract class Facility : MonoBehaviour
         this.buildingTimer.Subtract(totalBuildTime - remainBuildingTime);
     }
 
-    private void OnFirstTimePlacedHandler()
+    protected virtual void OnFirstTimePlacedHandler()
     {
         this.draggableObject.OnFirstTimePlaced -= OnFirstTimePlacedHandler;
         UpdateData();

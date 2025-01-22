@@ -6,6 +6,7 @@ using Dt.Attribute;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class ItemCollector : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class ItemCollector : MonoBehaviour
     [Line]
     [SerializeField, Required]
     private CollectedItem prefab;
-
+    
     [Title("Xp")]
     [SerializeField, Required]
     private Sprite xpGraphic;
@@ -139,7 +140,8 @@ public class ItemCollector : MonoBehaviour
     {
         foreach (GoodsReward reward in rewards)
         {
-            startPosition.x += 2;
+            if (reward.rate < Random.Range(0f, 1f)) continue;
+            startPosition.x += 1;
             OnCollectedHandler(reward, startPosition);
             await UniTask.WaitForSeconds(0.2f);
         }
@@ -153,6 +155,7 @@ public class ItemCollector : MonoBehaviour
             GoodsRewardType.Coin => this.coinTarget.position,
             GoodsRewardType.Gem => this.diamondTarget.position,
             GoodsRewardType.Xp => this.xpTarget.position,
+            GoodsRewardType.Supply => this.goodsTarget.position,
             _ => Vector3.zero
         };
         Sprite graphic = reward.type switch
@@ -160,6 +163,7 @@ public class ItemCollector : MonoBehaviour
             GoodsRewardType.Coin => this.coinGraphic,
             GoodsRewardType.Gem => this.diamondGraphic,
             GoodsRewardType.Xp => this.xpGraphic,
+            GoodsRewardType.Supply => reward.item.graphic,
             _ => null
         };
         collectedItem.Initialize(graphic, reward, position);

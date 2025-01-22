@@ -10,21 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d246714ffb64c31818447f78d33c7bf, type: 3}
-  m_Name: Field
+  m_Name: Chicken Coop
   m_EditorClassIdentifier: 
-  type: 0
-  icon: {fileID: 2202885217157402906, guid: 53b9ff8ecf2d518409750104b490651f, type: 3}
-  title: Field
+  type: 2
+  icon: {fileID: -5144212992877768969, guid: cf185dbb359acf64f9b6aad2e2c640b2, type: 3}
+  title: Chicken Coop
   description: 
   isUnlocked: 1
   unlockLevel: 1
   currencyType: 0
-  price: 1
-  numberOfSlot: 1
-  additionalQuantityEachLevel: 3
-  quantity: 0
-  maxQuantity: 6
-  prefab: {fileID: 1460372666203698498, guid: 9d81c0c4f606d6a4a8a3052460c08eb0, type: 3}
+  price: 5
+  numberOfSlot: 0
+  maxSlot: 6
+  additionalQuantityEachLevel: 0
+  quantity: 1
+  maxQuantity: 1
+  prefab: {fileID: 2629218928601626848, guid: 326d86d1aa96bce449b73e9f8ab67335, type: 3}
   days: 0
   hours: 0
   minutes: 0

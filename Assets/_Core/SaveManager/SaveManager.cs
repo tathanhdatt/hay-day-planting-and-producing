@@ -5,7 +5,7 @@ using UnityEngine.Windows;
 
 public class SaveManager : ISaveManager
 {
-    private const string saveFileExtension = ".hehe";
+    private const string saveFileExtension = ".json";
     public string Load(string id)
     {
         try

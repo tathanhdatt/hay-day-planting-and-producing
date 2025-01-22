@@ -21,6 +21,7 @@ MonoBehaviour:
   currencyType: 0
   price: 20
   numberOfSlot: 3
+  maxSlot: 5
   additionalQuantityEachLevel: 0
   quantity: 61
   maxQuantity: 99999999
