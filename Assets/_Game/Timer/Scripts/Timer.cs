@@ -136,10 +136,23 @@ public class Timer : MonoBehaviour
         CancelInvoke(nameof(InvokeHeartbeat));
         this.timeLeft -= timeSpan.TotalSeconds;
         this.finishTime -= timeSpan;
+        CalculateCurrentHeartbeatAndRestartInvoker();
+    }
+
+    private void CalculateCurrentHeartbeatAndRestartInvoker()
+    {
         float timeInterval = (float)this.timeSpan.TotalSeconds / this.heartbeat;
-        int numberOfHeartbeatsSkipped = (int)Math.Floor(timeSpan.TotalSeconds / timeInterval);
-        numberOfHeartbeatsSkipped = Math.Clamp(numberOfHeartbeatsSkipped, 0, this.heartbeat);
-        OnHeartbeat?.Invoke(numberOfHeartbeatsSkipped + 1);
+        TimeSpan passedTime = this.timeSpan - TimeSpan.FromSeconds(this.timeLeft);
+        int numberOfHeartbeatsSkipped = (int)Math.Floor(passedTime.TotalSeconds / timeInterval);
+        this.currentHeartbeat = Math.Clamp(numberOfHeartbeatsSkipped, 0, this.heartbeat);
+        float delay = (float)(this.timeLeft % timeInterval);
+        InvokeRepeating(nameof(InvokeHeartbeat), delay, timeInterval);
+        InvokeHeartbeat();
+        Debug.Log($"Heartbeat: {this.heartbeat}");
+        Debug.Log($"Interval: {timeInterval}");
+        Debug.Log($"Current Heartbeat: {this.currentHeartbeat}");
+        Debug.Log($"Delay: {delay}");
+        Debug.Log($"Time left: {TimeSpan.FromSeconds(this.timeLeft)}");
     }
 
     public string GetFormattedTimeLeft()

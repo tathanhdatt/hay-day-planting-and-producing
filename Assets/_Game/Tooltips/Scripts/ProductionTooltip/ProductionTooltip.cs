@@ -216,8 +216,9 @@ public class ProductionTooltip : MonoBehaviour
         this.gemSkipText.SetText(skipGem);
     }
 
-    public void Refresh()
+    public void RefreshIfActive()
     {
+        if (!gameObject.activeSelf) return;
         FillSlots();
         DisableTimerIfNoProducts();
     }

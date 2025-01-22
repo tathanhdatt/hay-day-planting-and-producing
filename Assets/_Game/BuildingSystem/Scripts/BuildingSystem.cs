@@ -245,4 +245,12 @@ public class BuildingSystem : MonoBehaviour
         File.WriteAllBytes(Application.persistentDataPath + "/data.json",
             Encoding.UTF8.GetBytes(json));
     }
+
+    [Button]
+    private void Test()
+    {
+        var a = DateTime.Parse("01/22/2025 11:03:00");
+        Debug.Log((a - DateTime.Now).TotalSeconds);
+        Debug.Log(new TimeSpan(0, 5, 0).TotalSeconds - (a - DateTime.Now).TotalSeconds);
+    }
 }

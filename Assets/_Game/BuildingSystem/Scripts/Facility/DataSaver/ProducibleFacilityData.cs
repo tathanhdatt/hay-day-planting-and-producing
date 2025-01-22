@@ -6,6 +6,7 @@ public class ProducibleFacilityData : FacilityData
 {
     public string finishedProducingTime;
     public List<string> productNames = new List<string>(5);
+    public List<string> collectibleProductNames = new List<string>(5);
 
     public ProducibleFacilityData()
     {

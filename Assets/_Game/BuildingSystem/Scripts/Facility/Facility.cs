@@ -108,7 +108,7 @@ public abstract class Facility : MonoBehaviour
     protected virtual void UpdateData()
     {
         this.data ??= new FacilityData();
-        this.data.id = $"{this.facilityInfo.type.ToString()}_{this.facilityInfo.quantity}";
+        this.data.id = $"{this.facilityInfo.type.ToString()}";
         this.data.type = this.facilityInfo.type;
         this.data.position = transform.position;
     }
@@ -158,7 +158,7 @@ public abstract class Facility : MonoBehaviour
         this.interactionDetector.OnFingerTap -= OnFingerTapHandler;
     }
 
-    public FacilityData GetData()
+    public virtual FacilityData GetData()
     {
         return this.data;
     }

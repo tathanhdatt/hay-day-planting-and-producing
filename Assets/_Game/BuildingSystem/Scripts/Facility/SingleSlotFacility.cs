@@ -80,14 +80,13 @@ public abstract class SingleSlotFacility : Facility
             this.currentRecipe.ConsumeMaterials();
             this.cropTooltip.RefreshContent();
             ProduceCurrentRecipe();
-            UpdateProduceData();
             await UniTask.WaitUntil(() => !this.isProducing);
         }
 
         this.isProducing = false;
     }
 
-    protected virtual void ProduceCurrentRecipe()
+    private void ProduceCurrentRecipe()
     {
         this.slot.SetIsProducing(true);
         this.producedTime = CreateProducedTime();
@@ -119,11 +118,18 @@ public abstract class SingleSlotFacility : Facility
             TimeSpan remainTime = finishedTime - DateTime.Now;
             this.currentRecipe = recipe;
             ProduceCurrentRecipe();
-            this.producedTimer.Subtract(this.producedTime - remainTime);
+            if (remainTime <= TimeSpan.Zero)
+            {
+                this.producedTimer.SkipTimer();
+            }
+            else
+            {
+                TimeSpan passedTime = this.producedTime - remainTime;
+                this.producedTimer.Subtract(passedTime);
+            }
+
             break;
         }
-
-        UpdateProduceData();
     }
 
     public void SetCropTooltip(CropTooltip tooltip)
@@ -144,40 +150,30 @@ public abstract class SingleSlotFacility : Facility
         this.cropTooltip.Show(this.recipes, transform);
     }
 
-    private void UpdateProduceData()
-    {
-        ProducibleFacilityData producibleFacilityData = GetProducibleData();
-        if (this.isProducing)
-        {
-            SaveCurrentProductData();
-        }
-
-        Debug.Log("Data Updated");
-        Debug.Log(JsonUtility.ToJson(producibleFacilityData, true));
-        this.data = producibleFacilityData;
-    }
-
-    private ProducibleFacilityData GetProducibleData()
-    {
-        if (this.data is not ProducibleFacilityData producibleFacilityData)
-        {
-            producibleFacilityData = new ProducibleFacilityData(this.data);
-        }
-
-        return producibleFacilityData;
-    }
-
-    protected void SaveCurrentProductData()
-    {
-        ProducibleFacilityData producibleData = GetProducibleData();
-        producibleData.finishedProducingTime =
-            this.producedTimer.GetFinishTimeString();
-        producibleData.productNames.Add(this.currentRecipe.product.name);
-    }
-
     protected override void UpdateData()
     {
         this.data ??= new ProducibleFacilityData();
         base.UpdateData();
+    }
+
+    public override FacilityData GetData()
+    {
+        SaveCurrentProductData();
+        return base.GetData();
+    }
+
+    private void SaveCurrentProductData()
+    {
+        ProducibleFacilityData producibleData = GetProducibleData();
+        producibleData.productNames.Clear();
+        if (this.currentRecipe == null) return;
+        producibleData.finishedProducingTime = this.producedTimer.GetFinishTimeString();
+        producibleData.productNames.Add(this.currentRecipe.product.name);
+    }
+    
+    private ProducibleFacilityData GetProducibleData()
+    {
+        this.data ??= new ProducibleFacilityData();
+        return this.data as ProducibleFacilityData;
     }
 }

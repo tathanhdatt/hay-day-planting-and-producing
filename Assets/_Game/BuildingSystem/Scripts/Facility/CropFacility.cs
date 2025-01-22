@@ -35,16 +35,14 @@ public class CropFacility : SingleSlotFacility
     private async void OnFreeSlotHandler()
     {
         this.graphic.sprite = this.currentRecipe.finishedGraphic;
+        this.currentRecipe = null;
         await UniTask.WaitForSeconds(0.6f);
         this.graphic.sprite = this.defaultGraphic;
         this.canHarvest = false;
-        (this.data as ProducibleFacilityData)?.productNames.RemoveFirst();
     }
 
     private void OnHeartbeatHandler(int time)
     {
-        Debug.Log(time);
-        time = Math.Clamp(time, 0, this.currentRecipe.growingGraphics.Count);
         this.graphic.sprite = this.currentRecipe.growingGraphics[time - 1];
     }
 
@@ -54,13 +52,6 @@ public class CropFacility : SingleSlotFacility
         this.canHarvest = true;
         this.graphic.sprite = this.currentRecipe.growingGraphics.Last();
     }
-
-    protected override void ProduceCurrentRecipe()
-    {
-        // this.graphic.sprite = this.currentRecipe.growingGraphics[0];
-        base.ProduceCurrentRecipe();
-    }
-
 
     public void SetHarvestTooltip(HarvestTooltip tooltip)
     {
