@@ -22,12 +22,11 @@ public class ProducedSlotFiller : MonoBehaviour, IPointerDownHandler, IPointerUp
     [SerializeField, ReadOnly]
     private GoodsRecipe recipe;
     
-    private List<ProductMaterial> materials = new List<ProductMaterial>(3);
+    private readonly List<ProductMaterial> materials = new List<ProductMaterial>(3);
 
     public void Initialize()
     {
         EventSystem.current.SetSelectedGameObject(gameObject);
-        this.detector.Initialize();
         this.detector.OnDetectedSlot += OnDetectedSlotHandler;
     }
 
