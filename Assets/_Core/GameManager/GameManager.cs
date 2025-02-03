@@ -200,6 +200,7 @@ namespace Core.Game
             this.dialogManager.AddDialog(dialog as PopupDialog);
         }
 
+#if UNITY_EDITOR
         private void OnApplicationQuit()
         {
             SaveManager.SaveData(SaveId.Building, this.buildingSystem.GetJsonData());
@@ -207,5 +208,15 @@ namespace Core.Game
             SaveManager.SaveData(SaveId.Gem, Currency.GetAmount(CurrencyType.Gem).ToString());
             SaveManager.SaveData(SaveId.Level, LevelXpStorage.GetJsonData());
         }
+#elif UNITY_ANDROID
+        private void OnApplicationPause(bool isPaused)
+        {
+            if (!isPaused) return;
+            SaveManager.SaveData(SaveId.Building, this.buildingSystem.GetJsonData());
+            SaveManager.SaveData(SaveId.Coin, Currency.GetAmount(CurrencyType.Coin).ToString());
+            SaveManager.SaveData(SaveId.Gem, Currency.GetAmount(CurrencyType.Gem).ToString());
+            SaveManager.SaveData(SaveId.Level, LevelXpStorage.GetJsonData());
+        }
+#endif
     }
 }
