@@ -22,6 +22,11 @@ public class GoodsItem : MonoBehaviour
 
     public void Refresh()
     {
+        if (this.goods == null)
+        {
+            Debug.LogWarning("There is no goods available!", gameObject);
+            return;
+        }
         this.icon.sprite = this.goods.graphic;
         this.quantity.SetText(this.goods.quantity.ToString());
     }
