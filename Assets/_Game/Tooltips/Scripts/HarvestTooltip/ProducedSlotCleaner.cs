@@ -15,7 +15,6 @@ public class ProducedSlotCleaner : MonoBehaviour
 
     public void Initialize()
     {
-        this.detector.Initialize();
         this.detector.OnDetectedSlot += OnDetectedSlotHandler;
     }
 
