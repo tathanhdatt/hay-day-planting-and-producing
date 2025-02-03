@@ -46,4 +46,10 @@ public class ItemInfo : ScriptableObject
     {
         this.quantity += 1;
     }
+
+    [Button]
+    private void ResetQuantity()
+    {
+        this.quantity = 0;
+    }
 }
