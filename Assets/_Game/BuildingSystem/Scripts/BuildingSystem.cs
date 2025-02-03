@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Dt.Attribute;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.Windows;
 
 public class BuildingSystem : MonoBehaviour
 {
@@ -71,6 +69,9 @@ public class BuildingSystem : MonoBehaviour
     {
         ItemInfo info = TryGetInfo(data.type);
         this.currentItemInfo = info;
+#if !UNITY_EDITOR
+        this.currentItemInfo.IncreaseQuantity();
+#endif
         InitializeFacility(data);
         this.facility.transform.position = data.position;
         this.facility.TryPlace();
