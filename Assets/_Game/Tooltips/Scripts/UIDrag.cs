@@ -2,10 +2,13 @@
 using DG.Tweening;
 using Dt.Attribute;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class UIDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
+    public UnityEvent onStartDrag;
+    public UnityEvent onEndDrag;
     [Title("Offset")]
     [SerializeField]
     private Vector3 offset;
@@ -43,6 +46,7 @@ public class UIDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
     public void OnPointerDown(PointerEventData eventData)
     {
         OnFingerDown?.Invoke();
+        this.onStartDrag?.Invoke();
         SaveStartPosition();
         transform.SetAsLastSibling();
     }
@@ -66,6 +70,7 @@ public class UIDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
     public void OnPointerUp(PointerEventData eventData)
     {
         OnFingerUp?.Invoke();
+        this.onEndDrag?.Invoke();
         if (this.snapToStart)
         {
             SnapToStartPosition();
