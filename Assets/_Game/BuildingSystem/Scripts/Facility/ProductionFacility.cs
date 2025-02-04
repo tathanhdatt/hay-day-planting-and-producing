@@ -183,6 +183,7 @@ public class ProductionFacility : Facility
 
             await UniTask.WaitUntil(() => !this.isProducing);
         }
+        this.passedTime = TimeSpan.Zero;
     }
 
     private void OnProductionTooltipHiddenHandler()
