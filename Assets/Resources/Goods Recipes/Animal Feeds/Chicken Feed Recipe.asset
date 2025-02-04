@@ -35,5 +35,6 @@ MonoBehaviour:
   hours: 0
   minutes: 4
   seconds: 0
-  growingGraphics: []
-  finishedGraphic: {fileID: 0}
+  growingGraphics:
+  - {fileID: -8842425140205577879, guid: 281bfdbc2186a0a49be6ed5385a887c9, type: 3}
+  finishedGraphic: {fileID: -8842425140205577879, guid: 281bfdbc2186a0a49be6ed5385a887c9, type: 3}
